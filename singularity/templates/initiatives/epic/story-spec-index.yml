@@ -1,0 +1,15 @@
+# Story Specification Index — {{workId}}
+#
+# Each Story specification lives at:
+#   artifacts/epic-planning/stories/<PLAN-ID>/story-spec.md
+#
+# The engine verifies every byte count and SHA-256 before the combined Planning
+# package can be approved. Any later edit invalidates the package hash.
+
+version: 1
+epicId: "{{workId}}"
+stories:
+  - planId: STORY-001
+    path: stories/STORY-001/story-spec.md
+    sha256: ""
+    bytes: 0

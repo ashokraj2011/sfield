@@ -1,0 +1,41 @@
+# Repository Impact Analysis — {{workId}}
+#
+# At Epic planning time Copilot resolves repository ownership against the
+# workspace registry and cites pinned business/technical sources. Detailed
+# code-level impact analysis begins later on each canonical Story branch, using
+# its repository World Model when available and explicit degraded context otherwise.
+
+version: 1
+epicId: "{{workId}}"
+repositories: {}
+# repositories:
+#   mobile:
+#     changeType: modify
+#     requirements: [REQ-001]
+#     components:
+#       - path: src/features/login
+#         responsibility: Mobile sign-in experience
+#     interfaces:
+#       - id: customer-api
+#         direction: consumes
+#         compatibility: backward
+#     data: []
+#     security: []
+#     testing: [unit, integration, accessibility]
+#     operations: []
+#     risks: []
+#     evidence:
+#       - sourceId: SRC-001
+#         locator: "Authentication requirements"
+#         sha256: ""
+
+unaffected: []
+# unaffected:
+#   - repository: reporting
+#     reason: No contract or data-flow dependency
+#     evidence:
+#       - sourceId: SRC-002
+#         locator: "Reporting boundary"
+#         sha256: ""
+
+externalSystems: []

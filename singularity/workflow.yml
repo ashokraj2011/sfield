@@ -1,0 +1,2374 @@
+version: 2
+inputsMode: enforce
+harnessImports:
+  mode: record
+  previewTextBytes: 16384
+  totalEnvelopeBytes: 32768
+  knowledge:
+    enabled: true
+    maximumBytes: 8192
+  conformance:
+    questionPrecedesMutation: warn
+    maximumActions: observe
+contextPolicy:
+  onApproval: new
+  onRejection: keep
+  phaseOverrides: {}
+sequenceGates:
+  default: soft
+  completion: hard
+  currentPhase: hard
+  freshGeneration: hard
+  generationCommit: hard
+  remoteGeneration: hard
+  publicationPending: hard
+defaultBaseBranch: main
+workItemRoot: singularity/work-items
+idPattern: ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$
+auto:
+  enabled: false
+  profile:
+    default: story
+    allowed:
+      - story
+  defaultPace: phase
+  defaultUntil: first-human-boundary
+  workIdAllocator: ulid
+  planTtlMinutes: 30
+  execution:
+    allowedHosts:
+      - copilot-cli
+    requireManagedWorktree: true
+    automaticResume: false
+    allowPolicyWaivers: false
+    allowClarificationAnswers: false
+    allowSequenceOverrides: false
+    allowScopeExpansion: false
+  repair:
+    policy: ask
+    maximumAttempts: 1
+adhoc:
+  enabled: true
+  entry:
+    allowExplicitStart: true
+    allowUnstartedLanding: true
+    defaultMode: in-place
+  baseline:
+    requireExactRevision: true
+    dirtyStart: ask
+    upstreamUse: confirm-if-commits-ahead
+  localWork:
+    allowed: true
+  executionUnits:
+    allowed: true
+    default: null
+  scope:
+    maximumTouchedResources: 20
+    maximumRepositoriesForDirectLanding: 1
+  externalEffects:
+    mode: governed-device-only
+    outsideGovernanceBehavior: promote-or-reconcile
+  protectedPaths:
+    behavior: promote
+  directLanding:
+    enabled: true
+    maximumRisk: low
+    requireIntentConfirmation: true
+    requireDispositionCoverage: true
+    requireVerification: true
+    requireHumanDecision: policy
+  promotion:
+    triggers:
+      repositoriesGreaterThan: 1
+      protectedPathTouched: true
+      architectureDecisionRequired: true
+      externalEffectRequired: true
+      estimatedRemainingTasksGreaterThan: 3
+      uncertainEffect: true
+  executionCeilings:
+    activeMinutes: 480
+    modelInvocations: 30
+    deviceCalls: 100
+  discard:
+    backup: required
+    backupRetentionDays: 14
+  telemetry:
+    contentFree: true
+    individualScoring: false
+git:
+  remote: origin
+  publish: required
+ledger:
+  enabled: true
+  branch: state
+  remote: origin
+  publication: warn
+  behind: warn
+  enforcement: shadow
+  signing: off
+  trustTier: T0
+  maxRetries: 4
+  pinTransport: refs
+  retentionDays: 2555
+templatesRoot: singularity/templates
+noModel:
+  unknownExternalCommands: warn
+repositoryReadiness:
+  requiredBeforeStory: false
+  dependencyHydration: when-detected
+  build: off
+  structuredTests: required-for-code
+  applicationStart: off
+  receiptScope: git-private-exact-base
+codeDelivery:
+  schemaVersion: 2
+  mode: enforce
+  generationBoundary:
+    requireBegin: true
+    dirtyStart: block
+  changeSet:
+    renameDetection: required
+    includeCommitted: true
+    includeIndex: true
+    includeWorktree: true
+    includeUntracked: true
+    symlinks: reject
+  tests:
+    requireExecutableSource: true
+    minimumDiscovered: 1
+    minimumPassed: 1
+    executionAssurance: module
+    stringCommands: reject
+    unknownModelPolicy: block
+    requireResultAdapter: true
+    requireAffectedModuleCoverage: true
+  traceability:
+    source: pinned-spec-index
+    requireNamespaceQualifiedIds: true
+    bareIdCompatibility: unique-only
+  publication:
+    idempotency: generation-intent
+  display:
+    source: reference-preview
+    previewBytes: 4096
+    fullDocumentMaximumBytes: 65536
+  model:
+    minimumAssurance: unavailable
+planning:
+  enabled: true
+  promptSource: singularity/prompts/copilot-planning.md
+  maxContextBytes: 1048576
+worldModel:
+  views:
+    - business
+    - architecture
+    - development
+    - testing
+    - release
+    - operations
+    - security
+  projections:
+    arch.calm:
+      enabled: false
+      required: false
+      contract: arch.calm@1
+      calm:
+        schemaRelease: "1.2"
+        strict: true
+      profile:
+        includeGovernanceActors: true
+        includeControls: true
+        includeFlows: true
+        includeExternalDependencies: direct-architecture-only
+  outputDir: singularity/world-model
+  historyDir: singularity/world-model-history
+  promptSource: singularity/prompts/worldmodel-builder.md
+  stateFetchTimeoutMs: 10000
+  generation:
+    parallel: true
+    maxWorkers: 4
+    strategy: view
+    maximumDiscoveryPacketBytes: 24576
+    maximumSynthesisInputTokens: 24000
+    synthesisOverflow: summarize-or-refuse
+  materialization:
+    mode: explicit
+    publish: governed
+    lookahead: none
+    depth: phase
+    confirmation: prompt
+  grounding: warn
+  staleness: warn
+  injection:
+    placeholder: "{{WORLD_MODEL}}"
+    mode: append
+    maxBytes: 32768
+    rules: []
+architectureIntent:
+  enabled: false
+  allowedPhases:
+    - design
+    - planning
+  blockRequiredUnfulfilledAt:
+    - verification
+    - release
+ast:
+  mode: auto
+  fallback: host-and-text
+  warmOnStoryStart:
+    mode: background
+    scope: configured-roots
+  evidence:
+    mode: replayable
+    store: local-directory
+  budgets:
+    maxFiles: 500
+    maxBytes: 20971520
+    maxFileBytes: 2097152
+models:
+  defaultProvider: copilot-cli
+  providers:
+    copilot-cli:
+      type: copilot-cli
+      executable: copilot
+      promptTransport: auto
+      arguments: []
+tokens:
+  mode: exact-or-unavailable
+tokenEconomy:
+  enabled: true
+  mode: observe
+  composer: legacy-v1
+  profile: standard
+  profiles:
+    standard:
+      maximumEstimatedPromptTokens: 18000
+      reservedOutputTokens: 6000
+      maxExpansionTokens: 8000
+      observationCapsuleTokens: 3000
+      policyOnBudgetBreach: refuse
+  observationFirewall: true
+  progressiveRetrieval: true
+  historicalMemory: false
+  cacheStableComposition: true
+  providerTelemetry: optional
+  ast: optional
+spec:
+  mode: record
+  coverage: record
+  acceptance: presence
+  compositionCache: local
+  testCommands: {}
+  excludes: []
+faultRepair:
+  enabled: true
+  maxAttempts: 3
+  maxMinutes: 20
+  maxTokens: 30000
+  leaseMinutes: 60
+  boundedAuto: false
+  environmentCeilings:
+    local: guided
+    ide: guided
+    copilot: guided
+    ci: propose
+    integration: propose
+    staging: propose
+    production: diagnose
+  protectedPaths:
+    - .git
+    - singularity
+    - infra/production
+documents:
+  allowedPhases:
+    - intake
+    - requirements
+    - design
+    - implementation-spec
+    - reproduction
+    - fix-design
+    - fix-spec
+  maxFileBytes: 26214400
+  maxPreviewBytes: 1048576
+collaboration:
+  assignmentMode: suggested
+  approvalReminderAfterHours: 24
+  notifications:
+    - terminal
+logging:
+  level: info
+  console: warn
+  maxBytes: 5242880
+  keep: 3
+session:
+  workItemSelection: prompt
+  requireBeforeTools: false
+mcpServers:
+  figma:
+    label: Figma design context
+    hostReference: figma
+    agents:
+      - product-designer
+    phases:
+      - design-intake
+      - design-inventory
+      - component-mapping
+      - mobile-spec
+      - visual-verification
+    tools:
+      - get_metadata
+      - get_design_context
+      - get_screenshot
+      - get_variable_defs
+      - get_code_connect_map
+    required: false
+    approval: confirm
+    evidence:
+      captureToolCalls: true
+      captureResults: true
+  playwright:
+    label: Playwright browser automation
+    hostReference: playwright
+    agents:
+      - qa
+      - product-designer
+      - poc-automation
+      - poc-explorer
+      - poc-validator
+    phases:
+      - design-intake
+      - design-inventory
+      - verification
+      - testing
+      - visual-verification
+      - conformance
+      - poc-ui-exploration
+      - poc-validation
+    tools:
+      - browser_navigate
+      - browser_snapshot
+      - browser_click
+      - browser_fill_form
+      - browser_hover
+      - browser_press_key
+      - browser_resize
+      - browser_take_screenshot
+      - browser_console_messages
+      - browser_network_requests
+    required: false
+    approval: confirm
+    evidence:
+      captureToolCalls: true
+      captureResults: true
+approvalSecurity:
+  profile: team
+  allowSelfApproval: true
+  autoEnrollNewIdentities: true
+approvalAuthorities:
+  product-approvers:
+    label: Product approvers
+    allowAnyGitIdentity: false
+    members: []
+  architecture-reviewers:
+    label: Architecture reviewers
+    allowAnyGitIdentity: false
+    members: []
+  engineering-reviewers:
+    label: Engineering reviewers
+    allowAnyGitIdentity: false
+    members: []
+  quality-reviewers:
+    label: Quality reviewers
+    allowAnyGitIdentity: false
+    members: []
+  design-reviewers:
+    label: Design reviewers
+    allowAnyGitIdentity: false
+    members: []
+artifactSets:
+  spec-driven-specification:
+    primary: spec.md
+    members:
+      - path: spec.md
+        role: specification
+        required: true
+      - path: checklists/requirements.md
+        role: specification-quality
+        required: false
+        authority: advisory
+  spec-driven-planning:
+    primary: plan.md
+    members:
+      - path: plan.md
+        role: implementation-plan
+        required: true
+      - path: tasks.md
+        role: advisory-task-map
+        required: false
+        authority: advisory
+  spec-driven-verification:
+    primary: conformance.md
+    members:
+      - path: conformance.md
+        role: conformance
+        required: true
+      - path: verification/
+        role: evidence-collection
+        required: true
+workTypes:
+  feature:
+    label: Feature
+    phases:
+      - intake
+      - requirements
+      - design
+      - implementation-spec
+      - implementation
+      - verification
+      - conformance
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - requirements
+        - implementation-spec
+      owners:
+        implementation: implementation-spec
+    templateOverrides:
+      intake: feature/intake.md
+      requirements: feature/requirements.md
+      design: feature/design.md
+      implementation-spec: feature/implementation-spec.md
+    phaseOverrides:
+      requirements:
+        inputs:
+          - intake
+      design:
+        inputs:
+          - requirements
+      implementation-spec:
+        inputs:
+          - requirements
+          - design
+      implementation:
+        inputs:
+          - design
+          - implementation-spec
+      verification:
+        inputs:
+          - implementation-spec
+          - implementation
+      conformance:
+        inputs:
+          - implementation-spec
+          - implementation
+          - verification
+  bugfix:
+    label: Bug fix
+    phases:
+      - intake
+      - reproduction
+      - fix-design
+      - fix-spec
+      - implementation
+      - verification
+      - conformance
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - fix-spec
+      owners:
+        implementation: fix-spec
+    templateOverrides:
+      intake: bugfix/intake.md
+      reproduction: bugfix/reproduction.md
+      fix-design: bugfix/fix-design.md
+      fix-spec: bugfix/fix-spec.md
+    phaseOverrides:
+      reproduction:
+        inputs:
+          - intake
+      fix-design:
+        inputs:
+          - reproduction
+      fix-spec:
+        inputs:
+          - reproduction
+          - fix-design
+      implementation:
+        inputs:
+          - fix-spec
+      verification:
+        inputs:
+          - fix-spec
+          - implementation
+      conformance:
+        inputs:
+          - fix-spec
+          - implementation
+          - verification
+  chore:
+    label: Chore
+    phases:
+      - intake
+      - implementation
+      - verification
+      - conformance
+    templateOverrides:
+      intake: chore/intake.md
+    phaseOverrides:
+      implementation:
+        inputs:
+          - intake
+        generation:
+          task: analyze
+      verification:
+        inputs:
+          - implementation
+      conformance:
+        inputs:
+          - implementation
+          - verification
+  figma-mobile:
+    label: Figma export to mobile app
+    phases:
+      - design-intake
+      - design-inventory
+      - component-mapping
+      - mobile-spec
+      - implementation
+      - visual-verification
+      - conformance
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - mobile-spec
+      owners:
+        implementation: mobile-spec
+    designSources:
+      capturePhase: design-intake
+      consumeIn:
+        - design-inventory
+        - component-mapping
+        - mobile-spec
+        - visual-verification
+        - conformance
+      staleness: warn
+      requireApprovedSet: true
+      inventoryDigest: optional
+    verification:
+      coverage: enforce
+      profiles:
+        - id: phone-390x844
+          label: Phone 390 × 844
+          width: 390
+          height: 844
+          deviceScaleFactor: 1
+        - id: tablet-834x1194
+          label: Tablet 834 × 1194
+          width: 834
+          height: 1194
+          deviceScaleFactor: 1
+      comparison:
+        mode: warn
+        channelTolerance: 8
+        maxDifferingPixelRatio: 0.02
+        maxDifferingPixels: null
+        maxPixels: 40000000
+    documents:
+      allowedPhases:
+        - design-intake
+        - design-inventory
+    templateOverrides:
+      design-intake: figma-mobile/design-intake.md
+      design-inventory: figma-mobile/design-inventory.md
+      component-mapping: figma-mobile/component-mapping.md
+      mobile-spec: figma-mobile/mobile-spec.md
+      implementation: figma-mobile/implementation.md
+      visual-verification: figma-mobile/visual-verification.md
+      conformance: figma-mobile/conformance.md
+    phaseOverrides:
+      design-inventory:
+        inputs:
+          - design-intake
+      component-mapping:
+        inputs:
+          - design-inventory
+      mobile-spec:
+        inputs:
+          - design-inventory
+          - component-mapping
+      implementation:
+        inputs:
+          - component-mapping
+          - mobile-spec
+      visual-verification:
+        inputs:
+          - design-inventory
+          - mobile-spec
+          - implementation
+      conformance:
+        inputs:
+          - mobile-spec
+          - implementation
+          - visual-verification
+        approval:
+          authorities:
+            - design-reviewers
+            - architecture-reviewers
+            - quality-reviewers
+          minimum: 1
+          rejectTo:
+            - design-inventory
+            - component-mapping
+            - mobile-spec
+            - implementation
+            - visual-verification
+            - conformance
+    sequenceGates:
+      documentPhase: hard
+  quick-fix:
+    label: Quick fix
+    phases:
+      - implement
+      - verify
+    plannedClaims:
+      mode: opt-out
+      reason: This low-risk two-phase profile intentionally has no approved pre-code
+        specification phase.
+    templateOverrides:
+      implement: quick-fix/implement.md
+      verify: quick-fix/verify.md
+    phaseOverrides:
+      verify:
+        inputs:
+          - implement
+  classic-delivery:
+    label: Classic delivery
+    description: Intake, code, testing, and code checking with committed test
+      receipts, the guarded manual REV refinement pilot during Code, and
+      explicit reviewer feedback/rework to Code; REV feedback attachments are
+      evidence only.
+    phases:
+      - intake
+      - implementation
+      - testing
+      - conformance
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - intake
+      owners:
+        implementation: intake
+    templateOverrides:
+      intake: classic-delivery/intake.md
+      testing: classic-delivery/testing.md
+      conformance: classic-delivery/code-checking.md
+    phaseOverrides:
+      intake:
+        artifact:
+          kind: requirements
+        clarification:
+          mode: required
+          maxQuestions: 5
+          topics:
+            - problem
+            - outcome
+            - scope
+            - acceptance criteria
+            - tests
+      implementation:
+        label: Code
+        inputs:
+          - intake
+        approval:
+          authorities:
+            - engineering-reviewers
+          minimum: 1
+          rejectTo:
+            - intake
+            - implementation
+      testing:
+        label: Testing
+        inputs:
+          - intake
+          - implementation
+        writeScope: artifact-only
+        testEvidenceFrom: implementation
+        approval:
+          authorities:
+            - quality-reviewers
+          minimum: 1
+          rejectTo:
+            - implementation
+            - testing
+      conformance:
+        label: Code checking
+        inputs:
+          - intake
+          - implementation
+          - testing
+        testEvidenceFrom: implementation
+        approval:
+          authorities:
+            - quality-reviewers
+            - engineering-reviewers
+          minimum: 1
+          rejectTo:
+            - intake
+            - implementation
+            - testing
+            - conformance
+  spec-code-test-loop:
+    label: Spec → code → Playwright review
+    description: A specification-first Story with Code publication, governed
+      Playwright browser observations, and bounded human-directed rework. The
+      optional BRL foundation can inspect or plan the exact retained Code
+      Candidate, but runs fail closed without its approved runner; MCP or BRL
+      observations never replace structured test receipts, Testing, publication,
+      or approval.
+    phases:
+      - specification
+      - implementation
+      - testing
+      - conformance
+    reworkLoops:
+      - from: testing
+        to: implementation
+        maxAttempts: 3
+        resetOnPhase: specification
+    spec:
+      mode: enforce
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - specification
+      owners:
+        implementation: specification
+    documents:
+      allowedPhases:
+        - specification
+    templateOverrides:
+      specification: spec-code-test-loop/specification.md
+      testing: spec-code-test-loop/testing.md
+      conformance: spec-code-test-loop/conformance.md
+    phaseOverrides:
+      implementation:
+        label: Code
+        inputs:
+          - specification
+        approval:
+          authorities:
+            - engineering-reviewers
+          minimum: 1
+          rejectTo:
+            - specification
+            - implementation
+      testing:
+        label: Playwright testing review
+        inputs:
+          - specification
+          - implementation
+        artifact:
+          validation:
+            requiredHeadings:
+              - Exact inputs and committed test receipt
+              - Authorized target and environment
+              - Playwright observations
+              - Clause results and gaps
+              - Correction decision
+              - Residual risk
+        writeScope: artifact-only
+        testEvidenceFrom: implementation
+        mcp:
+          requiredServers:
+            - playwright
+          requireSmoke: true
+          evidence:
+            - server: playwright
+              tool: browser_navigate
+              minimum: 1
+              outputRequired: false
+            - server: playwright
+              tool: browser_snapshot
+              minimum: 1
+              outputRequired: true
+            - server: playwright
+              tool: browser_take_screenshot
+              minimum: 1
+              outputRequired: true
+        approval:
+          authorities:
+            - quality-reviewers
+          minimum: 1
+          rejectTo:
+            - specification
+            - testing
+      conformance:
+        label: Spec, code and test checking
+        inputs:
+          - specification
+          - implementation
+          - testing
+        artifact:
+          validation:
+            requiredHeadings:
+              - Exact generation bindings
+              - Clause-by-clause comparison
+              - Unplanned changes and evidence gaps
+              - Correction and final decision
+        testEvidenceFrom: implementation
+        approval:
+          authorities:
+            - quality-reviewers
+            - architecture-reviewers
+          minimum: 1
+          rejectTo:
+            - specification
+            - implementation
+            - testing
+            - conformance
+  poc-lite:
+    label: POC Lite — local governed change
+    description: A model-free four-checkpoint demonstration with repository-native
+      validation and one explicit human finish decision; it imposes no MCP,
+      tracker, or hosted-service dependency.
+    phases:
+      - poc-lite-plan
+      - poc-lite-act
+      - poc-lite-verify
+      - poc-lite-finalize
+    plannedClaims:
+      mode: opt-out
+      reason: This deliberately small demonstration records a bounded plan but does
+        not establish a specification-clause contract.
+    intelligence:
+      worldModel: off
+      ast: off
+      agentBriefs: off
+    templateOverrides:
+      poc-lite-plan: poc-lite/plan.md
+      poc-lite-act: poc-lite/act.md
+      poc-lite-verify: poc-lite/verify.md
+      poc-lite-finalize: poc-lite/finalize.md
+    phaseOverrides:
+      poc-lite-act:
+        inputs:
+          - poc-lite-plan
+      poc-lite-verify:
+        inputs:
+          - poc-lite-plan
+          - poc-lite-act
+      poc-lite-finalize:
+        inputs:
+          - poc-lite-plan
+          - poc-lite-act
+          - poc-lite-verify
+  benchmarking-a:
+    label: Benchmark A — governed intelligence
+    description: Measures governed world-model, bounded AST, and approval-bound
+      agent-brief context; unavailable intelligence is a degraded benchmark run,
+      not a lifecycle refusal.
+    phases:
+      - intake
+      - design
+      - implementation
+      - testing
+      - conformance
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - intake
+      owners:
+        implementation: design
+    intelligence:
+      worldModel: required
+      ast: optional-context
+      agentBriefs: required
+    templateOverrides:
+      intake: benchmark/intake.md
+      design: benchmark/design.md
+      implementation: benchmark/implementation.md
+      testing: benchmark/testing.md
+      conformance: benchmark/conformance.md
+    phaseOverrides:
+      intake:
+        artifact:
+          kind: requirements
+      design:
+        inputs:
+          - phase: intake
+            projection: approved-summary
+            preserve:
+              - Success criteria
+              - Scope and constraints
+            maximumSummaryBytes: 16384
+            expansion: hash-bound-reference
+            fallback: block
+        approval:
+          authorities:
+            - architecture-reviewers
+          minimum: 1
+          rejectTo:
+            - intake
+            - design
+      implementation:
+        inputs:
+          - phase: design
+            projection: approved-summary
+            preserve:
+              - Design and interfaces
+              - Risks and rollback
+            maximumSummaryBytes: 16384
+            expansion: hash-bound-reference
+            fallback: block
+      testing:
+        inputs:
+          - phase: intake
+            projection: approved-summary
+            preserve:
+              - Success criteria
+            maximumSummaryBytes: 12288
+            expansion: hash-bound-reference
+            fallback: block
+          - phase: implementation
+            projection: approved-summary
+            preserve:
+              - Changed components
+              - Validation and operational notes
+            maximumSummaryBytes: 16384
+            expansion: hash-bound-reference
+            fallback: block
+      conformance:
+        inputs:
+          - phase: intake
+            projection: approved-summary
+            preserve:
+              - Success criteria
+            maximumSummaryBytes: 12288
+            expansion: hash-bound-reference
+            fallback: block
+          - phase: design
+            projection: approved-summary
+            preserve:
+              - Design and interfaces
+            maximumSummaryBytes: 12288
+            expansion: hash-bound-reference
+            fallback: block
+          - phase: implementation
+            projection: approved-summary
+            preserve:
+              - Changed components
+            maximumSummaryBytes: 12288
+            expansion: hash-bound-reference
+            fallback: block
+          - phase: testing
+            projection: approved-summary
+            preserve:
+              - Test evidence and results
+            maximumSummaryBytes: 16384
+            expansion: hash-bound-reference
+            fallback: block
+        approval:
+          authorities:
+            - quality-reviewers
+            - architecture-reviewers
+          minimum: 1
+          rejectTo:
+            - design
+            - implementation
+            - testing
+            - conformance
+  benchmarking-b:
+    label: Benchmark B — generic context
+    description: Uses full approved artifacts without world-model, AST, or
+      agent-brief enrichment.
+    phases:
+      - intake
+      - design
+      - implementation
+      - testing
+      - conformance
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - intake
+      owners:
+        implementation: design
+    intelligence:
+      worldModel: off
+      ast: off
+      agentBriefs: off
+    templateOverrides:
+      intake: benchmark/intake.md
+      design: benchmark/design.md
+      implementation: benchmark/implementation.md
+      testing: benchmark/testing.md
+      conformance: benchmark/conformance.md
+    phaseOverrides:
+      intake:
+        artifact:
+          kind: requirements
+        worldModel:
+          views: []
+      design:
+        inputs:
+          - intake
+        worldModel:
+          views: []
+        approval:
+          authorities:
+            - architecture-reviewers
+          minimum: 1
+          rejectTo:
+            - intake
+            - design
+      implementation:
+        inputs:
+          - design
+        worldModel:
+          views: []
+      testing:
+        inputs:
+          - intake
+          - implementation
+        worldModel:
+          views: []
+      conformance:
+        inputs:
+          - intake
+          - design
+          - implementation
+          - testing
+        worldModel:
+          views: []
+        approval:
+          authorities:
+            - quality-reviewers
+            - architecture-reviewers
+          minimum: 1
+          rejectTo:
+            - design
+            - implementation
+            - testing
+            - conformance
+  poc-workflow:
+    label: POC workflow — enterprise Playwright
+    description: The existing enterprise browser-regression profile with governed
+      Playwright MCP evidence and independent publication review.
+    phases:
+      - poc-intake
+      - poc-impact-analysis
+      - poc-ui-exploration
+      - poc-test-generation
+      - poc-validation
+      - poc-publication-review
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - poc-intake
+      owners:
+        poc-test-generation: poc-ui-exploration
+    templateOverrides:
+      poc-intake: poc-workflow/intake.md
+      poc-impact-analysis: poc-workflow/impact-analysis.md
+      poc-ui-exploration: poc-workflow/ui-exploration.md
+      poc-test-generation: poc-workflow/test-generation.md
+      poc-validation: poc-workflow/validation.md
+      poc-publication-review: poc-workflow/publication-review.md
+    phaseOverrides:
+      poc-intake:
+        artifact:
+          kind: requirements
+      poc-impact-analysis:
+        inputs:
+          - poc-intake
+      poc-ui-exploration:
+        inputs:
+          - poc-intake
+          - poc-impact-analysis
+      poc-test-generation:
+        inputs:
+          - poc-intake
+          - poc-impact-analysis
+          - poc-ui-exploration
+      poc-validation:
+        inputs:
+          - poc-impact-analysis
+          - poc-ui-exploration
+          - poc-test-generation
+      poc-publication-review:
+        inputs:
+          - poc-intake
+          - poc-impact-analysis
+          - poc-ui-exploration
+          - poc-test-generation
+          - poc-validation
+  reference-driven-build:
+    label: Reference-driven build
+    description: Creates a new implementation in the delivery repository from one or
+      more immutable, read-only repository branches pinned at Story intake.
+    references:
+      mode: required
+    phases:
+      - specification
+      - planning
+      - implementation
+      - convergence
+      - verification
+      - release
+    spec:
+      mode: enforce
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - specification
+      owners:
+        implementation: planning
+    templateOverrides:
+      specification: spec-driven/spec.md
+      planning: spec-driven/plan.md
+      convergence: spec-driven/convergence.md
+    phaseOverrides:
+      planning:
+        inputs:
+          - specification
+      implementation:
+        inputs:
+          - specification
+          - planning
+      convergence:
+        inputs:
+          - specification
+          - planning
+          - implementation
+      verification:
+        inputs:
+          - specification
+          - planning
+          - implementation
+      release:
+        inputs:
+          - verification
+  spec-driven-standard:
+    label: Spec-Driven Standard
+    spec:
+      mode: enforce
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - specification
+      owners:
+        implementation: planning
+    phases:
+      - specification
+      - planning
+      - implementation
+      - convergence
+      - verification
+      - release
+    fastPath:
+      specify:
+        milestone: specification-approved
+      plan:
+        milestone: planning-approved
+      implement:
+        milestone: implementation-published
+      converge:
+        milestone: convergence-advanced
+      verify:
+        milestone: release-approved
+        phases:
+          - verification
+          - release
+    constitution:
+      path: singularity/constitution.md
+      mode: warn
+    templateOverrides:
+      specification: spec-driven/spec.md
+      planning: spec-driven/plan.md
+      convergence: spec-driven/convergence.md
+    phaseOverrides:
+      planning:
+        inputs:
+          - phase: specification
+            projection: approved-summary
+            preserve:
+              - Requirements
+              - Non-functional requirements
+              - Boundary conditions
+            maximumSummaryBytes: 32768
+            expansion: hash-bound-reference
+            fallback: block
+      implementation:
+        inputs:
+          - phase: specification
+            projection: approved-summary
+            preserve:
+              - Requirements
+              - Non-functional requirements
+              - Boundary conditions
+            maximumSummaryBytes: 32768
+            expansion: hash-bound-reference
+            fallback: block
+          - phase: planning
+            projection: approved-summary
+            preserve:
+              - Test strategy
+              - Risks and rollback
+            maximumSummaryBytes: 24576
+            expansion: hash-bound-reference
+            fallback: block
+      convergence:
+        inputs:
+          - phase: specification
+            projection: approved-summary
+            preserve:
+              - Requirements
+              - Non-functional requirements
+              - Boundary conditions
+            maximumSummaryBytes: 32768
+            expansion: hash-bound-reference
+            fallback: block
+          - phase: planning
+            projection: approved-summary
+            preserve:
+              - Test strategy
+              - Risks and rollback
+            maximumSummaryBytes: 24576
+            expansion: hash-bound-reference
+            fallback: block
+          - phase: implementation
+            projection: approved-summary
+            preserve:
+              - Changed components and decisions
+              - Tests and operational notes
+            maximumSummaryBytes: 24576
+            expansion: hash-bound-reference
+            fallback: block
+      verification:
+        inputs:
+          - phase: specification
+            projection: approved-summary
+            preserve:
+              - Requirements
+              - Non-functional requirements
+              - Boundary conditions
+            maximumSummaryBytes: 32768
+            expansion: hash-bound-reference
+            fallback: block
+          - phase: planning
+            projection: approved-summary
+            preserve:
+              - Test strategy
+              - Risks and rollback
+            maximumSummaryBytes: 24576
+            expansion: hash-bound-reference
+            fallback: block
+          - phase: implementation
+            projection: approved-summary
+            preserve:
+              - Changed components and decisions
+              - Tests and operational notes
+            maximumSummaryBytes: 24576
+            expansion: hash-bound-reference
+            fallback: block
+      release:
+        inputs:
+          - phase: convergence
+          - phase: verification
+            projection: approved-summary
+            preserve:
+              - Acceptance and specification results
+              - Negative, regression, security, and non-functional checks
+            maximumSummaryBytes: 24576
+            expansion: hash-bound-reference
+            fallback: block
+phases:
+  intake:
+    label: Intake
+    defaultTemplate: common/intake.md
+    artifact:
+      path: artifacts/intake/intake.md
+      kind: intake
+      minimumBytes: 200
+    worldModel:
+      views:
+        - business
+      depth: quick
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - problem
+        - outcome
+        - users
+        - scope
+        - constraints
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - product-approvers
+      minimum: 1
+      rejectTo:
+        - intake
+  requirements:
+    label: Requirements
+    defaultTemplate: feature/requirements.md
+    artifact:
+      path: artifacts/requirements/requirements.md
+      kind: requirements
+      minimumBytes: 300
+    worldModel:
+      views:
+        - business
+      depth: standard
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - scope
+        - acceptance criteria
+        - dependencies
+        - constraints
+        - risks
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - product-approvers
+      minimum: 1
+      rejectTo:
+        - intake
+        - requirements
+  design:
+    label: Architecture and design
+    defaultTemplate: feature/design.md
+    artifact:
+      path: artifacts/design/design.md
+      kind: design
+      minimumBytes: 300
+    worldModel:
+      views:
+        - architecture
+        - security
+      depth: standard
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - boundaries
+        - contracts
+        - failure behavior
+        - security
+        - migration
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - architecture-reviewers
+      minimum: 1
+      rejectTo:
+        - requirements
+        - design
+  implementation-spec:
+    label: Implementation specification
+    defaultTemplate: feature/implementation-spec.md
+    artifact:
+      path: artifacts/implementation-spec/implementation-spec.md
+      kind: implementation-spec
+      minimumBytes: 400
+    worldModel:
+      views:
+        - architecture
+        - development
+        - testing
+        - security
+      depth: deep
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - interfaces
+        - data
+        - security
+        - observability
+        - migration
+        - tests
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - architecture-reviewers
+      minimum: 1
+      rejectTo:
+        - requirements
+        - design
+        - implementation-spec
+  reproduction:
+    label: Reproduction
+    defaultTemplate: bugfix/reproduction.md
+    artifact:
+      path: artifacts/reproduction/reproduction.md
+      kind: reproduction
+      minimumBytes: 250
+    worldModel:
+      views:
+        - development
+        - testing
+      depth: standard
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - observed behavior
+        - expected behavior
+        - reproduction
+        - environment
+        - impact
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - intake
+        - reproduction
+  fix-design:
+    label: Fix design
+    defaultTemplate: bugfix/fix-design.md
+    artifact:
+      path: artifacts/fix-design/fix-design.md
+      kind: fix-design
+      minimumBytes: 250
+    worldModel:
+      views:
+        - architecture
+        - development
+        - security
+      depth: standard
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - root cause
+        - scope
+        - regression risk
+        - compatibility
+        - rollback
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - architecture-reviewers
+      minimum: 1
+      rejectTo:
+        - reproduction
+        - fix-design
+  fix-spec:
+    label: Fix specification
+    defaultTemplate: bugfix/fix-spec.md
+    artifact:
+      path: artifacts/fix-spec/fix-spec.md
+      kind: implementation-spec
+      minimumBytes: 300
+    worldModel:
+      views:
+        - development
+        - testing
+        - security
+      depth: standard
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - changed behavior
+        - test expectations
+        - compatibility
+        - failure behavior
+        - rollback
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - architecture-reviewers
+      minimum: 1
+      rejectTo:
+        - reproduction
+        - fix-design
+        - fix-spec
+  design-intake:
+    label: Design package intake
+    defaultTemplate: figma-mobile/design-intake.md
+    artifact:
+      path: artifacts/design-intake/design-package-intake.md
+      kind: design-intake
+      minimumBytes: 350
+    worldModel:
+      views:
+        - business
+        - architecture
+      depth: standard
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - target platforms
+        - screen states
+        - interactions
+        - accessibility
+        - design constraints
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - design-reviewers
+      minimum: 1
+      rejectTo:
+        - design-intake
+  design-inventory:
+    label: Screen and design inventory
+    defaultTemplate: figma-mobile/design-inventory.md
+    artifact:
+      path: artifacts/design-inventory/design-inventory.md
+      kind: design-inventory
+      minimumBytes: 500
+    worldModel:
+      views:
+        - business
+        - architecture
+      depth: standard
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - screen states
+        - transitions
+        - assets
+        - responsive behavior
+        - evidence gaps
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - design-reviewers
+      minimum: 1
+      rejectTo:
+        - design-intake
+        - design-inventory
+  component-mapping:
+    label: Mobile component mapping
+    defaultTemplate: figma-mobile/component-mapping.md
+    artifact:
+      path: artifacts/component-mapping/component-mapping.md
+      kind: component-mapping
+      minimumBytes: 500
+    worldModel:
+      views:
+        - architecture
+        - development
+        - security
+      depth: deep
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - component ownership
+        - navigation
+        - state
+        - data contracts
+        - accessibility
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - architecture-reviewers
+      minimum: 1
+      rejectTo:
+        - design-inventory
+        - component-mapping
+  mobile-spec:
+    label: Mobile implementation specification
+    defaultTemplate: figma-mobile/mobile-spec.md
+    artifact:
+      path: artifacts/mobile-spec/mobile-spec.md
+      kind: implementation-spec
+      minimumBytes: 700
+    worldModel:
+      views:
+        - architecture
+        - development
+        - testing
+        - security
+      depth: deep
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - behavior
+        - interfaces
+        - failure states
+        - analytics
+        - testing
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - architecture-reviewers
+      minimum: 1
+      rejectTo:
+        - design-inventory
+        - component-mapping
+        - mobile-spec
+  implementation:
+    label: Implementation
+    defaultTemplate: common/implementation.md
+    artifact:
+      path: artifacts/implementation/implementation-summary.md
+      kind: implementation-summary
+      minimumBytes: 250
+    worldModel:
+      views:
+        - development
+        - testing
+      depth: standard
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - approved deviations
+        - implementation blockers
+    generation:
+      task: code
+    writeScope: source-and-artifact
+    approval:
+      authorities:
+        - engineering-reviewers
+      minimum: 1
+      rejectTo:
+        - implementation
+    qualityCommands: []
+  verification:
+    label: Verification
+    defaultTemplate: common/verification.md
+    artifact:
+      path: artifacts/verification/test-evidence.md
+      kind: test-evidence
+      minimumBytes: 300
+    worldModel:
+      views:
+        - testing
+        - development
+        - security
+      depth: standard
+      evidence: true
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - test gaps
+        - environment
+        - evidence
+        - deviations
+    writeScope: source-and-artifact
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - implementation
+        - verification
+    qualityCommands: []
+  testing:
+    label: Testing
+    defaultTemplate: benchmark/testing.md
+    artifact:
+      path: artifacts/testing/test-evidence.md
+      kind: test-evidence
+      minimumBytes: 300
+    worldModel:
+      views:
+        - testing
+        - development
+        - security
+      depth: standard
+      evidence: true
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - test gaps
+        - environment
+        - evidence
+        - deviations
+    writeScope: source-and-artifact
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - implementation
+        - testing
+    qualityCommands: []
+  visual-verification:
+    label: Mobile visual verification
+    defaultTemplate: figma-mobile/visual-verification.md
+    artifact:
+      path: artifacts/visual-verification/visual-comparison.md
+      kind: visual-test-evidence
+      minimumBytes: 600
+    worldModel:
+      views:
+        - testing
+        - development
+        - security
+      depth: deep
+      evidence: true
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - visual tolerance
+        - device evidence
+        - accessibility
+        - deviations
+    writeScope: source-and-artifact
+    approval:
+      authorities:
+        - design-reviewers
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - component-mapping
+        - mobile-spec
+        - implementation
+        - visual-verification
+    qualityCommands: []
+  conformance:
+    label: Spec-to-code conformance
+    defaultTemplate: common/conformance.md
+    artifact:
+      path: artifacts/conformance/spec-code-comparison.md
+      kind: conformance-report
+      minimumBytes: 400
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - approved deviations
+        - missing evidence
+        - unplanned work
+    worldModel:
+      views:
+        - architecture
+        - development
+        - testing
+        - security
+      depth: deep
+      evidence: true
+    writeScope: artifact-only
+    comparison:
+      identifiers:
+        - acceptance-criteria
+        - specification
+      verdicts:
+        - matched
+        - partial
+        - missing
+        - deviated
+        - unplanned
+      exactFileLineEvidence: true
+    approval:
+      authorities:
+        - quality-reviewers
+        - architecture-reviewers
+      minimum: 1
+      rejectTo:
+        - implementation-spec
+        - fix-spec
+        - implementation
+        - verification
+        - conformance
+  poc-intake:
+    label: POC intent and environment
+    defaultTemplate: poc-workflow/intake.md
+    artifact:
+      path: artifacts/poc-intake/intake.md
+      kind: poc-intake
+      minimumBytes: 500
+      validation:
+        requiredHeadings:
+          - Objective and scope
+          - Repository and branch context
+          - Target environment
+          - Test intent and acceptance criteria
+          - Safety and access
+    worldModel:
+      views:
+        - business
+        - testing
+        - security
+      depth: standard
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - test intent
+        - target environment
+        - acceptance criteria
+        - access and safety
+        - exclusions
+    writeScope: artifact-only
+    generation:
+      task: clarify
+    approval:
+      authorities:
+        - product-approvers
+      minimum: 1
+      rejectTo:
+        - poc-intake
+  poc-impact-analysis:
+    label: Regression impact analysis
+    defaultTemplate: poc-workflow/impact-analysis.md
+    artifact:
+      path: artifacts/poc-impact-analysis/impact-analysis.md
+      kind: impact-analysis
+      minimumBytes: 600
+      validation:
+        requiredHeadings:
+          - Compared revisions
+          - Changed-code evidence
+          - Regression footprint
+          - Proposed scenarios
+          - Risks and unknowns
+    worldModel:
+      views:
+        - architecture
+        - development
+        - testing
+        - security
+      depth: deep
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - change boundary
+        - affected routes
+        - test seams
+        - risk
+        - unknowns
+    writeScope: artifact-only
+    generation:
+      task: analyze
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - poc-intake
+        - poc-impact-analysis
+  poc-ui-exploration:
+    label: Governed UI exploration
+    defaultTemplate: poc-workflow/ui-exploration.md
+    artifact:
+      path: artifacts/poc-ui-exploration/ui-exploration.md
+      kind: ui-exploration-evidence
+      minimumBytes: 700
+      validation:
+        requiredHeadings:
+          - Authorized target
+          - Observed journeys and states
+          - Accessibility and locator evidence
+          - Visual and runtime evidence
+          - Coverage gaps
+    worldModel:
+      views:
+        - testing
+        - development
+        - security
+      depth: deep
+      evidence: true
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - environment access
+        - test data
+        - observed behavior
+        - accessibility
+        - evidence gaps
+    writeScope: artifact-only
+    generation:
+      task: analyze
+    mcp:
+      requiredServers:
+        - playwright
+      requireSmoke: true
+      evidence:
+        - server: playwright
+          tool: browser_navigate
+          minimum: 1
+          outputRequired: false
+        - server: playwright
+          tool: browser_snapshot
+          minimum: 1
+          outputRequired: true
+        - server: playwright
+          tool: browser_take_screenshot
+          minimum: 1
+          outputRequired: true
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - poc-impact-analysis
+        - poc-ui-exploration
+  poc-test-generation:
+    label: Playwright test generation
+    defaultTemplate: poc-workflow/test-generation.md
+    artifact:
+      path: artifacts/poc-test-generation/test-generation.md
+      kind: implementation-summary
+      minimumBytes: 600
+      validation:
+        requiredHeadings:
+          - Repository-native design
+          - Files changed
+          - Scenario traceability
+          - Locator and test-data strategy
+          - Deviations and residual risk
+    worldModel:
+      views:
+        - development
+        - testing
+        - architecture
+        - security
+      depth: deep
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - framework conventions
+        - fixtures
+        - test data
+        - approved deviations
+        - implementation blockers
+    writeScope: source-and-artifact
+    sourceBoundary: test-automation
+    generation:
+      task: code
+    approval:
+      authorities:
+        - engineering-reviewers
+      minimum: 1
+      rejectTo:
+        - poc-ui-exploration
+        - poc-test-generation
+    qualityCommands:
+      - id: git-diff-check
+        argv:
+          - git
+          - diff
+          - --check
+        modelPolicy: never
+  poc-validation:
+    label: Playwright validation and bounded repair
+    defaultTemplate: poc-workflow/validation.md
+    artifact:
+      path: artifacts/poc-validation/validation.md
+      kind: test-evidence
+      minimumBytes: 800
+      validation:
+        requiredHeadings:
+          - Validation scope
+          - Commands and environment
+          - Scenario results
+          - Evidence inventory
+          - Repair attempts
+          - Final verdict
+    worldModel:
+      views:
+        - testing
+        - development
+        - security
+      depth: deep
+      evidence: true
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - failure classification
+        - environment
+        - evidence
+        - repair scope
+        - residual risk
+    writeScope: source-and-artifact
+    sourceBoundary: test-automation
+    generation:
+      task: analyze
+    mcp:
+      requiredServers:
+        - playwright
+      requireSmoke: true
+      evidence:
+        - server: playwright
+          tool: browser_console_messages
+          minimum: 1
+          outputRequired: true
+        - server: playwright
+          tool: browser_network_requests
+          minimum: 1
+          outputRequired: true
+        - server: playwright
+          tool: browser_take_screenshot
+          minimum: 1
+          outputRequired: true
+    repairBudget:
+      maxAttempts: 2
+      resetOnPhase: poc-intake
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - poc-intake
+        - poc-ui-exploration
+        - poc-test-generation
+        - poc-validation
+    qualityCommands:
+      - id: git-diff-check
+        argv:
+          - git
+          - diff
+          - --check
+        modelPolicy: never
+        timeoutMs: 60000
+      - id: typescript-compile
+        argv:
+          - npx
+          - --no-install
+          - tsc
+          - --noEmit
+        modelPolicy: never
+        timeoutMs: 300000
+      - id: playwright-tests
+        argv:
+          - npx
+          - --no-install
+          - playwright
+          - test
+          - --reporter=json
+        modelPolicy: never
+        timeoutMs: 1200000
+  poc-publication-review:
+    label: Publication and PR review
+    defaultTemplate: poc-workflow/publication-review.md
+    artifact:
+      path: artifacts/poc-publication-review/publication-review.md
+      kind: publication-review
+      minimumBytes: 700
+      validation:
+        requiredHeadings:
+          - Publication boundary
+          - Change and coverage summary
+          - Validation evidence
+          - Residual risk and rollback
+          - Human decision
+    worldModel:
+      views:
+        - release
+        - testing
+        - development
+        - security
+      depth: standard
+      evidence: true
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - publication target
+        - evidence gaps
+        - residual risk
+        - rollback
+        - reviewer decision
+    writeScope: artifact-only
+    generation:
+      task: summarize
+    approval:
+      authorities:
+        - quality-reviewers
+        - engineering-reviewers
+      requiredAuthorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - poc-intake
+        - poc-impact-analysis
+        - poc-ui-exploration
+        - poc-test-generation
+        - poc-validation
+        - poc-publication-review
+  poc-lite-plan:
+    label: PLAN — bound the local change
+    defaultTemplate: poc-lite/plan.md
+    artifact:
+      path: artifacts/poc-lite-plan/plan.md
+      kind: delivery-plan
+      minimumBytes: 200
+      validation:
+        requiredHeadings:
+          - Work item
+          - Changed paths
+          - Configured checks
+          - Specification claims
+    generation:
+      requirement: required
+      producer: deterministic
+      task: reason
+    worldModel:
+      views: []
+    writeScope: artifact-only
+    approval: none
+  poc-lite-act:
+    label: ACT — make the bounded change
+    defaultTemplate: poc-lite/act.md
+    artifact:
+      path: artifacts/poc-lite-act/implementation-summary.md
+      kind: implementation-summary
+      minimumBytes: 200
+      validation:
+        requiredHeadings:
+          - Work item
+          - Changed paths
+          - Configured checks
+          - Specification claims
+    generation:
+      requirement: required
+      producer: deterministic
+      task: code
+    worldModel:
+      views: []
+    writeScope: source-and-artifact
+    approval: none
+    qualityCommands:
+      - id: git-diff-check
+        argv:
+          - git
+          - diff
+          - --check
+        modelPolicy: never
+  poc-lite-verify:
+    label: VERIFY — run repository checks
+    defaultTemplate: poc-lite/verify.md
+    artifact:
+      path: artifacts/poc-lite-verify/verification.md
+      kind: test-evidence
+      minimumBytes: 200
+      validation:
+        requiredHeadings:
+          - Work item
+          - Changed paths
+          - Configured checks
+          - Specification claims
+    generation:
+      requirement: required
+      producer: deterministic
+      task: analyze
+    worldModel:
+      views: []
+    writeScope: artifact-only
+    approval: none
+    qualityCommands:
+      - id: git-diff-check
+        argv:
+          - git
+          - diff
+          - --check
+        modelPolicy: never
+  poc-lite-finalize:
+    label: FINALIZE — human finish decision
+    defaultTemplate: poc-lite/finalize.md
+    artifact:
+      path: artifacts/poc-lite-finalize/finalize.md
+      kind: publication-review
+      minimumBytes: 200
+      validation:
+        requiredHeadings:
+          - Work item
+          - Changed paths
+          - Configured checks
+          - Specification claims
+    generation:
+      requirement: required
+      producer: deterministic
+      task: summarize
+    worldModel:
+      views: []
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - quality-reviewers
+      requiredAuthorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - poc-lite-plan
+        - poc-lite-act
+        - poc-lite-verify
+        - poc-lite-finalize
+  specification:
+    label: Specification
+    defaultTemplate: spec-driven/spec.md
+    artifact:
+      path: artifacts/specification/spec.md
+      kind: requirements
+      minimumBytes: 400
+    artifactSet: spec-driven-specification
+    worldModel:
+      views:
+        - business
+      depth: standard
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - scope
+        - acceptance criteria
+        - actors
+        - boundary conditions
+        - non-functional requirements
+      markers:
+        mode: block
+    specificationQuality:
+      mode: enforce
+      checklist: requirements-quality-v1
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - product-approvers
+      minimum: 1
+      rejectTo:
+        - specification
+  planning:
+    label: Planning
+    defaultTemplate: spec-driven/plan.md
+    artifact:
+      path: artifacts/planning/plan.md
+      kind: design
+      minimumBytes: 300
+    artifactSet: spec-driven-planning
+    worldModel:
+      views:
+        - architecture
+      depth: standard
+    clarification:
+      mode: off
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - architecture-reviewers
+      minimum: 1
+      rejectTo:
+        - specification
+        - planning
+  release:
+    label: Release
+    defaultTemplate: spec-driven/release.md
+    artifact:
+      path: artifacts/release/conformance.md
+      kind: conformance-report
+      minimumBytes: 300
+    artifactSet: spec-driven-verification
+    worldModel:
+      views:
+        - release
+      depth: quick
+      evidence: true
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - implementation
+        - verification
+        - release
+  convergence:
+    label: Convergence
+    defaultTemplate: spec-driven/convergence.md
+    artifact:
+      path: artifacts/convergence/convergence.md
+      kind: verification-report
+      minimumBytes: 200
+    generation:
+      requirement: required
+      producer: deterministic
+      task: analyze
+    worldModel:
+      views:
+        - development
+      depth: quick
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - architecture-reviewers
+      minimum: 1
+      rejectTo:
+        - implementation
+  implement:
+    label: Implement
+    defaultTemplate: quick-fix/implement.md
+    artifact:
+      path: artifacts/implement/implementation-summary.md
+      kind: implementation-summary
+      minimumBytes: 200
+    generation:
+      requirement: required
+      producer: deterministic
+      task: code
+    worldModel:
+      views:
+        - development
+      depth: quick
+    writeScope: source-and-artifact
+    approval: none
+    qualityCommands: []
+  verify:
+    label: Verify
+    defaultTemplate: quick-fix/verify.md
+    artifact:
+      path: artifacts/verify/verification-summary.md
+      kind: test-evidence
+      minimumBytes: 200
+    generation:
+      requirement: required
+      producer: deterministic
+      task: analyze
+    worldModel:
+      views:
+        - testing
+      depth: quick
+      evidence: true
+    writeScope: source-and-artifact
+    approval:
+      mode: policy
+      policy: quick-fix-low-risk-v1
+      maximumChangedPaths: 5
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - implement
+        - verify
+    qualityCommands:
+      - id: git-diff-check
+        argv:
+          - git
+          - diff
+          - --check
+        modelPolicy: never
+governance:
+  requireAcceptanceCriteriaTags: true
+  protectedPaths:
+    - singularity/workflow.yml
+    - singularity/impact.yml
+    - singularity/agent-mappings.yml
+    - singularity/agents.lock.yml
+    - singularity/templates
+    - singularity/agents
+    - singularity/prompts
+    - .github/agents
+    - plugin/agents
+    - plugin/skills
+    - .github/skills

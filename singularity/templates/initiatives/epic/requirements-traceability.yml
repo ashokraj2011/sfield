@@ -1,0 +1,35 @@
+# Requirements Traceability Matrix — {{workId}}
+#
+# The machine-checked half of the requirements phase. Every REQ-nnn and AC-nnn in
+# the requirements specification must appear here with at least one pinned source
+# citation, and every citation must name a source that exists in the catalog.
+#
+# Verification is strict:
+#   - IDs must match REQ-nnn / AC-nnn (three digits or more) and be unique.
+#   - Each item needs a non-empty `sources` list.
+#   - A citation must carry BOTH a source ID and a locator (page, frame, section).
+#   - The cited source ID must exist in the pinned Epic source manifest.
+#
+# A citation may be written either way:
+#   sources: ["SRC-1A2B3C4D5E6F#page 12"]
+#   sources:
+#     - sourceId: SRC-1A2B3C4D5E6F
+#       locator: "§4.2 Payment retry"
+#
+# Story planning allocates these exact identifiers to Stories, so they must stay
+# stable. Never renumber an approved identifier; supersede it with a new one.
+
+version: 1
+epicId: "{{workId}}"
+
+requirements:
+  - id: REQ-001
+    # Optional but recommended: keeps the matrix readable without opening the SRS.
+    # statement: ""
+    # priority: Must
+    sources: []
+
+acceptanceCriteria:
+  - id: AC-001
+    requirements: [REQ-001]
+    sources: []

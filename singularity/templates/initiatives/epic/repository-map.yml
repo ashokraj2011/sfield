@@ -1,0 +1,67 @@
+# Impact Map — {{workId}}
+#
+# Which repositories this Epic touches, and the evidence justifying each claim.
+# Publishing the plan phase validates this file against committed state:
+#
+#   - every key under `repositories` must exist in singularity/portfolio.yml
+#   - when a committed World-Model manifest is available, every entry in
+#     `worldModelViews` must exist in it
+#
+# A missing or unavailable World Model records degraded evidence and does not block
+# publication. Against an available manifest, an unresolvable reference blocks under
+# `grounding: enforce` and otherwise warns. These checks are why this file is worth
+# completing properly: an impact map that names a repository nobody configured, or
+# cites a view absent from the available manifest, is a guess wearing the costume of
+# an analysis.
+#
+# Use World-Model evidence when available. Without it, cite pinned sources and
+# record the uncertainty instead of guessing; ordinary Initiative work continues.
+#
+# Shape of a complete entry — copy into `repositories` and replace the alias with
+# a real portfolio repository ID:
+#
+#   repositories:
+#     api:                                  # must match a portfolio repository ID
+#       worldModelViews: [architecture, development]
+#       changeType: modify                  # create | modify | integrate | read-only
+#       blastRadius: contained              # contained | cross-cutting | breaking
+#       confidence: high                    # high | medium | low
+#       requirements: [REQ-001]             # what drives the change here
+#       components:                         # named from the world model, not guessed
+#         - path: src/routes/items.ts
+#           change: "Add cos operator to the rule evaluator"
+#       interfaces:                         # contracts crossing a repository boundary
+#         - id: items-api
+#           version: 2
+#           role: producer                  # producer | consumer
+#           compatibility: backward         # backward | breaking
+#       migrations: []                      # schema or data changes required
+#       tests: [contract, integration]      # test levels the change demands
+#       risks:
+#         - "Rule evaluator is shared by three callers; regression surface is wide."
+#       evidence:                           # why we believe this repository is affected
+#         - "world-model:architecture#rule-evaluator"
+#
+# Repositories examined and found NOT to be affected belong in `unaffected`, with
+# the reason. A silent omission is indistinguishable from an oversight.
+
+version: 1
+epicId: "{{workId}}"
+
+repositories: {}
+
+unaffected: []
+# unaffected:
+#   - repository: web-read
+#     reason: "Read path consumes items-api v1 and v2 identically; no change required."
+#     evidence: ["world-model:architecture#items-api-consumers"]
+
+# Systems outside the portfolio that this Epic affects or depends on. Recorded
+# for completeness — these are not validated because Singularity Flow does not
+# govern them.
+externalSystems: []
+# externalSystems:
+#   - name: "Billing platform"
+#     involvement: integrate
+#     owner: "Finance Engineering"
+#     coordinationNeeded: true
