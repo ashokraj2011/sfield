@@ -312,6 +312,20 @@ export class SField {
     },
   };
 
+  /** Attachments enter through the host (§11.3): an opaque id plus digest, media type, size, and classification. */
+  readonly attachments = {
+    put: async (input: { principal?: Principal; bytes: Uint8Array; mediaType: string; name?: string; classification?: import("./types/common.js").DataClassification }): Promise<import("./types/common.js").AttachmentRef> => {
+      const principal = this.i.runs.resolvePrincipal(input.principal);
+      const limit = this.i.limits.requestMaxBytes ?? HOST_DEFAULTS.requestMaxBytes;
+      if (input.bytes.byteLength > limit * 8) throw new SFieldError("REQUEST_TOO_LARGE", `attachment of ${input.bytes.byteLength} bytes exceeds ${limit * 8}`);
+      const ref = await this.i.artifacts.put({ bytes: input.bytes, mediaType: input.mediaType, classification: input.classification ?? "confidential", tenantId: principal.tenantId });
+      await this.i.artifacts.commit?.(ref, { tenantId: principal.tenantId });
+      const out: import("./types/common.js").AttachmentRef = { id: ref.id, digest: ref.digest, mediaType: ref.mediaType, bytes: ref.bytes, classification: ref.classification };
+      if (input.name) out.name = input.name;
+      return out;
+    },
+  };
+
   readonly conversations = {
     history: (input: { id: string; principal?: Principal; limit?: number }) => this.i.runs.history(input),
     export: (input: { id: string; principal?: Principal }) => this.i.runs.exportConversation(input),

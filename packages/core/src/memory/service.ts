@@ -207,6 +207,19 @@ export class MemoryService {
     const rec: AuditRecord = { id: newId("aud"), at: nowIso(), tenantId: principal.tenantId, type, principal: { tenantId: principal.tenantId, subjectId: principal.subjectId }, data };
     if (this.opts.preset) rec.preset = this.opts.preset;
     await this.opts.audit([rec]);
+    await this.mirrorOutbox(principal.tenantId);
+  }
+
+  /** Repository outbox events are mirrored into the central audit stream, deduplicated by event id (§17.5). */
+  private readonly mirrored = new Set<string>();
+  async mirrorOutbox(tenantId: string): Promise<void> {
+    const events = await this.opts.repository.drainOutbox(100);
+    const fresh = events.filter((e) => !this.mirrored.has(e.id));
+    if (fresh.length) {
+      await this.opts.audit(fresh.map((e) => ({ id: `aud_outbox_${e.id}`, at: e.at, tenantId, type: "memory_outbox", data: { itemId: e.itemId, version: e.version, op: e.op, generation: e.generation, scopeKey: e.scopeKey }, preset: this.opts.preset })));
+      for (const e of fresh) this.mirrored.add(e.id);
+    }
+    if (events.length) await this.opts.repository.ackOutbox(events.map((e) => e.id));
   }
 }
 

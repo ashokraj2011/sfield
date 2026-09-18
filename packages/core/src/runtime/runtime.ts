@@ -369,6 +369,7 @@ export class AgentRuntime {
     const capabilities = await this.deps.gateway.describe(binding);
     if (cp.counters.modelCalls >= agent.budget.max_model_calls) throw new SFieldError("BUDGET_EXHAUSTED", `max_model_calls ${agent.budget.max_model_calls} reached`);
     const memory = await this.loadMemory(ctx);
+    const ctxStart = Date.now();
     const built = await buildContext({
       runId: run.runId,
       agent: { ...agent, context: { ...agent.context, max_input_tokens: inputCeiling } },
@@ -385,6 +386,8 @@ export class AgentRuntime {
       signal: ctx.controller.signal,
       countTokens: capabilities.tokenCounting === "provider" ? (req) => this.deps.gateway.countTokens(req) : undefined,
     });
+    this.deps.telemetry?.metric?.("sfield.context.build_ms", Date.now() - ctxStart, { agent: agent.id });
+    this.deps.telemetry?.metric?.("sfield.context.omissions", built.packet.omissions.length, { agent: agent.id });
     await this.deps.persistence.saveContextExplanation(built.explanation);
     cp.contextPacketIds.push(built.packet.id);
     await this.emit(ctx, "context_built", { contextId: built.packet.id, blocks: built.packet.blocks.length, omissions: built.packet.omissions.length, estimatedInput: built.packet.budget.estimatedInput, estimated: built.packet.budget.estimated, tools: built.packet.tools.length, digest: built.packet.digest });
