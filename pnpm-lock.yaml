@@ -15,6 +15,27 @@ importers:
         specifier: ^5.6.3
         version: 5.9.3
 
+  packages/artifacts-fs:
+    dependencies:
+      '@sfield/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/cli:
+    dependencies:
+      '@sfield/core':
+        specifier: workspace:*
+        version: link:../core
+      '@sfield/http':
+        specifier: workspace:*
+        version: link:../http
+      '@sfield/preset-local':
+        specifier: workspace:*
+        version: link:../preset-local
+      '@sfield/preset-memory':
+        specifier: workspace:*
+        version: link:../preset-memory
+
   packages/core:
     dependencies:
       ajv:
@@ -23,6 +44,43 @@ importers:
       yaml:
         specifier: ^2.7.0
         version: 2.9.1
+
+  packages/http:
+    dependencies:
+      '@sfield/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/preset-local:
+    dependencies:
+      '@sfield/artifacts-fs':
+        specifier: workspace:*
+        version: link:../artifacts-fs
+      '@sfield/core':
+        specifier: workspace:*
+        version: link:../core
+      '@sfield/store-sqlite':
+        specifier: workspace:*
+        version: link:../store-sqlite
+
+  packages/preset-memory:
+    dependencies:
+      '@sfield/core':
+        specifier: workspace:*
+        version: link:../core
+      '@sfield/preset-local':
+        specifier: workspace:*
+        version: link:../preset-local
+
+  packages/store-sqlite:
+    dependencies:
+      '@sfield/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@sfield/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/testing:
     dependencies:

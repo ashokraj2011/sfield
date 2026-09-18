@@ -6,6 +6,24 @@
     },
     {
       "path": "packages/testing"
+    },
+    {
+      "path": "packages/http"
+    },
+    {
+      "path": "packages/store-sqlite"
+    },
+    {
+      "path": "packages/artifacts-fs"
+    },
+    {
+      "path": "packages/preset-local"
+    },
+    {
+      "path": "packages/preset-memory"
+    },
+    {
+      "path": "packages/cli"
     }
   ]
 }
