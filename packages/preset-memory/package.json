@@ -1,3 +1,24 @@
-{ "name": "@sfield/preset-memory", "version": "0.1.0", "description": "In-memory development preset for Singularity Field tests", "type": "module", "license": "Apache-2.0",
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } }, "files": ["dist"], "scripts": { "build": "tsc -b" },
-  "dependencies": { "@sfield/core": "workspace:*", "@sfield/preset-local": "workspace:*" } }
+{
+  "name": "@sfield/preset-memory",
+  "version": "0.1.0",
+  "description": "In-memory development preset for Singularity Field tests",
+  "type": "module",
+  "license": "Apache-2.0",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@sfield/core": "workspace:*",
+    "@sfield/preset-local": "workspace:*"
+  }
+}

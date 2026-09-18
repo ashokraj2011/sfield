@@ -124,11 +124,15 @@ export class SField {
     if (persistence.mode !== deployment) {
       throw new SFieldError("UNSUPPORTED_DEPLOYMENT", `deployment ${deployment} needs a ${deployment} persistence backend; the supplied backend is ${persistence.mode}`, { path: "options.deployment" });
     }
-    await checkLockApproved(config.digest, options.governance, deployment, { lockApprovals: persistence.lockApprovals, evalReports: persistence.evalReports });
-
     const ownerId = `${process.pid}:${newId("owner").slice(6, 14)}`;
     const namespace = options.namespace ?? configDir;
     await persistence.init({ namespace, ownerId });
+    try {
+      await checkLockApproved(config.digest, options.governance, deployment, { lockApprovals: persistence.lockApprovals, evalReports: persistence.evalReports });
+    } catch (e) {
+      await persistence.close().catch(() => undefined);
+      throw e;
+    }
     const artifacts = options.artifacts ?? preset?.artifacts ?? persistence.artifacts ?? new InMemoryArtifactStore();
     const memoryRepo = options.memory ?? preset?.memory ?? persistence.memory ?? new InMemoryMemoryRepository();
     const scrubber = new Scrubber(secrets.knownValues?.() ?? [], () => secrets.knownValues?.() ?? []);

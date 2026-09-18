@@ -4,11 +4,19 @@
   "description": "Singularity Field core runtime: config compiler, tool registry pipeline, memory, retrieval, context manager, model gateway, agent runtime",
   "type": "module",
   "license": "Apache-2.0",
-  "engines": { "node": ">=22.13" },
-  "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+  "engines": {
+    "node": ">=22.13"
   },
-  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -b"
   },

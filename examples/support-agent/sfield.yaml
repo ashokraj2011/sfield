@@ -1,0 +1,24 @@
+# support-agent/sfield.yaml — complete
+version: 1
+
+models:
+  default:
+    provider: anthropic
+    model: "${env:SFIELD_MODEL}"
+    credential: {env: ANTHROPIC_API_KEY}
+
+sources:
+  policies:
+    type: local_files
+    path: ./knowledge
+
+agents:
+  support:
+    instructions_file: ./instructions.md
+    tools: [orders.get]
+    memory:
+      conversation: true
+      preferences: explicit
+    context:
+      sources:
+        - {source: policies, query: {ref: message.text}, max_items: 3}

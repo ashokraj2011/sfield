@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "configDigest": "sha256:8023f6963d8fc7a3e9c0102241236bfb6255ee47167f9479cc523226ea3d68f7",
+  "tools": {
+    "orders.get@1.0.0": {
+      "ref": "orders.get@1.0.0",
+      "digest": "sha256:92e897f83d0f88acb474bf8d010aa45cfae0e46777911a5e09e477846745b056",
+      "source": "bundle"
+    }
+  },
+  "plugins": {
+    "http": {
+      "version": "0.1.0",
+      "buildDigest": "sha256:6d1f0a9c3b7e5248d0c4e8a1f3b6c9d2"
+    }
+  },
+  "bindings": {
+    "model:default": {
+      "kind": "model",
+      "identity": {
+        "id": "model:default",
+        "revision": "8802fbb10d5aa258",
+        "accountScope": "anthropic",
+        "classification": "restricted"
+      }
+    },
+    "retrieval:policies": {
+      "kind": "retrieval",
+      "identity": {
+        "id": "retrieval:policies",
+        "revision": "e1fa6a2b4a6d0e97",
+        "accountScope": "local_files",
+        "classification": "internal"
+      }
+    }
+  },
+  "schemaVersion": 1,
+  "compilerVersion": "sfield-compiler@0.1.0",
+  "formats": "sfield-formats@1",
+  "createdAt": "2026-09-18T12:58:53.744Z"
+}
