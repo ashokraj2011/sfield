@@ -68,6 +68,7 @@ export class RunService {
     const agent = this.deps.config().agents[input.agentId];
     if (!agent) throw new SFieldError("UNKNOWN_AGENT", `agent ${input.agentId} is not configured`);
     if (!request?.message || typeof request.message.text !== "string") throw new SFieldError("INVALID_INPUT", "request.message.text is required");
+    if (this.deps.scheduler.isClosing) throw new SFieldError("STATE_UNAVAILABLE", "the instance is closing; admission is stopped", { retryable: false });
     const bytes = Buffer.byteLength(JSON.stringify({ message: request.message, inputs: request.inputs ?? null }), "utf8");
     if (bytes > this.deps.requestMaxBytes) throw new SFieldError("REQUEST_TOO_LARGE", `request of ${bytes} bytes exceeds ${this.deps.requestMaxBytes}`);
     this.deps.registry.freeze();
@@ -158,7 +159,7 @@ export class RunService {
   async history(input: { id: string; principal?: Principal; limit?: number }): Promise<MessageRecord[]> {
     const principal = this.resolvePrincipal(input.principal);
     const conv = await this.deps.persistence.getConversation(input.id);
-    if (!conv || conv.tenantId !== principal.tenantId || conv.subjectId !== principal.subjectId) throw new SFieldError("NOT_FOUND", `conversation ${input.id} not found`);
+    if (!conv || conv.tenantId !== principal.tenantId || conv.subjectId !== principal.subjectId || conv.deletedAt) throw new SFieldError("NOT_FOUND", `conversation ${input.id} not found`);
     return this.deps.persistence.listMessages(input.id, { limit: input.limit ?? 100 });
   }
 

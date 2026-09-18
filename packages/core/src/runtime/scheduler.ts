@@ -22,6 +22,11 @@ export class Scheduler {
     this.runtime = runtime;
   }
 
+  /** True once shutdown started: admission is stopped (§20.2). */
+  get isClosing(): boolean {
+    return this.closing;
+  }
+
   registerAbort(runId: string, controller: AbortController): void {
     this.aborts.set(runId, controller);
   }
