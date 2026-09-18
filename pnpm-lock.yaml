@@ -15,6 +15,18 @@ importers:
         specifier: ^5.6.3
         version: 5.9.3
 
+  examples/ollama-agent:
+    dependencies:
+      '@sfield/cli':
+        specifier: ^0.1.0
+        version: link:../../packages/cli
+      '@sfield/core':
+        specifier: ^0.1.0
+        version: link:../../packages/core
+      '@sfield/preset-local':
+        specifier: ^0.1.0
+        version: link:../../packages/preset-local
+
   examples/support-agent:
     dependencies:
       '@sfield/cli':

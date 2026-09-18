@@ -1,0 +1,26 @@
+# ollama-agent/sfield.yaml — complete
+version: 1
+
+models:
+  default:
+    provider: openai_compatible
+    model: "${env:SFIELD_MODEL}"
+    base_url: http://localhost:11434/v1
+    credential: {env: OPENAI_API_KEY}
+    limits: {context_window: 16000, max_output_tokens: 512}
+
+sources:
+  policies:
+    type: local_files
+    path: ./knowledge
+
+agents:
+  support:
+    instructions_file: ./instructions.md
+    tools: [orders.get]
+    memory:
+      conversation: true
+      preferences: explicit
+    context:
+      sources:
+        - {source: policies, query: {ref: message.text}, max_items: 3}
