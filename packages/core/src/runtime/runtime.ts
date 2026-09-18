@@ -521,6 +521,11 @@ export class AgentRuntime {
         const recovered = await this.deps.pipeline.recover(rec, principal, ctx.controller.signal);
         results[call.callId] = { result: recovered.result, view: this.deps.pipeline.modelView(recovered.result) };
         cp.batchResults[call.callId] = recovered.result;
+        // The recovered outcome is durable evidence: record it on the call and settle its reservation (§16.4).
+        if (rec.state !== "succeeded" && rec.state !== "failed") {
+          const state = recovered.result.status === "succeeded" ? "succeeded" : recovered.result.status === "failed" ? "failed" : "outcome_unknown";
+          await p.commitResult({ runId: run.runId, epoch: claim.epoch, callId: call.callId, result: recovered.result, state, reservation: rec.reservationId ? { id: rec.reservationId, actualMicroUsd: 0, state: state === "outcome_unknown" ? "uncertain" : "settled" } : undefined, events: [{ v: 1, id: newId("evt"), runId: run.runId, conversationId: run.conversationId, timestamp: nowIso(), type: "tool_recovered", payload: { callId: call.callId, toolRef: rec.toolRef, status: recovered.result.status, effect: recovered.result.effect, resolved: recovered.resolved } }], audit: [{ id: newId("aud"), at: nowIso(), tenantId: principal.tenantId, runId: run.runId, callId: call.callId, type: "tool_recovered", principal: { tenantId: principal.tenantId, subjectId: principal.subjectId }, configDigest: run.configDigest, data: { fromState: rec.state, status: recovered.result.status, effect: recovered.result.effect, resolved: recovered.resolved }, preset: this.deps.preset }] });
+        }
         if (!recovered.resolved) {
           await this.park(ctx, "reconciliation_required", { reason: "reconciliation", note: `call ${call.callId} has an unresolved external effect` });
           return "parked";
