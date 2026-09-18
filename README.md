@@ -56,6 +56,21 @@ pnpm test               # node --test over the compiled test files
 Requires Node.js 22.13+ (`node:sqlite`). Generated projects run their TypeScript directly with
 `--experimental-strip-types`; the CLI re-executes itself with that flag so `tools.ts` loads.
 
+## Verified so far
+
+- 113 automated tests across all packages (`pnpm test`): config compiler, schema subset, pipeline,
+  memory, retrieval, context fitting, both provider adapters against recorded cassettes, gateway
+  retries, runtime end to end (approvals, input, loop detection, idempotency, repairs, budgets,
+  fallback, reload with pinned runs, crash recovery), persistence conformance for the in-memory and
+  SQLite stores, the HTTP adapter against a real local server, the generated projects.
+- Live, through the real `sfield` CLI and the `local` preset on a local Ollama runtime (`gemma4`):
+  the L1 starter answered an order question with a tool call and cited policy passages; the
+  business-agent starter ran the §24 refund flow — two concurrent reads (one over HTTP with bearer
+  auth), the eligibility prerequisite, a parked destructive approval, `sfield approvals decide`,
+  in-process resumption, one deduplicated refund dispatch, confirmed effect.
+- The `anthropic` adapter is verified against recorded cassettes only; no hosted credential was
+  available in this environment.
+
 ## Status against the specification
 
 Implemented: §§4–16 for a single process (`ephemeral` and `durable_single`), both reference provider
