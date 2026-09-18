@@ -302,6 +302,8 @@ export class ToolPipeline {
     } else if (observed.artifact) {
       status = "succeeded";
       outputRef = observed.artifact;
+      // Adapter-produced artifacts are committed under current ownership so GC never drops a referenced result (§17.4).
+      await this.deps.artifacts.commit?.(observed.artifact, { tenantId: principal.tenantId, runId });
       output = { artifact_id: observed.artifact.id, digest: observed.artifact.digest, bytes: observed.artifact.bytes, media_type: observed.artifact.mediaType };
       const v = sharedValidator().validate(def.outputs, output);
       if (!v.ok) {
