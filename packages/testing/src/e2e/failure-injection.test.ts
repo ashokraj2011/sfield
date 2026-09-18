@@ -39,11 +39,8 @@ async function crashedAfterIntent(h: Awaited<ReturnType<typeof createHarness>>, 
   const toolDef = h.sf.i.registry.get(def.ref)!;
   const prepared = await h.sf.i.pipeline.prepare({ def: toolDef, inputs, principal: TEST_PRINCIPAL, runId, callId, agentId: "support", preset: "supervised" });
   await p.prepareBatch(runId, claim.epoch, [{ callId, runId, batchId: "b1", turn: 1, order: 0, toolRef: def.ref, state: "intent_committed", proposedArguments: inputs, invocation: prepared.invocation, intent: { at: nowIso(), attempt: 1, operationDigest: "sha256:op", idempotencyKey: "idem-1" }, attempts: [], createdAt: nowIso(), updatedAt: nowIso() }]);
-  const transcript: NeutralMessage[] = [
-    { role: "user", parts: [{ type: "text", text: "refund" }] },
-    { role: "assistant", parts: [{ type: "tool_call", callId, toolRef: def.ref, alias: "refunds_request", arguments: inputs, providerCallId: "toolu_x" }] },
-  ];
-  const cp: Checkpoint = { runId, agentId: "support", configDigest: digest, pluginIdentities: {}, transcript, contextPacketIds: [], pendingBatch: { batchId: "b1", callIds: [callId], turn: 1 }, pendingApprovals: [], pendingInputs: [], reservationIds: [], counters: { turns: 1, modelCalls: 1, providerAttempts: 1, toolCalls: 1, toolAttempts: 0, inputTokens: 10, outputTokens: 5, tokensReported: true, costMicroUsd: 0, costLabel: "unpriced", activeMs: 10, repairs: 0, summarizations: 0, polls: 0, contextRefits: 0 }, loop: { seen: {}, warned: {}, pollCount: 0 }, batchResults: {}, startedAt: nowIso(), updatedAt: nowIso() };
+  const runMessages: NeutralMessage[] = [{ role: "assistant", parts: [{ type: "tool_call", callId, toolRef: def.ref, alias: "refunds_request", arguments: inputs, providerCallId: "toolu_x" }] }];
+  const cp: Checkpoint = { runId, agentId: "support", configDigest: digest, pluginIdentities: {}, transcript: [], runMessages, contextPacketIds: [], pendingBatch: { batchId: "b1", callIds: [callId], turn: 1 }, pendingApprovals: [], pendingInputs: [], reservationIds: [], counters: { turns: 1, modelCalls: 1, providerAttempts: 1, toolCalls: 1, toolAttempts: 0, inputTokens: 10, outputTokens: 5, tokensReported: true, costMicroUsd: 0, costLabel: "unpriced", activeMs: 10, repairs: 0, summarizations: 0, polls: 0, contextRefits: 0, continuations: 0 }, loop: { seen: {}, warned: {}, pollCount: 0 }, batchResults: {}, startedAt: nowIso(), updatedAt: nowIso() };
   await p.saveCheckpoint(runId, claim.epoch, cp);
   await p.updateRun(runId, claim.epoch, { state: "suspended" });
   await p.release(claim);

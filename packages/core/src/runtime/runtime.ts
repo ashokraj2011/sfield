@@ -185,11 +185,12 @@ export class AgentRuntime {
       configDigest: run.configDigest,
       pluginIdentities: Object.fromEntries(Object.entries(version.config.lock.plugins).map(([k, v]) => [k, v.buildDigest])),
       transcript,
+      runMessages: [],
       contextPacketIds: [],
       pendingApprovals: [],
       pendingInputs: [],
       reservationIds: [],
-      counters: { turns: 0, modelCalls: 0, providerAttempts: 0, toolCalls: 0, toolAttempts: 0, inputTokens: 0, outputTokens: 0, tokensReported: true, costMicroUsd: 0, costLabel: "unpriced", activeMs: 0, repairs: 0, summarizations: 0, polls: 0, contextRefits: 0 },
+      counters: { turns: 0, modelCalls: 0, providerAttempts: 0, toolCalls: 0, toolAttempts: 0, inputTokens: 0, outputTokens: 0, tokensReported: true, costMicroUsd: 0, costLabel: "unpriced", activeMs: 0, repairs: 0, summarizations: 0, polls: 0, contextRefits: 0, continuations: 0 },
       loop: emptyLoopState(),
       batchResults: {},
       startedAt: run.createdAt,
@@ -255,7 +256,7 @@ export class AgentRuntime {
         cp.counters.activeMs += Date.now() - turnStart;
       }
       const { message, stopReason } = dispatch;
-      cp.transcript.push(message);
+      cp.runMessages.push(message);
       await this.persistMessage(ctx, "assistant", message.parts as unknown as JsonValue);
       await this.checkpoint(ctx);
       const budgetStop = await this.checkBudgets(ctx);
@@ -281,9 +282,10 @@ export class AgentRuntime {
         case "continue":
           break;
         case "max_tokens":
-          if (cp.counters.repairs < agent.output.max_repairs && !message.parts.some((pt) => pt.type === "tool_call")) {
-            cp.counters.repairs++;
-            cp.transcript.push({ role: "user", parts: [{ type: "text", text: "Your previous response was cut off by the output limit. Continue exactly where you stopped, without repeating what you already wrote." }] });
+          // One bounded continuation of the assistant turn (§13.3); no fabricated user message.
+          if (cp.counters.continuations < 1 && !message.parts.some((pt) => pt.type === "tool_call") && !agent.output.schema) {
+            cp.counters.continuations++;
+            await this.emit(ctx, "output_continuation", { reason: "max_tokens" });
             break;
           }
           await this.finish(ctx, "failed", undefined, new SFieldError("INCOMPLETE_OUTPUT", "model output truncated by the output token limit"));
@@ -298,7 +300,7 @@ export class AgentRuntime {
           if (cp.counters.contextRefits < 1) {
             cp.counters.contextRefits++;
             inputCeiling = Math.floor(inputCeiling * 0.75);
-            cp.transcript.pop();
+            cp.runMessages.pop();
             break;
           }
           await this.finish(ctx, "failed", undefined, new SFieldError("CONTEXT_LIMIT", "provider reported the context window exceeded"));
@@ -316,7 +318,7 @@ export class AgentRuntime {
     // Data routing: the fallback must accept at least what the primary accepted; opaque blocks must be convertible.
     const primary = ctx.version.modelBindings[from];
     if (primary && !classificationAllowed(primary.acceptsClassification, target.acceptsClassification)) return false;
-    if (ctx.cp.transcript.some((m) => m.role !== "tool_results" && m.parts.some((pt) => pt.type === "opaque" && pt.provider !== target.provider))) return false;
+    if ([...ctx.cp.transcript, ...ctx.cp.runMessages].some((m) => m.role !== "tool_results" && m.parts.some((pt) => pt.type === "opaque" && pt.provider !== target.provider))) return false;
     return true;
   }
 
@@ -378,6 +380,7 @@ export class AgentRuntime {
       runInputs: run.request.inputs,
       attributes: principal.attributes,
       transcript: cp.transcript,
+      continuation: cp.runMessages,
       binding,
       capabilities,
       tools: ctx.exposed,
@@ -491,7 +494,7 @@ export class AgentRuntime {
   private async runBatch(ctx: RunContext, callIds: string[], resuming: boolean): Promise<StepOutcome> {
     const { cp, agent, principal, run, claim } = ctx;
     const p = this.deps.persistence;
-    const last = cp.transcript[cp.transcript.length - 1];
+    const last = cp.runMessages[cp.runMessages.length - 1];
     if (!last || last.role !== "assistant") throw new SFieldError("STATE_UNAVAILABLE", "batch without an assistant call message");
     const calls = last.parts.filter((pt): pt is Extract<NeutralPart, { type: "tool_call" }> => pt.type === "tool_call" && callIds.includes(pt.callId));
     const batchId = cp.pendingBatch?.batchId ?? newId("batch");
@@ -635,7 +638,7 @@ export class AgentRuntime {
       const r = results[c.callId]!;
       return { callId: c.callId, alias: c.alias, providerCallId: c.providerCallId, content: r.view.content, isError: r.view.isError };
     });
-    cp.transcript.push({ role: "tool_results", results: group });
+    cp.runMessages.push({ role: "tool_results", results: group });
     await this.persistMessage(ctx, "tool_results", group as unknown as JsonValue);
     delete cp.pendingBatch;
     cp.batchResults = {};
@@ -769,9 +772,9 @@ export class AgentRuntime {
 
   // ---------------------------------------------------------------- completion and verification
 
-  private async complete(ctx: RunContext, message: Extract<NeutralMessage, { role: "assistant" }>): Promise<StepOutcome> {
+  private async complete(ctx: RunContext, _message: Extract<NeutralMessage, { role: "assistant" }>): Promise<StepOutcome> {
     const { agent, cp } = ctx;
-    const text = textOf(message);
+    const text = finalText(cp.runMessages);
     let output: JsonValue = text;
     const problems: string[] = [];
     if (agent.output.schema) {
@@ -800,7 +803,7 @@ export class AgentRuntime {
     if (cp.counters.repairs < agent.output.max_repairs) {
       cp.counters.repairs++;
       await this.emit(ctx, "output_repair", { attempt: cp.counters.repairs, problems });
-      cp.transcript.push({ role: "user", parts: [{ type: "text", text: `Your previous answer was rejected by output verification: ${problems.join("; ")}. Produce a corrected final answer${agent.output.schema ? " as JSON matching the required schema, with no surrounding text" : ""}.` }] });
+      cp.runMessages.push({ role: "user", parts: [{ type: "text", text: `Your previous answer was rejected by output verification: ${problems.join("; ")}. Produce a corrected final answer${agent.output.schema ? " as JSON matching the required schema, with no surrounding text" : ""}.` }] });
       return "continue";
     }
     await this.finish(ctx, "verification_failed", output, new SFieldError("INVALID_OUTPUT", problems.join("; ")));
@@ -963,6 +966,17 @@ export function inputRequirement(def: ToolDefinition, inputs: JsonObject): { que
 
 export function textOf(message: Extract<NeutralMessage, { role: "assistant" }>): string {
   return message.parts.filter((pt): pt is Extract<NeutralPart, { type: "text" }> => pt.type === "text").map((pt) => pt.text).join("");
+}
+
+/** The candidate answer: text of the trailing consecutive assistant messages (continuations join). */
+export function finalText(messages: NeutralMessage[]): string {
+  const tail: string[] = [];
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const m = messages[i]!;
+    if (m.role !== "assistant") break;
+    tail.unshift(textOf(m));
+  }
+  return tail.join("");
 }
 
 export function extractJson(text: string): string {

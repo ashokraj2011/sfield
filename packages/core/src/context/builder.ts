@@ -21,6 +21,8 @@ export interface ContextBuildInput {
   attributes?: Record<string, string>;
   /** Prior transcript in neutral form; the current message is not part of it. */
   transcript: NeutralMessage[];
+  /** This run's messages after the current message (assistant turns, tool result batches, repair prompts); always required. */
+  continuation?: NeutralMessage[];
   binding: ModelBinding;
   capabilities: ModelCapabilities;
   tools: ExposedTool[];
@@ -91,6 +93,12 @@ export async function buildContext(input: ContextBuildInput): Promise<ContextBui
   // 4. History: each prior message is a block; pending tool-call/result groups are atomic and required (§12.4).
   const history = historyBlocks(input.transcript);
   blocks.push(...history.blocks);
+  // This run's own exchange after the current message is mandatory continuation content.
+  const continuation = input.continuation ?? [];
+  for (const [i, m] of continuation.entries()) {
+    const text = blockTextOf(m);
+    blocks.push({ id: newId("blk"), kind: "history", sourceIds: [`run:${i}`], authority: m.role === "user" ? "host_instruction" : "reference_data", classification: "confidential", content: { type: "text", text }, tokens: estimateTokens(text), required: true, freshness: "current" });
+  }
 
   // Memory categories.
   for (const item of input.memory.preferences) blocks.push(memoryBlock(item, "preference", "preferences", now));
@@ -248,7 +256,7 @@ export async function buildContext(input: ContextBuildInput): Promise<ContextBui
   // 10. Assemble the neutral request and validate pairing.
   const selected = [...required, ...selectedOptional];
   const historySelected = history.entries.filter((h) => selected.some((b) => b.id === h.block.id) || selected.some((b) => b.sourceIds.includes(h.block.id) && b.kind === "history"));
-  const messages = assembleMessages(historySelected, selected, currentText, citations);
+  const messages = assembleMessages(historySelected, selected, currentText, citations, continuation);
   validatePairing(messages);
   const request: NeutralModelRequest = {
     binding,
@@ -399,7 +407,7 @@ function shortenToolResultBlock(block: ContextBlock): ContextBlock | null {
   return { ...block, id: newId("blk"), sourceIds: [...block.sourceIds, block.id], content: { type: "text", text: excerpt }, tokens: estimateTokens(excerpt), shortened: true };
 }
 
-function assembleMessages(history: HistoryEntry[], selected: ContextBlock[], currentText: string, citations: Record<string, CitationTarget>): NeutralMessage[] {
+function assembleMessages(history: HistoryEntry[], selected: ContextBlock[], currentText: string, citations: Record<string, CitationTarget>, continuation: NeutralMessage[]): NeutralMessage[] {
   const messages: NeutralMessage[] = [];
   for (const h of history) {
     const shortened = selected.find((b) => b.shortened && b.sourceIds.includes(h.block.id));
@@ -426,6 +434,7 @@ function assembleMessages(history: HistoryEntry[], selected: ContextBlock[], cur
   if (referenceParts.length) parts.push({ type: "text", text: referenceParts.join("\n\n") });
   parts.push({ type: "text", text: currentText });
   messages.push({ role: "user", parts });
+  messages.push(...continuation);
   return messages;
 }
 

@@ -699,14 +699,13 @@ export class SqlitePersistence implements ExecutionPersistence {
     });
   }
 
+  /** `gap` means retention already removed events after the cursor; the reader must resync from a snapshot (§19.2). */
   async readEvents(runId: string, afterSeq: number, limit = 1000): Promise<{ events: RunEvent[]; gap: boolean; lastSeq: number }> {
-    return this.db.tx(() => {
-      const run = this.mustRun(runId);
-      const oldest = this.db.one<{ s: number | null }>("SELECT MIN(seq) AS s FROM events WHERE run_id = ?", runId)?.s ?? null;
-      const gap = oldest !== null && afterSeq + 1 < Number(oldest);
-      const events = this.db.all<BodyRow>("SELECT body FROM events WHERE run_id = ? AND seq > ? ORDER BY seq LIMIT ?", runId, afterSeq, limit).map((r) => parse<RunEvent>(r.body));
-      return { events, gap, lastSeq: run.lastEventSeq };
-    });
+    const run = this.mustRun(runId);
+    const oldest = this.db.one<{ s: number | null }>("SELECT MIN(seq) AS s FROM events WHERE run_id = ?", runId)?.s ?? null;
+    const gap = oldest !== null && afterSeq + 1 < Number(oldest);
+    const events = this.db.all<BodyRow>("SELECT body FROM events WHERE run_id = ? AND seq > ? ORDER BY seq LIMIT ?", runId, afterSeq, limit).map((r) => parse<RunEvent>(r.body));
+    return { events, gap, lastSeq: run.lastEventSeq };
   }
 
   // ---- audit (§19.3)

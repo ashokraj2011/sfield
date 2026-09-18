@@ -465,3 +465,51 @@ test("reload switches new runs atomically while a parked run stays pinned to its
   assert.equal(h.provider.requests[h.provider.requests.length - 1]!.instructions[0], "Version two instructions.");
   await h.sf.close();
 });
+
+test("stop reasons: continue resumes without a fabricated user message; max_tokens gets one bounded continuation; stop_sequence completes", async () => {
+  const h = await createHarness({ config: agentConfig(), tools: [ordersGet()], script: [{ text: "part one", stopReason: "continue" }, { text: " part two", stopReason: "max_tokens" }, { text: " end", stopReason: "stop_sequence", stopSequence: "END" }] });
+  const session = await h.sf.sessions.open({ agent: "support" });
+  const result = await (await session.send({ message: { text: "go" } })).result();
+  assert.equal(result.state, "completed");
+  assert.equal(result.output, "part one part two end", "continuations join into one answer");
+  // Second request: the current user message, then the assistant's partial turn; no synthetic user turn.
+  const second = h.provider.requests[1]!;
+  assert.deepEqual(second.messages.map((m) => m.role), ["user", "assistant"]);
+  // Third request continues after two assistant messages.
+  const third = h.provider.requests[2]!;
+  assert.deepEqual(third.messages.map((m) => m.role), ["user", "assistant", "assistant"]);
+  const audit = await h.sf.audit.read({ type: "stop_sequence" });
+  assert.equal(audit.length, 1);
+  // The conversation store holds the user message followed by the three assistant messages in order.
+  const history = await h.sf.conversations.history({ id: session.conversationId });
+  assert.deepEqual(history.map((m) => m.role), ["user", "assistant", "assistant", "assistant"]);
+  await h.sf.close();
+});
+
+test("context_exceeded from the provider triggers exactly one bounded refit", async () => {
+  const h = await createHarness({ config: agentConfig(), tools: [ordersGet()], script: [{ error: { code: "CONTEXT_EXCEEDED", message: "prompt too long", retryable: false } }, { text: "fits now" }] });
+  const session = await h.sf.sessions.open({ agent: "support" });
+  const run = await session.send({ message: { text: "long" } });
+  const events = collectEvents(run);
+  const result = await run.result();
+  assert.equal(result.state, "completed");
+  assert.ok((await events).some((e) => e.type === "context_refit"));
+  assert.equal(h.provider.requests.length, 2);
+  const again = await createHarness({ config: agentConfig(), tools: [ordersGet()], script: [{ error: { code: "CONTEXT_EXCEEDED", message: "prompt too long", retryable: false } }, { error: { code: "CONTEXT_EXCEEDED", message: "still too long", retryable: false } }, { text: "never" }] });
+  const s2 = await again.sf.sessions.open({ agent: "support" });
+  const r2 = await (await s2.send({ message: { text: "long" } })).result();
+  assert.equal(r2.state, "failed");
+  assert.equal(r2.error?.code, "CONTEXT_LIMIT");
+  await h.sf.close();
+  await again.sf.close();
+});
+
+test("output.stream=false disables provisional deltas while the final output is unchanged", async () => {
+  const h = await createHarness({ config: agentConfig({ output: { stream: false } }), tools: [ordersGet()], script: [{ deltas: ["a", "b"], text: "ab" }] });
+  const session = await h.sf.sessions.open({ agent: "support" });
+  const run = await session.send({ message: { text: "q" } });
+  const events = await collectEvents(run);
+  assert.ok(!events.some((e) => e.type === "text_delta"));
+  assert.equal((await run.result()).output, "ab");
+  await h.sf.close();
+});

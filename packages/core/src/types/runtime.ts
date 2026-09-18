@@ -155,6 +155,7 @@ export interface RunCounters {
   summarizations: number;
   polls: number;
   contextRefits: number;
+  continuations: number;
 }
 
 export interface LoopDetectorState {
@@ -171,7 +172,10 @@ export interface Checkpoint {
   agentId: string;
   configDigest: string;
   pluginIdentities: Record<string, string>;
+  /** Prior conversation history (before this run's message). */
   transcript: NeutralMessage[];
+  /** This run's own messages after the current user message: assistant turns, result batches, repair prompts. */
+  runMessages: NeutralMessage[];
   contextPacketIds: string[];
   pendingBatch?: { batchId: string; callIds: string[]; turn: number };
   pendingApprovals: string[];
