@@ -1,4 +1,32 @@
-{ "name": "@sfield/cli", "version": "0.1.0", "description": "sfield command: init, validate, inspect, run, tools, lock, memory, eval", "type": "module", "license": "Apache-2.0",
-  "bin": { "sfield": "./bin/sfield.js" },
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } }, "files": ["dist", "bin", "templates"], "scripts": { "build": "tsc -b" },
-  "dependencies": { "@sfield/core": "workspace:*", "@sfield/preset-local": "workspace:*", "@sfield/preset-memory": "workspace:*", "@sfield/http": "workspace:*" } }
+{
+  "name": "@sfield/cli",
+  "version": "0.1.0",
+  "description": "sfield command: init, validate, inspect, run, tools, lock, memory, eval",
+  "type": "module",
+  "license": "Apache-2.0",
+  "bin": {
+    "sfield": "./bin/sfield.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "bin",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@sfield/core": "workspace:*",
+    "@sfield/preset-local": "workspace:*",
+    "@sfield/preset-memory": "workspace:*",
+    "@sfield/http": "workspace:*",
+    "yaml": "^2.7.0",
+    "@sfield/testing": "workspace:*"
+  }
+}

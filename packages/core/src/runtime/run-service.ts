@@ -12,7 +12,10 @@ import type { Scheduler } from "./scheduler.js";
 import type { ToolRegistry } from "../registry/registry.js";
 
 export interface RunServiceDeps {
-  config: EffectiveConfig;
+  /** The configuration new runs pin to; reload swaps it atomically (§20.2). */
+  config: () => EffectiveConfig;
+  /** Whether a pinned version's executable dependencies are still loaded. */
+  hasVersion: (digest: string) => boolean;
   persistence: ExecutionPersistence;
   scheduler: Scheduler;
   bus: EventBus;
@@ -38,8 +41,8 @@ export class RunService {
 
   async openSession(input: { agent: string; principal?: Principal; conversationId?: string }): Promise<Session> {
     const principal = this.resolvePrincipal(input.principal);
-    const agent = this.deps.config.agents[input.agent];
-    if (!agent) throw new SFieldError("UNKNOWN_AGENT", `agent ${input.agent} is not configured`, { suggestion: `Configured agents: ${Object.keys(this.deps.config.agents).join(", ") || "none"}` });
+    const agent = this.deps.config().agents[input.agent];
+    if (!agent) throw new SFieldError("UNKNOWN_AGENT", `agent ${input.agent} is not configured`, { suggestion: `Configured agents: ${Object.keys(this.deps.config().agents).join(", ") || "none"}` });
     let conversation: ConversationRecord | null = null;
     if (input.conversationId) {
       conversation = await this.deps.persistence.getConversation(input.conversationId);
@@ -62,7 +65,7 @@ export class RunService {
 
   async accept(input: { agentId: string; principal: Principal; request: SendRequest; conversationId?: string; kind: "session" | "standalone" }): Promise<RunHandle> {
     const { principal, request } = input;
-    const agent = this.deps.config.agents[input.agentId];
+    const agent = this.deps.config().agents[input.agentId];
     if (!agent) throw new SFieldError("UNKNOWN_AGENT", `agent ${input.agentId} is not configured`);
     if (!request?.message || typeof request.message.text !== "string") throw new SFieldError("INVALID_INPUT", "request.message.text is required");
     const bytes = Buffer.byteLength(JSON.stringify({ message: request.message, inputs: request.inputs ?? null }), "utf8");
@@ -95,7 +98,7 @@ export class RunService {
       requestDigest,
       idempotencyKey,
       idempotencyScope,
-      configDigest: this.deps.config.digest,
+      configDigest: this.deps.config().digest,
       expiresAt: new Date(Date.now() + agent.budget.max_elapsed_seconds * 1000).toISOString(),
       effects: [],
       usage: { turns: 0, modelCalls: 0, providerAttempts: 0, toolCalls: 0, toolAttempts: 0, inputTokens: 0, outputTokens: 0, totalTokens: 0, tokensReported: true, costMicroUsd: 0, costLabel: "unpriced", activeMs: 0, elapsedMs: 0 },
@@ -138,9 +141,8 @@ export class RunService {
     const run = await this.deps.persistence.getRun(input.runId);
     if (!run || run.tenantId !== principal.tenantId || run.subjectId !== principal.subjectId) throw new SFieldError("NOT_FOUND", `run ${input.runId} not found`);
     if (isTerminal(run.state)) throw new SFieldError("RUN_NOT_RESUMABLE", `run ${run.runId} is ${run.state}`);
-    if (run.configDigest !== this.deps.config.digest) {
-      const cp = await this.deps.persistence.getCheckpoint(run.runId);
-      if (!cp || cp.configDigest !== run.configDigest) throw new SFieldError("RUN_NOT_RESUMABLE", `run ${run.runId} was pinned to configuration ${run.configDigest}; the running configuration is ${this.deps.config.digest}`);
+    if (!this.deps.hasVersion(run.configDigest)) {
+      throw new SFieldError("RUN_NOT_RESUMABLE", `run ${run.runId} is pinned to configuration ${run.configDigest}, whose executable dependencies are not loaded (running: ${this.deps.config().digest})`);
     }
     if (SUSPENDED_RUN_STATES.has(run.state) || run.state === "queued") {
       const claim = await this.deps.persistence.claim(run.scopeId, "resume", 5000);

@@ -423,3 +423,45 @@ test("fallback model is used after the primary fails non-retryably", async () =>
   assert.equal(primary.requests[1]!.binding.model, "b");
   await h.sf.close();
 });
+
+test("reload switches new runs atomically while a parked run stays pinned to its version", async () => {
+  const calls: JsonObject[] = [];
+  const transport = new RecordingApprovalTransport();
+  const h = await createHarness({
+    config: agentConfig({ tools: ["refunds.request"] }),
+    tools: [ordersGet(), refundsRequest(calls)],
+    approvals: transport,
+    script: [
+      { toolCalls: [{ alias: "refunds_request", arguments: { order_id: "A-1001", amount_minor: 100, currency: "INR" } }] },
+      { text: "Refund requested." },
+      { text: "v2 answer" },
+    ],
+  });
+  const before = h.sf.config.digest();
+  const session = await h.sf.sessions.open({ agent: "support" });
+  const parked = await session.send({ message: { text: "refund" } });
+  const suspended = await parked.result();
+  assert.equal(suspended.state, "waiting_approval");
+  // Reload with different instructions: new runs use v2, the parked run keeps v1.
+  const reloaded = await h.sf.reload({ config: agentConfig({ tools: ["refunds.request"], instructions: "Version two instructions." }) });
+  assert.equal(reloaded.changed, true);
+  assert.notEqual(reloaded.digest, before);
+  assert.equal(h.sf.config.effective().agents["support"]!.instructions, "Version two instructions.");
+  assert.deepEqual(h.sf.config.versions().sort(), [before, reloaded.digest].sort());
+  // An invalid candidate leaves the running configuration untouched.
+  await assert.rejects(h.sf.reload({ config: { version: 1, agents: { support: { instructions: "x", tools: ["missing.tool"] } } } }));
+  assert.equal(h.sf.config.digest(), reloaded.digest);
+  await h.sf.approvals.decide({ approvalId: suspended.pending!.approvals[0]!, actor: TEST_ACTOR, decision: "approve" });
+  const resumed = await h.sf.runs.resume({ runId: parked.id });
+  const final = await resumed.result();
+  assert.equal(final.state, "completed");
+  assert.equal(calls.length, 1);
+  const snapshot = await resumed.snapshot();
+  assert.equal(snapshot.configDigest, before, "resumed run stayed pinned");
+  const fresh = await (await h.sf.sessions.open({ agent: "support" })).send({ message: { text: "hi" } });
+  const freshResult = await fresh.result();
+  assert.equal((await fresh.snapshot()).configDigest, reloaded.digest);
+  assert.equal(freshResult.state, "completed");
+  assert.equal(h.provider.requests[h.provider.requests.length - 1]!.instructions[0], "Version two instructions.");
+  await h.sf.close();
+});

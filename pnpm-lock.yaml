@@ -35,6 +35,12 @@ importers:
       '@sfield/preset-memory':
         specifier: workspace:*
         version: link:../preset-memory
+      '@sfield/testing':
+        specifier: workspace:*
+        version: link:../testing
+      yaml:
+        specifier: ^2.7.0
+        version: 2.9.1
 
   packages/core:
     dependencies:

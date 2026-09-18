@@ -49,6 +49,10 @@ export interface PrepareRequest {
   callId: string;
   agentId?: string;
   preset: PolicyPreset;
+  /** The run's pinned configuration digest (defaults to the current one). */
+  configDigest?: string;
+  /** Connection resolvers of the run's pinned configuration version. */
+  connections?: Record<string, ConnectionResolver>;
 }
 
 export interface PreparedCall {
@@ -73,6 +77,7 @@ export interface DispatchRequest {
   approvalId?: string;
   signal: AbortSignal;
   budgetScopes: BudgetScopeRequest[];
+  connections?: Record<string, ConnectionResolver>;
   /** Emits committed durable events to live subscribers. */
   onEvents?: (events: RunEvent[]) => void;
 }
@@ -124,8 +129,9 @@ export class ToolPipeline {
     const adapter = def.adapter === "builtin" ? this.deps.registry.functionAdapter : this.deps.registry.getAdapter(def.adapter);
     if (!adapter) throw new SFieldError("UNKNOWN_ADAPTER", `adapter ${def.adapter} is not registered`, { runId, callId });
     let connection: ConnectionHandle | undefined;
+    const connections = req.connections ?? this.deps.connections;
     if (def.connection) {
-      const resolver = this.deps.connections[def.connection];
+      const resolver = connections[def.connection];
       if (!resolver) throw new SFieldError("UNKNOWN_BINDING", `connection ${def.connection} is not bound`, { runId, callId });
       connection = await resolver.resolve(principal, def);
     }
@@ -173,7 +179,7 @@ export class ToolPipeline {
       normalizedInputs: inputs,
       operation,
       effect,
-      configDigest: this.deps.configDigest,
+      configDigest: req.configDigest ?? this.deps.configDigest,
       prerequisiteEvidence: evidence.map((e) => e.id),
     };
     const invocation: PreparedInvocation = { ...base, digest: digestJson(base) };
@@ -230,7 +236,7 @@ export class ToolPipeline {
       return this.rejected(req, "APPROVAL_REQUIRED", prepared.approval.reason, started);
     }
     if (prepared.connection && def.connection) {
-      const fresh = await this.deps.connections[def.connection]?.resolve(principal, def);
+      const fresh = await (req.connections ?? this.deps.connections)[def.connection]?.resolve(principal, def);
       if (!fresh || fresh.identity.id !== invocation.bindingIdentity.id || fresh.identity.accountScope !== invocation.bindingIdentity.accountScope) {
         await p.settle(reservationId, 0, "released");
         return this.rejected(req, "POLICY_CHANGED", "connection binding changed since preparation", started);

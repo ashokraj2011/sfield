@@ -1,0 +1,56 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - run: pnpm test
+
+  # Adoption gate (§4.4, §25.4): a fresh machine reaches a generated project, validates it, and runs a
+  # replay evaluation without editing runtime internals. The live first-run leg needs a model credential
+  # and runs only when the secret is configured.
+  adoption-gate:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --frozen-lockfile && pnpm run build
+      - name: init, validate, doctor (no credential needed beyond a placeholder value)
+        working-directory: examples
+        env:
+          ANTHROPIC_API_KEY: ci-placeholder
+          SFIELD_MODEL: claude-sonnet-5
+        run: |
+          rm -rf ci-agent && node ../packages/cli/bin/sfield.js init ci-agent --preset local
+          cd ci-agent
+          node ../../packages/cli/bin/sfield.js validate
+          node ../../packages/cli/bin/sfield.js doctor
+          node ../../packages/cli/bin/sfield.js tools list
+      - name: live first run (only with a real credential)
+        if: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+        working-directory: examples/ci-agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SFIELD_MODEL: claude-sonnet-5
+        run: timeout 600 node ../../packages/cli/bin/sfield.js run --agent support --message "What is the refund policy?"

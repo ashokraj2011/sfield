@@ -4,7 +4,7 @@ import { classificationAllowed } from "../types/common.js";
 import type { EffectiveAgentConfig, EffectiveConfig } from "../config/types.js";
 import type { MemoryItem } from "../types/memory.js";
 import type { ModelAttemptRecord, ModelBinding, NeutralMessage, NeutralModelRequest, NeutralPart, NeutralToolResult, StopReason } from "../types/model.js";
-import type { HostLimits, RegisteredHook, TelemetrySink, Verifier } from "../types/options.js";
+import type { ConnectionResolver, HostLimits, RegisteredHook, TelemetrySink, Verifier } from "../types/options.js";
 import type { BudgetScopeRequest, CallRecord, ExecutionPersistence, MessageRecord, OwnershipClaim, RunRecord } from "../types/persistence.js";
 import type { Checkpoint, EffectSummary, RunCounters, RunEvent, RunState, UsageSummary } from "../types/runtime.js";
 import { isTerminal } from "../types/runtime.js";
@@ -31,17 +31,24 @@ import { buildContext } from "../context/builder.js";
 import { estimateTokens } from "../util/tokens.js";
 import type { EventBus } from "./events.js";
 
-export interface RuntimeDeps {
+/** One loaded configuration version: runs stay pinned to the version they started with (§20.2). */
+export interface ConfigVersion {
   config: EffectiveConfig;
+  modelBindings: Record<string, ModelBinding>;
+  connections: Record<string, ConnectionResolver>;
+  retrieval: RetrievalService;
+}
+
+export interface RuntimeDeps {
+  /** Resolves a pinned version by digest; undefined when its executable dependencies cannot be restored. */
+  resolveVersion: (digest: string) => ConfigVersion | undefined;
   registry: ToolRegistry;
   persistence: ExecutionPersistence;
   pipeline: ToolPipeline;
   gateway: ModelGateway;
   memory: MemoryService;
-  retrieval: RetrievalService;
   approvals: ApprovalService;
   bus: EventBus;
-  modelBindings: Record<string, ModelBinding>;
   limits: HostLimits;
   hooks: RegisteredHook[];
   scrubber: Scrubber;
@@ -57,6 +64,7 @@ export interface RuntimeDeps {
 
 interface RunContext {
   run: RunRecord;
+  version: ConfigVersion;
   agent: EffectiveAgentConfig;
   principal: Principal;
   claim: OwnershipClaim;
@@ -83,9 +91,14 @@ export class AgentRuntime {
     const run0 = await p.getRun(runId);
     if (!run0) throw new SFieldError("NOT_FOUND", `run ${runId} not found`);
     if (isTerminal(run0.state)) return;
-    const agent = this.deps.config.agents[run0.agentId];
+    const version = this.deps.resolveVersion(run0.configDigest);
+    if (!version) {
+      await this.finishWithoutOwnership(run0, "failed", { code: "RUN_NOT_RESUMABLE", message: `run is pinned to configuration ${run0.configDigest}, whose executable dependencies are no longer loaded` });
+      return;
+    }
+    const agent = version.config.agents[run0.agentId];
     if (!agent) {
-      await this.finishWithoutOwnership(run0, "failed", { code: "UNKNOWN_AGENT", message: `agent ${run0.agentId} is not in the running configuration` });
+      await this.finishWithoutOwnership(run0, "failed", { code: "UNKNOWN_AGENT", message: `agent ${run0.agentId} is not in the pinned configuration` });
       return;
     }
     const claim = await p.claim(run0.scopeId, this.deps.ownerId, this.deps.leaseMs);
@@ -101,7 +114,7 @@ export class AgentRuntime {
     renew.unref();
     try {
       const run = await p.updateRun(runId, claim.epoch, { wakeup: null, state: run0.state === "queued" ? "running" : run0.state, ownerId: this.deps.ownerId });
-      const cp = (await p.getCheckpoint(runId)) ?? (await this.freshCheckpoint(run, agent));
+      const cp = (await p.getCheckpoint(runId)) ?? (await this.freshCheckpoint(run, agent, version));
       const principal = run.principal;
       const effective = computeEffectiveTools({ agent, registry: this.deps.registry, limits: this.deps.limits, hasInputTransport: this.deps.hasInputTransport });
       const defsByAlias = new Map<string, ToolDefinition>();
@@ -113,6 +126,7 @@ export class AgentRuntime {
       }
       const ctx: RunContext = {
         run,
+        version,
         agent,
         principal,
         claim,
@@ -150,7 +164,7 @@ export class AgentRuntime {
     }
   }
 
-  private async freshCheckpoint(run: RunRecord, agent: EffectiveAgentConfig): Promise<Checkpoint> {
+  private async freshCheckpoint(run: RunRecord, agent: EffectiveAgentConfig, version: ConfigVersion): Promise<Checkpoint> {
     const transcript: NeutralMessage[] = [];
     if (run.conversationId && agent.memory.conversation) {
       const messages = await this.deps.persistence.listMessages(run.conversationId, { limit: MAX_HISTORY_MESSAGES });
@@ -169,7 +183,7 @@ export class AgentRuntime {
       conversationId: run.conversationId,
       agentId: agent.id,
       configDigest: run.configDigest,
-      pluginIdentities: Object.fromEntries(Object.entries(this.deps.config.lock.plugins).map(([k, v]) => [k, v.buildDigest])),
+      pluginIdentities: Object.fromEntries(Object.entries(version.config.lock.plugins).map(([k, v]) => [k, v.buildDigest])),
       transcript,
       contextPacketIds: [],
       pendingApprovals: [],
@@ -228,7 +242,7 @@ export class AgentRuntime {
           return;
         }
         // Provider failure: explicit fallback when configured and compatible (§13.4).
-        const fallback = this.deps.config.models[modelId]?.fallback;
+        const fallback = ctx.version.config.models[modelId]?.fallback;
         if (fallback && fallback !== modelId && this.fallbackCompatible(ctx, modelId, fallback)) {
           await this.emit(ctx, "model_fallback", { from: modelId, to: fallback, reason: e.code });
           modelId = fallback;
@@ -297,10 +311,10 @@ export class AgentRuntime {
   }
 
   private fallbackCompatible(ctx: RunContext, from: string, to: string): boolean {
-    const target = this.deps.modelBindings[to];
+    const target = ctx.version.modelBindings[to];
     if (!target) return false;
     // Data routing: the fallback must accept at least what the primary accepted; opaque blocks must be convertible.
-    const primary = this.deps.modelBindings[from];
+    const primary = ctx.version.modelBindings[from];
     if (primary && !classificationAllowed(primary.acceptsClassification, target.acceptsClassification)) return false;
     if (ctx.cp.transcript.some((m) => m.role !== "tool_results" && m.parts.some((pt) => pt.type === "opaque" && pt.provider !== target.provider))) return false;
     return true;
@@ -350,7 +364,7 @@ export class AgentRuntime {
 
   private async modelTurn(ctx: RunContext, modelId: string, inputCeiling: number): Promise<{ message: Extract<NeutralMessage, { role: "assistant" }>; stopReason: StopReason }> {
     const { agent, cp, principal, run } = ctx;
-    const binding = this.deps.modelBindings[modelId];
+    const binding = ctx.version.modelBindings[modelId];
     if (!binding) throw new SFieldError("UNKNOWN_MODEL", `model ${modelId} has no binding`);
     const capabilities = await this.deps.gateway.describe(binding);
     if (cp.counters.modelCalls >= agent.budget.max_model_calls) throw new SFieldError("BUDGET_EXHAUSTED", `max_model_calls ${agent.budget.max_model_calls} reached`);
@@ -367,7 +381,7 @@ export class AgentRuntime {
       capabilities,
       tools: ctx.exposed,
       memory,
-      retrieval: this.deps.retrieval,
+      retrieval: ctx.version.retrieval,
       signal: ctx.controller.signal,
       countTokens: capabilities.tokenCounting === "provider" ? (req) => this.deps.gateway.countTokens(req) : undefined,
     });
@@ -522,7 +536,7 @@ export class AgentRuntime {
         continue;
       }
       try {
-        const pc = await this.deps.pipeline.prepare({ def, inputs: call.arguments, principal, runId: run.runId, callId: call.callId, agentId: agent.id, preset: agent.policy.preset });
+        const pc = await this.deps.pipeline.prepare({ def, inputs: call.arguments, principal, runId: run.runId, callId: call.callId, agentId: agent.id, preset: agent.policy.preset, configDigest: run.configDigest, connections: ctx.version.connections });
         // Repeated-call detection on the resolved identity (§14.7).
         const identity = callIdentity(def.ref, digestJson(pc.normalizedInputs), pc.invocation.resource.id);
         const verdict = ctx.loop.check({ identity, effect: def.policy.effect, pollable: def.policy.pollable, turn, now: Date.now(), callId: call.callId });
@@ -572,7 +586,7 @@ export class AgentRuntime {
     const scopes = this.budgetScopes(ctx);
     let mutationHalted = false;
     const dispatchOne = async (pc: PreparedCall): Promise<void> => {
-      const out = await this.deps.pipeline.dispatch({ prepared: pc, principal, runId: run.runId, epoch: claim.epoch, agentId: agent.id, conversationId: run.conversationId, approvalId: approvalIds.get(pc.invocation.callId), signal: ctx.controller.signal, budgetScopes: scopes, onEvents: (evs) => this.deps.bus.publish(evs) });
+      const out = await this.deps.pipeline.dispatch({ prepared: pc, principal, runId: run.runId, epoch: claim.epoch, agentId: agent.id, conversationId: run.conversationId, approvalId: approvalIds.get(pc.invocation.callId), signal: ctx.controller.signal, budgetScopes: scopes, connections: ctx.version.connections, onEvents: (evs) => this.deps.bus.publish(evs) });
       cp.counters.toolAttempts += out.result.meta.attempts;
       results[pc.invocation.callId] = { result: out.result, view: out.view };
       cp.batchResults[pc.invocation.callId] = out.result;
@@ -796,8 +810,8 @@ export class AgentRuntime {
       const callId = newId("call");
       await this.deps.persistence.prepareBatch(ctx.run.runId, ctx.claim.epoch, [{ callId, runId: ctx.run.runId, batchId: newId("batch"), turn: ctx.cp.counters.turns, order: 0, toolRef: def.ref, state: "proposed", proposedArguments: { output }, attempts: [], createdAt: nowIso(), updatedAt: nowIso() }]);
       try {
-        const pc = await this.deps.pipeline.prepare({ def, inputs: { output }, principal: ctx.principal, runId: ctx.run.runId, callId, agentId: ctx.agent.id, preset: ctx.agent.policy.preset });
-        const out = await this.deps.pipeline.dispatch({ prepared: pc, principal: ctx.principal, runId: ctx.run.runId, epoch: ctx.claim.epoch, agentId: ctx.agent.id, conversationId: ctx.run.conversationId, signal: ctx.controller.signal, budgetScopes: this.budgetScopes(ctx), onEvents: (evs) => this.deps.bus.publish(evs) });
+        const pc = await this.deps.pipeline.prepare({ def, inputs: { output }, principal: ctx.principal, runId: ctx.run.runId, callId, agentId: ctx.agent.id, preset: ctx.agent.policy.preset, configDigest: ctx.run.configDigest, connections: ctx.version.connections });
+        const out = await this.deps.pipeline.dispatch({ prepared: pc, principal: ctx.principal, runId: ctx.run.runId, epoch: ctx.claim.epoch, agentId: ctx.agent.id, conversationId: ctx.run.conversationId, signal: ctx.controller.signal, budgetScopes: this.budgetScopes(ctx), connections: ctx.version.connections, onEvents: (evs) => this.deps.bus.publish(evs) });
         ctx.cp.counters.toolCalls++;
         const o = out.result.output as JsonObject | undefined;
         if (out.result.status !== "succeeded" || !o) return { ok: false, reason: out.result.error?.message ?? "verifier tool failed" };
@@ -807,7 +821,7 @@ export class AgentRuntime {
       }
     }
     if (verifier.kind === "model_grader" && verifier.graderModel) {
-      const binding = this.deps.modelBindings[verifier.graderModel];
+      const binding = ctx.version.modelBindings[verifier.graderModel];
       if (!binding) return { ok: false, reason: `grader model ${verifier.graderModel} is not bound` };
       ctx.cp.counters.modelCalls++;
       const request: NeutralModelRequest = {

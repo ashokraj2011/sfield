@@ -32,7 +32,7 @@ import { MemoryService } from "./memory/service.js";
 import { RetrievalService } from "./retrieval/service.js";
 import { ApprovalService } from "./policy/approvals.js";
 import { ToolPipeline } from "./pipeline/execute.js";
-import { AgentRuntime } from "./runtime/runtime.js";
+import { AgentRuntime, type ConfigVersion } from "./runtime/runtime.js";
 import { Scheduler } from "./runtime/scheduler.js";
 import { EventBus } from "./runtime/events.js";
 import { RunService } from "./runtime/run-service.js";
@@ -68,13 +68,14 @@ export interface SFieldCreateOptions extends SFieldOptions {
 
 interface Internals {
   options: SFieldCreateOptions;
-  config: EffectiveConfig;
+  /** Loaded configuration versions by digest; `current` receives new runs (§20.2). */
+  versions: Map<string, ConfigVersion>;
+  current: ConfigVersion & { retrievalBindings: Map<string, RetrievalBinding> };
   registry: ToolRegistry;
   plugins: PluginManager;
   persistence: ExecutionPersistence;
   artifacts: ArtifactStore;
   memory: MemoryService;
-  retrieval: RetrievalService;
   approvals: ApprovalService;
   pipeline: ToolPipeline;
   gateway: ModelGateway;
@@ -84,8 +85,6 @@ interface Internals {
   runs: RunService;
   secrets: SecretResolver;
   scrubber: Scrubber;
-  modelBindings: Record<string, ModelBinding>;
-  connections: Record<string, ConnectionResolver>;
   preset?: PresetComponents;
   deployment: "ephemeral" | "durable_single" | "service";
   limits: HostLimits;
@@ -96,7 +95,7 @@ interface Internals {
 
 export class SField {
   private closed = false;
-  private constructor(private readonly i: Internals) {}
+  private constructor(readonly i: Internals) {}
 
   // ------------------------------------------------------------ construction
 
@@ -148,16 +147,8 @@ export class SField {
     const memory = new MemoryService({ repository: memoryRepo, index: options.memoryIndex, artifacts, caps: { preferences: limits.memoryCaps?.preferences ?? HOST_DEFAULTS.memoryCaps.preferences, facts: limits.memoryCaps?.facts ?? HOST_DEFAULTS.memoryCaps.facts }, retentionDays, hooks: options.hooks, authorizer, audit: (r) => persistence.appendAudit(r), preset: preset?.name });
 
     // Bindings: shorthand models/connections/sources compile into the same binding objects as explicit host bindings (§5.5).
-    const modelBindings: Record<string, ModelBinding> = {};
-    for (const m of Object.values(config.models)) modelBindings[m.id] = m.form === "binding" ? options.bindings!.models![m.binding!]! : shorthandModelBinding(m);
-    const connections: Record<string, ConnectionResolver> = { ...(options.bindings?.connections ?? {}) };
-    for (const c of Object.values(config.connections)) connections[c.id] = shorthandConnection(c, secrets);
-    const retrievalBindings = new Map<string, RetrievalBinding>();
-    for (const s of Object.values(config.sources)) {
-      if (s.form === "binding") retrievalBindings.set(s.id, options.bindings!.retrieval![s.binding!]!);
-      else retrievalBindings.set(s.id, plugins.registrations.retrievalTypes.get(s.type!)!.create(s.id, s.config, { configDir }));
-    }
-    const retrieval = new RetrievalService(retrievalBindings);
+    const current = assembleVersion(config, options, plugins, secrets, configDir);
+    const versions = new Map<string, ConfigVersion & { retrievalBindings: Map<string, RetrievalBinding> }>([[config.digest, current]]);
     const gateway = new ModelGateway({ providers: plugins.registrations.providers, secrets, telemetry: options.telemetry });
     const pipeline = new ToolPipeline({
       registry,
@@ -167,7 +158,7 @@ export class SField {
       prerequisites: options.prerequisites ?? {},
       hooks: options.hooks ?? [],
       limits,
-      connections,
+      connections: current.connections,
       artifacts,
       configDigest: config.digest,
       scrubber,
@@ -178,16 +169,14 @@ export class SField {
       modelViewLimitBytes: limits.modelViewLimitBytes ?? HOST_DEFAULTS.modelViewLimitBytes,
     });
     const runtime = new AgentRuntime({
-      config,
+      resolveVersion: (digest) => versions.get(digest),
       registry,
       persistence,
       pipeline,
       gateway,
       memory,
-      retrieval,
       approvals,
       bus,
-      modelBindings,
       limits,
       hooks: options.hooks ?? [],
       scrubber,
@@ -202,15 +191,41 @@ export class SField {
     (pipeline as unknown as { deps: { builtinExecutor: typeof runtime.builtinExecutor } }).deps.builtinExecutor = runtime.builtinExecutor;
     scheduler.attach(runtime);
     const devPrincipal = options.devPrincipal ?? preset?.devPrincipal;
-    const runs = new RunService({ config, persistence, scheduler, bus, registry, artifacts, requestMaxBytes: limits.requestMaxBytes ?? HOST_DEFAULTS.requestMaxBytes, idempotencyRetentionMs: (limits.retention?.idempotencyDays ?? HOST_DEFAULTS.idempotencyRetentionDays) * 86400000, preset: preset?.name, devPrincipal });
+    const instanceRef: { sf?: SField } = {};
+    const runs = new RunService({ config: () => instanceRef.sf?.i.current.config ?? config, hasVersion: (digest) => versions.has(digest), persistence, scheduler, bus, registry, artifacts, requestMaxBytes: limits.requestMaxBytes ?? HOST_DEFAULTS.requestMaxBytes, idempotencyRetentionMs: (limits.retention?.idempotencyDays ?? HOST_DEFAULTS.idempotencyRetentionDays) * 86400000, preset: preset?.name, devPrincipal });
     const stopController = new AbortController();
-    plugins.checkRequirements({ models: modelBindings, connections, retrieval: Object.fromEntries(retrievalBindings) }, { secrets: () => true });
-    await plugins.start({ config: config.extensions, bindings: { models: modelBindings, connections, retrieval: Object.fromEntries(retrievalBindings) }, secrets, signal: stopController.signal });
+    const hostBindings: HostBindings = { models: current.modelBindings, connections: current.connections, retrieval: Object.fromEntries(current.retrievalBindings) };
+    plugins.checkRequirements(hostBindings, { secrets: () => true });
+    await plugins.start({ config: config.extensions, bindings: hostBindings, secrets, signal: stopController.signal });
     if (preset && !options.quiet) {
       // eslint-disable-next-line no-console
       console.error(preset.banner ?? `[sfield] development preset "${preset.name}" — not for production`);
     }
-    return new SField({ options, config, registry, plugins, persistence, artifacts, memory, retrieval, approvals, pipeline, gateway, runtime, scheduler, bus, runs, secrets, scrubber, modelBindings, connections, preset, deployment, limits, ownerId, devPrincipal, stopController });
+    const sf = new SField({ options, versions, current, registry, plugins, persistence, artifacts, memory, approvals, pipeline, gateway, runtime, scheduler, bus, runs, secrets, scrubber, preset, deployment, limits, ownerId, devPrincipal, stopController });
+    instanceRef.sf = sf;
+    return sf;
+  }
+
+  /**
+   * Reload (§20.2): compiles a candidate independently, checks governance and the lock, and switches new runs to it
+   * atomically. Existing runs stay pinned to their version; an unapproved or invalid candidate leaves the running
+   * configuration untouched.
+   */
+  async reload(input: { config?: string | JsonObject; overrides?: JsonObject[] } = {}): Promise<{ digest: string; previous: string; changed: boolean }> {
+    const previous = this.i.current.config.digest;
+    const options: SFieldCreateOptions = { ...this.i.options, config: input.config ?? this.i.options.config, overrides: input.overrides ?? this.i.options.overrides };
+    const { loaded, ctx, configDir } = await prepareCompile(options, { validateOnly: true, registry: this.i.registry, plugins: this.i.plugins });
+    const candidate = compileConfig(loaded, ctx);
+    if (candidate.digest === previous) return { digest: previous, previous, changed: false };
+    await checkLockApproved(candidate.digest, this.i.options.governance, this.i.deployment, { lockApprovals: this.i.persistence.lockApprovals, evalReports: this.i.persistence.evalReports });
+    for (const t of Object.values(candidate.tools)) this.i.registry.registerConfigured(t);
+    this.i.registry.verifyLock(candidate.lock);
+    const version = assembleVersion(candidate, options, this.i.plugins, this.i.secrets, configDir);
+    this.i.versions.set(candidate.digest, version);
+    this.i.current = version;
+    this.i.options = options;
+    await this.i.persistence.appendAudit([{ id: newId("aud"), at: nowIso(), tenantId: "host", type: "config_reloaded", data: { previous, digest: candidate.digest }, preset: this.i.preset?.name }]);
+    return { digest: candidate.digest, previous, changed: true };
   }
 
   // ------------------------------------------------------------ surfaces (§7.2)
@@ -241,7 +256,7 @@ export class SField {
   readonly executions = {
     open: async (input: Omit<ExecutionScopeOptions, "principal"> & { principal?: Principal }): Promise<ExecutionScope> => {
       const principal = this.i.runs.resolvePrincipal(input.principal);
-      const scope = new ExternalExecutionScope({ config: this.i.config, persistence: this.i.persistence, registry: this.i.registry, pipeline: this.i.pipeline, approvals: this.i.approvals, bus: this.i.bus, ownerId: this.i.ownerId, leaseMs: 30_000, presetName: this.i.preset?.name }, { ...input, principal });
+      const scope = new ExternalExecutionScope({ config: this.i.current.config, persistence: this.i.persistence, registry: this.i.registry, pipeline: this.i.pipeline, approvals: this.i.approvals, bus: this.i.bus, ownerId: this.i.ownerId, leaseMs: 30_000, presetName: this.i.preset?.name }, { ...input, principal });
       return scope.open();
     },
   };
@@ -268,9 +283,9 @@ export class SField {
     /** Builds context for an external loop (§7.2). No model call is made. */
     build: async (input: { agent: string; principal?: Principal; message: import("./types/common.js").MessageInput; transcript?: import("./types/model.js").NeutralMessage[]; runInputs?: JsonObject }): Promise<ContextBuildOutput> => {
       const principal = this.i.runs.resolvePrincipal(input.principal);
-      const agent = this.i.config.agents[input.agent];
+      const agent = this.i.current.config.agents[input.agent];
       if (!agent) throw new SFieldError("UNKNOWN_AGENT", `agent ${input.agent} is not configured`);
-      const binding = this.i.modelBindings[agent.model];
+      const binding = this.i.current.modelBindings[agent.model];
       if (!binding) throw new SFieldError("UNKNOWN_MODEL", `model ${agent.model} has no binding`);
       const capabilities = await this.i.gateway.describe(binding);
       const effective = computeEffectiveTools({ agent, registry: this.i.registry, limits: this.i.limits, hasInputTransport: this.i.approvals.hasInputTransport });
@@ -285,7 +300,7 @@ export class SField {
         summaries: [],
       };
       const runId = newId("ctxrun");
-      const out = await buildContext({ runId, agent, principal, message: input.message, runInputs: input.runInputs, attributes: principal.attributes, transcript: input.transcript ?? [], binding, capabilities, tools, memory, retrieval: this.i.retrieval });
+      const out = await buildContext({ runId, agent, principal, message: input.message, runInputs: input.runInputs, attributes: principal.attributes, transcript: input.transcript ?? [], binding, capabilities, tools, memory, retrieval: this.i.current.retrieval });
       await this.i.persistence.saveContextExplanation(out.explanation);
       return out;
     },
@@ -304,16 +319,17 @@ export class SField {
   };
 
   readonly config = {
-    effective: (): EffectiveConfig => this.i.config,
-    digest: (): string => this.i.config.digest,
-    explain: (agent?: string) => explainConfig(this.i.config, agent),
-    explainText: (agent?: string): string => formatExplanation(explainConfig(this.i.config, agent)),
-    lock: () => this.i.config.lock,
+    effective: (): EffectiveConfig => this.i.current.config,
+    digest: (): string => this.i.current.config.digest,
+    explain: (agent?: string) => explainConfig(this.i.current.config, agent),
+    explainText: (agent?: string): string => formatExplanation(explainConfig(this.i.current.config, agent)),
+    lock: () => this.i.current.config.lock,
+    versions: (): string[] => [...this.i.versions.keys()],
   };
 
   readonly lock = {
     approve: (input: ApproveLockInput): Promise<{ record: LockApprovalRecord; changed: boolean }> => approveLock(input, this.i.options.governance, { lockApprovals: this.i.persistence.lockApprovals, evalReports: this.i.persistence.evalReports }),
-    status: async (): Promise<{ digest: string; approved: LockApprovalRecord | null; required: boolean }> => ({ digest: this.i.config.digest, approved: await this.i.persistence.lockApprovals.get(this.i.config.digest), required: this.i.options.governance?.requireApproved ?? this.i.deployment === "service" }),
+    status: async (): Promise<{ digest: string; approved: LockApprovalRecord | null; required: boolean }> => ({ digest: this.i.current.config.digest, approved: await this.i.persistence.lockApprovals.get(this.i.current.config.digest), required: this.i.options.governance?.requireApproved ?? this.i.deployment === "service" }),
     evalReports: () => this.i.persistence.evalReports,
   };
 
@@ -348,8 +364,8 @@ export class SField {
     const plugins = await this.i.plugins.health();
     const degraded: string[] = [];
     for (const [id, h] of Object.entries(plugins)) if (!h.ok) degraded.push(`plugin:${id}`);
-    for (const [id] of Object.entries(this.i.config.sources)) if (!this.i.retrieval.has(id)) degraded.push(`source:${id}`);
-    const report: HealthReport = { ok: persistence.ok && degraded.length === 0 && !this.closed, deployment: this.i.deployment, configDigest: this.i.config.digest, degraded, plugins, persistence };
+    for (const [id] of Object.entries(this.i.current.config.sources)) if (!this.i.current.retrieval.has(id)) degraded.push(`source:${id}`);
+    const report: HealthReport = { ok: persistence.ok && degraded.length === 0 && !this.closed, deployment: this.i.deployment, configDigest: this.i.current.config.digest, degraded, plugins, persistence };
     if (this.i.preset) report.preset = this.i.preset.name;
     return report;
   }
@@ -367,7 +383,21 @@ export class SField {
 
 // ---------------------------------------------------------------- helpers
 
-async function prepareCompile(options: SFieldCreateOptions, mode: { validateOnly: boolean }) {
+/** Builds the binding objects of one configuration version (§5.5, §6.3). */
+function assembleVersion(config: EffectiveConfig, options: SFieldCreateOptions, plugins: PluginManager, secrets: SecretResolver, configDir: string): ConfigVersion & { retrievalBindings: Map<string, RetrievalBinding> } {
+  const modelBindings: Record<string, ModelBinding> = {};
+  for (const m of Object.values(config.models)) modelBindings[m.id] = m.form === "binding" ? options.bindings!.models![m.binding!]! : shorthandModelBinding(m);
+  const connections: Record<string, ConnectionResolver> = { ...(options.bindings?.connections ?? {}) };
+  for (const c of Object.values(config.connections)) connections[c.id] = shorthandConnection(c, secrets);
+  const retrievalBindings = new Map<string, RetrievalBinding>();
+  for (const s of Object.values(config.sources)) {
+    if (s.form === "binding") retrievalBindings.set(s.id, options.bindings!.retrieval![s.binding!]!);
+    else retrievalBindings.set(s.id, plugins.registrations.retrievalTypes.get(s.type!)!.create(s.id, s.config, { configDir }));
+  }
+  return { config, modelBindings, connections, retrieval: new RetrievalService(retrievalBindings), retrievalBindings };
+}
+
+async function prepareCompile(options: SFieldCreateOptions, mode: { validateOnly: boolean; registry?: ToolRegistry; plugins?: PluginManager }) {
   const env = options.env ?? process.env;
   if (options.preset && (env["NODE_ENV"] === "production" || options.deployment === "service")) {
     throw new SFieldError("PRESET_REFUSED", `development preset "${options.preset}" refuses to load ${env["NODE_ENV"] === "production" ? "under NODE_ENV=production" : "with deployment: service"}`, { suggestion: "Production configures persistence, identity, and authorization explicitly (§4.7)" });
@@ -376,19 +406,22 @@ async function prepareCompile(options: SFieldCreateOptions, mode: { validateOnly
   if (typeof options.config === "string") loaded = loadConfigFile(options.config);
   else loaded = loadConfigDocument(options.config, resolve(options.configDir ?? process.cwd()));
   const configDir = loaded.configDir;
-  const registry = new ToolRegistry();
-  const plugins = new PluginManager(registry);
-  plugins.registerProvider(new AnthropicProvider());
-  plugins.registerProvider(new OpenAICompatibleProvider());
+  const reusing = !!mode.registry;
+  const registry = mode.registry ?? new ToolRegistry();
+  const plugins = mode.plugins ?? new PluginManager(registry);
   let preset: PresetComponents | undefined;
-  let presetModule: PresetModule | undefined;
-  if (options.preset) {
-    presetModule = await loadPresetModule(options.preset, options.presetLoader);
-    if (!mode.validateOnly) preset = await presetModule.createPreset({ ...options, configDir });
-    for (const f of preset?.retrievalTypes ?? presetModule.retrievalTypes ?? []) if (!plugins.registrations.retrievalTypes.has(f.type)) plugins.registerRetrievalType(f);
+  if (!reusing) {
+    plugins.registerProvider(new AnthropicProvider());
+    plugins.registerProvider(new OpenAICompatibleProvider());
+    let presetModule: PresetModule | undefined;
+    if (options.preset) {
+      presetModule = await loadPresetModule(options.preset, options.presetLoader);
+      if (!mode.validateOnly) preset = await presetModule.createPreset({ ...options, configDir });
+      for (const f of preset?.retrievalTypes ?? presetModule.retrievalTypes ?? []) if (!plugins.registrations.retrievalTypes.has(f.type)) plugins.registerRetrievalType(f);
+    }
+    for (const p of options.plugins ?? []) plugins.load(p);
+    for (const t of options.tools ?? []) registry.registerCode(t, "bundle");
   }
-  for (const p of options.plugins ?? []) plugins.load(p);
-  for (const t of options.tools ?? []) registry.registerCode(t, "bundle");
   const deployment = options.deployment ?? preset?.deployment ?? (mode.validateOnly ? "ephemeral" : undefined);
   if (!deployment) throw new SFieldError("INVALID_CONFIG", "deployment is required without a preset", { path: "options.deployment", suggestion: 'Pass deployment: "durable_single" (or "ephemeral" for tests) with matching persistence' });
   const envSecrets = new EnvSecretResolver(env);
