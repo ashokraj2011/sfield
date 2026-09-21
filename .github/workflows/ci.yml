@@ -27,6 +27,9 @@ jobs:
   adoption-gate:
     runs-on: ubuntu-latest
     needs: build-test
+    env:
+      # The secrets context is not available in step-level `if`; expose it through env instead.
+      LIVE_ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -48,9 +51,9 @@ jobs:
           node ../../packages/cli/bin/sfield.js doctor
           node ../../packages/cli/bin/sfield.js tools list
       - name: live first run (only with a real credential)
-        if: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+        if: env.LIVE_ANTHROPIC_API_KEY != ''
         working-directory: examples/ci-agent
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ env.LIVE_ANTHROPIC_API_KEY }}
           SFIELD_MODEL: claude-sonnet-5
         run: timeout 600 node ../../packages/cli/bin/sfield.js run --agent support --message "What is the refund policy?"
