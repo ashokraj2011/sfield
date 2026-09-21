@@ -42,6 +42,8 @@ jobs:
           SFIELD_MODEL: claude-sonnet-5
         run: |
           rm -rf ci-agent && node ../packages/cli/bin/sfield.js init ci-agent --preset local
+          # Stand-in for `npm install` of the published packages: link @sfield/* from this workspace.
+          (cd .. && pnpm install --no-frozen-lockfile)
           cd ci-agent
           node ../../packages/cli/bin/sfield.js validate
           node ../../packages/cli/bin/sfield.js doctor
