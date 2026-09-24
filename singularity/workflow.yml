@@ -102,14 +102,6 @@ ledger:
   enabled: true
   branch: state
   remote: origin
-  publication: warn
-  behind: warn
-  enforcement: shadow
-  signing: off
-  trustTier: T0
-  maxRetries: 4
-  pinTransport: refs
-  retentionDays: 2555
 templatesRoot: singularity/templates
 noModel:
   unknownExternalCommands: warn
@@ -368,23 +360,33 @@ approvalAuthorities:
   product-approvers:
     label: Product approvers
     allowAnyGitIdentity: false
-    members: []
+    members:
+      - name: Ashok Raj
+        email: 88361104+ashokraj2011@users.noreply.github.com
   architecture-reviewers:
     label: Architecture reviewers
     allowAnyGitIdentity: false
-    members: []
+    members:
+      - name: Ashok Raj
+        email: 88361104+ashokraj2011@users.noreply.github.com
   engineering-reviewers:
     label: Engineering reviewers
     allowAnyGitIdentity: false
-    members: []
+    members:
+      - name: Ashok Raj
+        email: 88361104+ashokraj2011@users.noreply.github.com
   quality-reviewers:
     label: Quality reviewers
     allowAnyGitIdentity: false
-    members: []
+    members:
+      - name: Ashok Raj
+        email: 88361104+ashokraj2011@users.noreply.github.com
   design-reviewers:
     label: Design reviewers
     allowAnyGitIdentity: false
-    members: []
+    members:
+      - name: Ashok Raj
+        email: 88361104+ashokraj2011@users.noreply.github.com
 artifactSets:
   spec-driven-specification:
     primary: spec.md
@@ -633,8 +635,7 @@ workTypes:
       - verify
     plannedClaims:
       mode: opt-out
-      reason: This low-risk two-phase profile intentionally has no approved pre-code
-        specification phase.
+      reason: This low-risk two-phase profile intentionally has no approved pre-code specification phase.
     templateOverrides:
       implement: quick-fix/implement.md
       verify: quick-fix/verify.md
@@ -644,10 +645,7 @@ workTypes:
           - implement
   classic-delivery:
     label: Classic delivery
-    description: Intake, code, testing, and code checking with committed test
-      receipts, the guarded manual REV refinement pilot during Code, and
-      explicit reviewer feedback/rework to Code; REV feedback attachments are
-      evidence only.
+    description: Intake, code, testing, and code checking with committed test receipts, the guarded manual REV refinement pilot during Code, and explicit reviewer feedback/rework to Code; REV feedback attachments are evidence only.
     phases:
       - intake
       - implementation
@@ -720,12 +718,7 @@ workTypes:
             - conformance
   spec-code-test-loop:
     label: Spec → code → Playwright review
-    description: A specification-first Story with Code publication, governed
-      Playwright browser observations, and bounded human-directed rework. The
-      optional BRL foundation can inspect or plan the exact retained Code
-      Candidate, but runs fail closed without its approved runner; MCP or BRL
-      observations never replace structured test receipts, Testing, publication,
-      or approval.
+    description: A specification-first Story with Code publication, governed Playwright browser observations, and bounded human-directed rework. The optional BRL foundation can inspect or plan the exact retained Code Candidate, but runs fail closed without its approved runner; MCP or BRL observations never replace structured test receipts, Testing, publication, or approval.
     phases:
       - specification
       - implementation
@@ -829,9 +822,7 @@ workTypes:
             - conformance
   poc-lite:
     label: POC Lite — local governed change
-    description: A model-free four-checkpoint demonstration with repository-native
-      validation and one explicit human finish decision; it imposes no MCP,
-      tracker, or hosted-service dependency.
+    description: A model-free four-checkpoint demonstration with repository-native validation and one explicit human finish decision; it imposes no MCP, tracker, or hosted-service dependency.
     phases:
       - poc-lite-plan
       - poc-lite-act
@@ -839,8 +830,7 @@ workTypes:
       - poc-lite-finalize
     plannedClaims:
       mode: opt-out
-      reason: This deliberately small demonstration records a bounded plan but does
-        not establish a specification-clause contract.
+      reason: This deliberately small demonstration records a bounded plan but does not establish a specification-clause contract.
     intelligence:
       worldModel: off
       ast: off
@@ -865,9 +855,7 @@ workTypes:
           - poc-lite-verify
   benchmarking-a:
     label: Benchmark A — governed intelligence
-    description: Measures governed world-model, bounded AST, and approval-bound
-      agent-brief context; unavailable intelligence is a degraded benchmark run,
-      not a lifecycle refusal.
+    description: Measures governed world-model, bounded AST, and approval-bound agent-brief context; unavailable intelligence is a degraded benchmark run, not a lifecycle refusal.
     phases:
       - intake
       - design
@@ -980,8 +968,7 @@ workTypes:
             - conformance
   benchmarking-b:
     label: Benchmark B — generic context
-    description: Uses full approved artifacts without world-model, AST, or
-      agent-brief enrichment.
+    description: Uses full approved artifacts without world-model, AST, or agent-brief enrichment.
     phases:
       - intake
       - design
@@ -1053,8 +1040,7 @@ workTypes:
             - conformance
   poc-workflow:
     label: POC workflow — enterprise Playwright
-    description: The existing enterprise browser-regression profile with governed
-      Playwright MCP evidence and independent publication review.
+    description: The existing enterprise browser-regression profile with governed Playwright MCP evidence and independent publication review.
     phases:
       - poc-intake
       - poc-impact-analysis
@@ -1105,8 +1091,7 @@ workTypes:
           - poc-validation
   reference-driven-build:
     label: Reference-driven build
-    description: Creates a new implementation in the delivery repository from one or
-      more immutable, read-only repository branches pinned at Story intake.
+    description: Creates a new implementation in the delivery repository from one or more immutable, read-only repository branches pinned at Story intake.
     references:
       mode: required
     phases:
