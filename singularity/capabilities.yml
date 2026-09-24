@@ -1,0 +1,11 @@
+version: 1
+capabilities:
+  sfield:
+    name: sfield
+    kind: delivery
+    parent: null
+    repository: sfield
+    jira:
+      projectKey: pay
+    teams:
+      - pay

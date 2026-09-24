@@ -1,0 +1,50 @@
+# Singularity Flow — {{output.label}}
+#
+# How this initiative maps onto the trackers and repositories that will carry it.
+# Read by people rather than by the engine, but kept as YAML so the linkage can be
+# diffed and grepped rather than reconstructed from prose.
+#
+# The rule this file exists for: one initiative can span several Epics and several
+# repositories, and the mapping between them is the thing nobody can reconstruct
+# later from the tracker alone.
+
+version: 1
+initiativeId: "{{initiative.id}}"
+phase: "{{phase.id}}"
+output: "{{output.id}}"
+
+# The tracker parent this initiative answers to, if there is one. A local
+# initiative with no tracker leaves these empty rather than inventing a key.
+parent:
+  tracker: ""          # jira | none
+  key: ""
+  url: ""
+
+# Epics carrying this initiative's work. `repository` must be a repository ID
+# declared in singularity/portfolio.yml — a repository named here that the
+# portfolio does not know about cannot be cloned or governed.
+epics:
+  - key: ""
+    title: ""
+    repository: ""
+    # Which capability delivers this, from the lead repository's capability map.
+    capability: ""
+    # Requirements this Epic carries. Verified against the traceability matrix
+    # once requirements are approved.
+    requirements: []
+    status: ""
+
+# Work that belongs to this initiative but is tracked somewhere else, with the
+# reason. This is the section that stops an initiative looking complete because
+# the missing part was never in its own tracker.
+external:
+  - description: ""
+    trackedIn: ""
+    owner: ""
+    reason: ""
+
+# Anything the linkage cannot yet express, and who resolves it.
+openQuestions:
+  - question: ""
+    blocks: ""
+    owner: ""

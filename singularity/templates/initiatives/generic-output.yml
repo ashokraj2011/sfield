@@ -1,0 +1,10 @@
+# Singularity Flow governed initiative output
+initiativeId: "{{initiative.id}}"
+phase: "{{phase.id}}"
+output: "{{output.id}}"
+generation: 0
+
+summary: ""
+items: []
+dependencies: []
+evidence: []

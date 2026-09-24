@@ -1,0 +1,41 @@
+# Task → model-selection policy. This is the ONLY file in the repository that may pin a
+# concrete model identifier. The shipped policy uses `auto`, so Copilot chooses the concrete model
+# independently for each isolated ACP invocation.
+#
+# Skills, workflows, agents and the command registry all name a *task*; this file is the single
+# indirection to a vendor. That is what makes a model deprecation a one-line edit here rather than a
+# sweep through every contract that mentioned it. `[ADP:REQ-020]` `[ADP:CON-002]`
+#
+# Model-specific parameters belong here too, for the same reason: the volatile things live in the
+# one volatile file. `[ADP:REQ-021]` `[ADP:CON-006]`
+#
+# Changing this file is a governed configuration change like any other. A story pins the *task* it
+# routes by and the *revision* of this mapping; the model name resolves when the work actually runs,
+# so retiring a model degrades availability without rewriting what the story was governed by.
+# `[ADP:REQ-030]` `[ADP:CON-007]`
+#
+# Shipped deliberately thin. Two tiers declare provider-auto selection and four alias them. Split
+# an alias or pin a concrete model only when the scorecard supplies evidence for that decision.
+
+modelTiers:
+  # Dispatch and faithful narration. Cheap, fast, and asked only to not editorialise — the tier that
+  # should stay small even when the others grow.
+  relay:
+    model: auto
+
+  # Design, planning, trade-off analysis. The tier that most visibly rewards a stronger model, and
+  # the one whose thinking budget is worth stating rather than inheriting.
+  reason:
+    # Copilot resolves the concrete model for each isolated ACP session. The invocation receipt
+    # records both this `auto` selector and provider-reported resolved model telemetry.
+    model: auto
+    params:
+      effort: high
+
+  # Aliases until measurement says otherwise. Each is a claim that this work resembles the tier it
+  # points at closely enough that a separate choice would be unjustified — not a claim that it is
+  # unimportant.
+  clarify: relay
+  summarize: relay
+  code: reason
+  analyze: reason
