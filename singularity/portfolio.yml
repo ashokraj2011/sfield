@@ -78,13 +78,13 @@ applicabilityPolicies:
     question: Does this initiative change a shared domain model or cross-domain contract?
 
 approvalAuthorities:
-  initiative-owners: { members: [] }
-  executive-approvers: { members: [] }
-  product-approvers: { members: [] }
-  architecture-reviewers: { members: [] }
-  security-reviewers: { members: [] }
-  risk-reviewers: { members: [] }
-  operations-reviewers: { members: [] }
+  initiative-owners: {members: [{name: Ashok Raj, email: 88361104+ashokraj2011@users.noreply.github.com}]}
+  executive-approvers: {members: [{name: Ashok Raj, email: 88361104+ashokraj2011@users.noreply.github.com}]}
+  product-approvers: {members: [{name: Ashok Raj, email: 88361104+ashokraj2011@users.noreply.github.com}]}
+  architecture-reviewers: {members: [{name: Ashok Raj, email: 88361104+ashokraj2011@users.noreply.github.com}]}
+  security-reviewers: {members: [{name: Ashok Raj, email: 88361104+ashokraj2011@users.noreply.github.com}]}
+  risk-reviewers: {members: [{name: Ashok Raj, email: 88361104+ashokraj2011@users.noreply.github.com}]}
+  operations-reviewers: {members: [{name: Ashok Raj, email: 88361104+ashokraj2011@users.noreply.github.com}]}
 
 # Add participating repositories with stable aliases. An empty registry is
 # valid until an initiative story plan references a repository. Application
@@ -99,7 +99,7 @@ approvalAuthorities:
 #     clone: { mode: blobless-sparse, filter: "blob:none", sparseCone: [apps/mobile, packages/contracts], fallback: refuse }
 #     jira: { projectKey: MOB }
 #     metadata: { appId: APP-1001, name: Mobile application, owner: Digital }
-repositories: {}
+repositories: {sfield: {url: https://github.com/ashokraj2011/sfield.git, defaultBranch: main, required: true, clone: {mode: blobless, filter: blob:none, sparseCone: [], fallback: refuse}}}
 
 repositoryMetadata:
   requiredKeys: []
@@ -120,8 +120,8 @@ storage:
   providers:
     # Bytes committed alongside the Epic, addressed by their own hash. Self-contained and offline,
     # at the cost of the repository carrying them.
-    local: { type: local }
-    jira: { type: jira-attachment }
+    local: {type: local}
+    jira: {type: jira-attachment}
 
 initiativeProfiles:
   epic-planning:
@@ -156,20 +156,20 @@ initiativeProfiles:
         approval:
           mode: bundle
           chain:
-            - { authority: product-approvers, label: Product Governance }
-            - { authority: executive-approvers, label: Executive Decisioning }
+            - {authority: product-approvers, label: Product Governance}
+            - {authority: executive-approvers, label: Executive Decisioning}
       - id: concept-readiness
         label: Concept Readiness
         members:
           - discover-define/requirements
-        approval: { mode: bundle, authorities: [product-approvers], minimum: 1 }
+        approval: {mode: bundle, authorities: [product-approvers], minimum: 1}
       - id: experience-strategy-concepts
         label: Experience Strategy & Concepts
         members:
           - design-iterate/service-blueprint
           - design-iterate/design-specification
           - design-iterate/solution-validation
-        approval: { mode: bundle, authorities: [product-approvers], minimum: 1 }
+        approval: {mode: bundle, authorities: [product-approvers], minimum: 1}
       - id: product-readiness
         label: Product Readiness
         members:
@@ -183,8 +183,8 @@ initiativeProfiles:
         approval:
           mode: bundle
           chain:
-            - { authority: product-approvers, label: Product Governance }
-            - { authority: risk-reviewers, label: LRC Review }
+            - {authority: product-approvers, label: Product Governance}
+            - {authority: risk-reviewers, label: LRC Review}
       - id: technical-design-architecture
         label: Technical Design & Architecture
         members:
@@ -196,8 +196,8 @@ initiativeProfiles:
         approval:
           mode: bundle
           chain:
-            - { authority: architecture-reviewers, label: Architecture Review }
-            - { authority: security-reviewers, label: Security Review }
+            - {authority: architecture-reviewers, label: Architecture Review}
+            - {authority: security-reviewers, label: Security Review}
       - id: implementation-specification
         label: Implementation Specification
         members:
@@ -205,7 +205,7 @@ initiativeProfiles:
           - elaboration/sequencing-plan
           - elaboration/dependency-matrix
           - elaboration/functional-tests
-        approval: { mode: bundle, authorities: [architecture-reviewers], minimum: 1 }
+        approval: {mode: bundle, authorities: [architecture-reviewers], minimum: 1}
       - id: validation-release-readiness
         label: Validation & Release Readiness
         members:
@@ -220,9 +220,9 @@ initiativeProfiles:
         approval:
           mode: bundle
           chain:
-            - { authority: operations-reviewers, label: Operational Readiness }
-            - { authority: security-reviewers, label: Security Review }
-            - { authority: initiative-owners, label: Stage Gate Approval }
+            - {authority: operations-reviewers, label: Operational Readiness}
+            - {authority: security-reviewers, label: Security Review}
+            - {authority: initiative-owners, label: Stage Gate Approval}
 
 initiativePhases:
   epic-intake:
@@ -231,13 +231,13 @@ initiativePhases:
     lanes: [business-product]
     worldModelViews: []
     outputs:
-      - { id: source-catalog, label: Source catalog, kind: markdown, path: source-catalog.md, generator: source-catalog, required: false }
+      - {id: source-catalog, label: Source catalog, kind: markdown, path: source-catalog.md, generator: source-catalog, required: false}
     checklist:
-      - { id: epic-identity-verified, label: Epic identity reserved and verified, requirement: optional, acceptedAssurance: [machine-verified, system-verified], gate: warn }
-      - { id: sources-pinned, label: Additional source versions are accessible and hash-pinned, requirement: optional, acceptedAssurance: [machine-verified, system-verified], gate: warn }
+      - {id: epic-identity-verified, label: Epic identity reserved and verified, requirement: optional, acceptedAssurance: [machine-verified, system-verified], gate: warn}
+      - {id: sources-pinned, label: Additional source versions are accessible and hash-pinned, requirement: optional, acceptedAssurance: [machine-verified, system-verified], gate: warn}
     # Intake is a collection step, not an approval ceremony. Jira identity and any pinned
     # source material are enough to continue; repository grounding starts on each Story branch.
-    bundleApproval: { mode: none, authorities: [], minimum: 0, allowSelfApproval: true }
+    bundleApproval: {mode: none, authorities: [], minimum: 0, allowSelfApproval: true}
 
   epic-requirements:
     label: Requirements
@@ -245,14 +245,14 @@ initiativePhases:
     lanes: [business-product, design-architecture]
     worldModelViews: []
     outputs:
-      - { id: requirements-specification, label: Requirements specification, kind: markdown, path: requirements.md, template: initiatives/epic/requirements.md }
-      - { id: requirements-traceability, label: Requirements traceability, kind: yaml, path: traceability.yml, template: initiatives/epic/requirements-traceability.yml }
-      - { id: impact-analysis, label: Repository impact analysis, kind: yaml, path: impact-analysis.yml, template: initiatives/epic/impact-analysis.yml }
+      - {id: requirements-specification, label: Requirements specification, kind: markdown, path: requirements.md, template: initiatives/epic/requirements.md}
+      - {id: requirements-traceability, label: Requirements traceability, kind: yaml, path: traceability.yml, template: initiatives/epic/requirements-traceability.yml}
+      - {id: impact-analysis, label: Repository impact analysis, kind: yaml, path: impact-analysis.yml, template: initiatives/epic/impact-analysis.yml}
     checklist:
-      - { id: requirements-traceable, label: Every REQ and AC cites a pinned source, requirement: must, acceptedAssurance: [machine-verified, human-approved], gate: block }
-      - { id: material-questions-resolved, label: Material scope questions are resolved or explicitly accepted, requirement: optional, acceptedAssurance: [human-approved], gate: warn }
-      - { id: impact-grounded, label: Impact analysis resolves every named repository against workspace configuration, requirement: must, acceptedAssurance: [machine-verified], gate: block }
-    bundleApproval: { mode: bundle, authorities: [product-approvers], minimum: 1, allowSelfApproval: true }
+      - {id: requirements-traceable, label: Every REQ and AC cites a pinned source, requirement: must, acceptedAssurance: [machine-verified, human-approved], gate: block}
+      - {id: material-questions-resolved, label: Material scope questions are resolved or explicitly accepted, requirement: optional, acceptedAssurance: [human-approved], gate: warn}
+      - {id: impact-grounded, label: Impact analysis resolves every named repository against workspace configuration, requirement: must, acceptedAssurance: [machine-verified], gate: block}
+    bundleApproval: {mode: bundle, authorities: [product-approvers], minimum: 1, allowSelfApproval: true}
 
   epic-planning:
     label: Planning
@@ -260,16 +260,16 @@ initiativePhases:
     lanes: [business-product, design-architecture, engineering]
     worldModelViews: []
     outputs:
-      - { id: story-plan, label: Executable Story plan, kind: yaml, path: story-plan.yml, template: initiatives/epic/story-plan.yml, consumes: [epic-requirements/requirements-specification, epic-requirements/requirements-traceability, epic-requirements/impact-analysis] }
-      - { id: parent-specification, label: Parent solution specification, kind: markdown, path: parent-spec.md, template: initiatives/epic/parent-spec.md, consumes: [epic-requirements/requirements-specification, epic-requirements/requirements-traceability, epic-requirements/impact-analysis] }
-      - { id: story-specification-index, label: Story specification index, kind: yaml, path: story-spec-index.yml, template: initiatives/epic/story-spec-index.yml, consumes: [epic-requirements/requirements-specification, epic-requirements/requirements-traceability, epic-requirements/impact-analysis] }
+      - {id: story-plan, label: Executable Story plan, kind: yaml, path: story-plan.yml, template: initiatives/epic/story-plan.yml, consumes: [epic-requirements/requirements-specification, epic-requirements/requirements-traceability, epic-requirements/impact-analysis]}
+      - {id: parent-specification, label: Parent solution specification, kind: markdown, path: parent-spec.md, template: initiatives/epic/parent-spec.md, consumes: [epic-requirements/requirements-specification, epic-requirements/requirements-traceability, epic-requirements/impact-analysis]}
+      - {id: story-specification-index, label: Story specification index, kind: yaml, path: story-spec-index.yml, template: initiatives/epic/story-spec-index.yml, consumes: [epic-requirements/requirements-specification, epic-requirements/requirements-traceability, epic-requirements/impact-analysis]}
     checklist:
-      - { id: stories-traceable, label: Every Story maps to REQ and AC identifiers, requirement: must, acceptedAssurance: [machine-verified, human-approved], gate: block }
-      - { id: repositories-resolved, label: Every Story has a configured owning repository, requirement: must, acceptedAssurance: [machine-verified], gate: block }
-      - { id: dependencies-acyclic, label: Story dependencies are valid and acyclic, requirement: must, acceptedAssurance: [machine-verified], gate: block }
-      - { id: story-specifications-complete, label: Every Story has an exact hash-bound specification, requirement: must, acceptedAssurance: [machine-verified], gate: block }
-      - { id: acceptance-criteria-covered, label: Every acceptance criterion is allocated to at least one Story, requirement: must, acceptedAssurance: [machine-verified], gate: block }
-    bundleApproval: { mode: bundle, authorities: [product-approvers], minimum: 1, allowSelfApproval: true }
+      - {id: stories-traceable, label: Every Story maps to REQ and AC identifiers, requirement: must, acceptedAssurance: [machine-verified, human-approved], gate: block}
+      - {id: repositories-resolved, label: Every Story has a configured owning repository, requirement: must, acceptedAssurance: [machine-verified], gate: block}
+      - {id: dependencies-acyclic, label: Story dependencies are valid and acyclic, requirement: must, acceptedAssurance: [machine-verified], gate: block}
+      - {id: story-specifications-complete, label: Every Story has an exact hash-bound specification, requirement: must, acceptedAssurance: [machine-verified], gate: block}
+      - {id: acceptance-criteria-covered, label: Every acceptance criterion is allocated to at least one Story, requirement: must, acceptedAssurance: [machine-verified], gate: block}
+    bundleApproval: {mode: bundle, authorities: [product-approvers], minimum: 1, allowSelfApproval: true}
 
   epic-publish:
     label: Publish Stories
@@ -277,14 +277,14 @@ initiativePhases:
     lanes: [business-product, engineering]
     worldModelViews: []
     outputs:
-      - { id: jira-write-plan, label: Jira write plan, kind: yaml, path: jira-write-plan.yml, template: initiatives/epic/jira-write-plan.yml, consumes: [epic-planning/story-plan, epic-planning/parent-specification, epic-planning/story-specification-index] }
-      - { id: materialization-report, label: Jira and Git materialization report, kind: markdown, path: materialization-report.md, template: initiatives/epic/materialization-report.md, consumes: [epic-planning/story-plan, epic-planning/parent-specification, epic-planning/story-specification-index] }
+      - {id: jira-write-plan, label: Jira write plan, kind: yaml, path: jira-write-plan.yml, template: initiatives/epic/jira-write-plan.yml, consumes: [epic-planning/story-plan, epic-planning/parent-specification, epic-planning/story-specification-index]}
+      - {id: materialization-report, label: Jira and Git materialization report, kind: markdown, path: materialization-report.md, template: initiatives/epic/materialization-report.md, consumes: [epic-planning/story-plan, epic-planning/parent-specification, epic-planning/story-specification-index]}
     checklist:
-      - { id: jira-permission-verified, label: Selected identity authority can create Story records, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block }
-      - { id: stories-materialized, label: Jira Stories and canonical Git branches have receipts, requirement: must, acceptedAssurance: [system-verified, machine-verified], gate: block }
+      - {id: jira-permission-verified, label: Selected identity authority can create Story records, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block}
+      - {id: stories-materialized, label: Jira Stories and canonical Git branches have receipts, requirement: must, acceptedAssurance: [system-verified, machine-verified], gate: block}
     # The Planning package already carries the Product Owner decision. This operational phase
     # completes automatically only after exact Jira and Git receipts exist for every Story.
-    bundleApproval: { mode: none, authorities: [], minimum: 0, allowSelfApproval: true }
+    bundleApproval: {mode: none, authorities: [], minimum: 0, allowSelfApproval: true}
 
   define:
     label: Define
@@ -292,13 +292,13 @@ initiativePhases:
     lanes: [business-product]
     worldModelViews: [business]
     outputs:
-      - { id: business-case, label: Business case, kind: markdown, path: business-case.md, template: initiatives/generic-output.md, approval: { mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true } }
-      - { id: scope-and-outcomes, label: Scope and outcomes, kind: markdown, path: scope-and-outcomes.md, template: initiatives/generic-output.md }
-      - { id: acceptance-criteria, label: Acceptance criteria, kind: markdown, path: acceptance-criteria.md, template: initiatives/generic-output.md }
+      - {id: business-case, label: Business case, kind: markdown, path: business-case.md, template: initiatives/generic-output.md, approval: {mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true}}
+      - {id: scope-and-outcomes, label: Scope and outcomes, kind: markdown, path: scope-and-outcomes.md, template: initiatives/generic-output.md}
+      - {id: acceptance-criteria, label: Acceptance criteria, kind: markdown, path: acceptance-criteria.md, template: initiatives/generic-output.md}
     checklist:
-      - { id: business-case-approved, label: Business case approved, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: scope-agreed, label: Scope and outcomes agreed, requirement: must, acceptedAssurance: [human-approved], gate: block }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: business-case-approved, label: Business case approved, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: scope-agreed, label: Scope and outcomes agreed, requirement: must, acceptedAssurance: [human-approved], gate: block}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
 
   plan:
     label: Plan
@@ -306,13 +306,13 @@ initiativePhases:
     lanes: [business-product, design-architecture, engineering]
     worldModelViews: [business, architecture, security]
     outputs:
-      - { id: architecture-summary, label: Architecture summary, kind: markdown, path: architecture-summary.md, template: initiatives/generic-output.md, consumes: [define/scope-and-outcomes], approval: { mode: individual, authorities: [architecture-reviewers], minimum: 1, allowSelfApproval: true } }
-      - { id: story-plan, label: Story plan, kind: yaml, path: story-plan.yml, template: initiatives/generic-output.yml, consumes: [define/acceptance-criteria] }
-      - { id: interface-contracts, label: Interface contracts, kind: interface-contract, path: interface-contracts.md, template: initiatives/interface-contract.md, consumes: [define/scope-and-outcomes], approval: { mode: individual, authorities: [architecture-reviewers], minimum: 1, allowSelfApproval: true } }
+      - {id: architecture-summary, label: Architecture summary, kind: markdown, path: architecture-summary.md, template: initiatives/generic-output.md, consumes: [define/scope-and-outcomes], approval: {mode: individual, authorities: [architecture-reviewers], minimum: 1, allowSelfApproval: true}}
+      - {id: story-plan, label: Story plan, kind: yaml, path: story-plan.yml, template: initiatives/generic-output.yml, consumes: [define/acceptance-criteria]}
+      - {id: interface-contracts, label: Interface contracts, kind: interface-contract, path: interface-contracts.md, template: initiatives/interface-contract.md, consumes: [define/scope-and-outcomes], approval: {mode: individual, authorities: [architecture-reviewers], minimum: 1, allowSelfApproval: true}}
     checklist:
-      - { id: stories-ready, label: Repository stories estimated and sequenced, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block }
-      - { id: dependencies-agreed, label: Dependencies and contracts agreed, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: stories-ready, label: Repository stories estimated and sequenced, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block}
+      - {id: dependencies-agreed, label: Dependencies and contracts agreed, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
 
   build:
     label: Build
@@ -320,12 +320,12 @@ initiativePhases:
     lanes: [engineering]
     worldModelViews: [architecture, development, testing, security, operations]
     outputs:
-      - { id: implementation-index, label: Implementation evidence index, kind: markdown, path: implementation-index.md, template: initiatives/generic-output.md, consumes: [plan/story-plan, plan/interface-contracts] }
-      - { id: test-and-ci-report, label: Test and CI report, kind: markdown, path: test-and-ci-report.md, template: initiatives/generic-output.md, consumes: [plan/story-plan] }
+      - {id: implementation-index, label: Implementation evidence index, kind: markdown, path: implementation-index.md, template: initiatives/generic-output.md, consumes: [plan/story-plan, plan/interface-contracts]}
+      - {id: test-and-ci-report, label: Test and CI report, kind: markdown, path: test-and-ci-report.md, template: initiatives/generic-output.md, consumes: [plan/story-plan]}
     checklist:
-      - { id: blocking-stories-complete, label: All blocking stories complete and conformant, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block }
-      - { id: tests-passing, label: Required tests and CI checks pass, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: blocking-stories-complete, label: All blocking stories complete and conformant, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block}
+      - {id: tests-passing, label: Required tests and CI checks pass, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
 
   release:
     label: Release
@@ -333,14 +333,14 @@ initiativePhases:
     lanes: [business-product, engineering]
     worldModelViews: [release, operations, testing]
     outputs:
-      - { id: release-record, label: Release record, kind: markdown, path: release-record.md, template: initiatives/generic-output.md, consumes: [build/implementation-index] }
-      - { id: production-validation, label: Production validation, kind: markdown, path: production-validation.md, template: initiatives/generic-output.md, consumes: [build/test-and-ci-report] }
-      - { id: initiative-conformance, label: Initiative conformance, kind: markdown, path: initiative-conformance.md, template: initiatives/generic-output.md, consumes: [build/implementation-index, build/test-and-ci-report] }
+      - {id: release-record, label: Release record, kind: markdown, path: release-record.md, template: initiatives/generic-output.md, consumes: [build/implementation-index]}
+      - {id: production-validation, label: Production validation, kind: markdown, path: production-validation.md, template: initiatives/generic-output.md, consumes: [build/test-and-ci-report]}
+      - {id: initiative-conformance, label: Initiative conformance, kind: markdown, path: initiative-conformance.md, template: initiatives/generic-output.md, consumes: [build/implementation-index, build/test-and-ci-report]}
     checklist:
-      - { id: deployment-complete, label: Production deployment completed, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block }
-      - { id: monitoring-healthy, label: Production monitoring is healthy, requirement: must, acceptedAssurance: [machine-verified, system-verified], freshness: { validFor: 24h, revalidateAt: [release] }, gate: block }
-      - { id: business-accepted, label: Business acceptance completed, requirement: must, acceptedAssurance: [human-approved], gate: block }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: deployment-complete, label: Production deployment completed, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block}
+      - {id: monitoring-healthy, label: Production monitoring is healthy, requirement: must, acceptedAssurance: [machine-verified, system-verified], freshness: {validFor: 24h, revalidateAt: [release]}, gate: block}
+      - {id: business-accepted, label: Business acceptance completed, requirement: must, acceptedAssurance: [human-approved], gate: block}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
 
   discover-define:
     label: Discover & Define
@@ -351,13 +351,13 @@ initiativePhases:
     # the impact analysis in one place. The long-form business artifacts are right for some work and
     # ceremony for the rest, so each Epic chooses them (`initiative outputs`, or the Artifacts pane).
     outputs:
-      - { id: requirements, label: Requirement and impact analysis, kind: markdown, path: requirements.md, template: initiatives/requirement-impact.md, approval: { mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true } }
-      - { id: business-case, label: Business case, kind: markdown, path: business-case.md, template: initiatives/business-case.md, required: false, approval: { mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true } }
-      - { id: opportunity-brief, label: Market and customer opportunity, kind: markdown, path: opportunity-brief.md, template: initiatives/opportunity-brief.md, required: false }
-      - { id: product-roadmap, label: Product roadmap, kind: markdown, path: product-roadmap.md, template: initiatives/product-roadmap.md, required: false }
+      - {id: requirements, label: Requirement and impact analysis, kind: markdown, path: requirements.md, template: initiatives/requirement-impact.md, approval: {mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true}}
+      - {id: business-case, label: Business case, kind: markdown, path: business-case.md, template: initiatives/business-case.md, required: false, approval: {mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true}}
+      - {id: opportunity-brief, label: Market and customer opportunity, kind: markdown, path: opportunity-brief.md, template: initiatives/opportunity-brief.md, required: false}
+      - {id: product-roadmap, label: Product roadmap, kind: markdown, path: product-roadmap.md, template: initiatives/product-roadmap.md, required: false}
     checklist:
-      - { id: opportunity-defined, label: Opportunity and measurable outcomes defined, requirement: must, acceptedAssurance: [human-approved], gate: block }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: opportunity-defined, label: Opportunity and measurable outcomes defined, requirement: must, acceptedAssurance: [human-approved], gate: block}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
 
   design-iterate:
     label: Design & Iterate
@@ -365,12 +365,12 @@ initiativePhases:
     lanes: [business-product, design-architecture]
     worldModelViews: [business, architecture]
     outputs:
-      - { id: service-blueprint, label: Service blueprint and journey, kind: markdown, path: service-blueprint.md, template: initiatives/service-blueprint.md, consumes: [discover-define/requirements, discover-define/opportunity-brief] }
-      - { id: design-specification, label: Design specification and prototype index, kind: markdown, path: design-specification.md, template: initiatives/design-specification.md, consumes: [discover-define/requirements, discover-define/opportunity-brief] }
-      - { id: solution-validation, label: Solution validation report, kind: markdown, path: solution-validation.md, template: initiatives/solution-validation.md, consumes: [discover-define/requirements, discover-define/business-case] }
+      - {id: service-blueprint, label: Service blueprint and journey, kind: markdown, path: service-blueprint.md, template: initiatives/service-blueprint.md, consumes: [discover-define/requirements, discover-define/opportunity-brief]}
+      - {id: design-specification, label: Design specification and prototype index, kind: markdown, path: design-specification.md, template: initiatives/design-specification.md, consumes: [discover-define/requirements, discover-define/opportunity-brief]}
+      - {id: solution-validation, label: Solution validation report, kind: markdown, path: solution-validation.md, template: initiatives/solution-validation.md, consumes: [discover-define/requirements, discover-define/business-case]}
     checklist:
-      - { id: solution-validated, label: Proposed solution validated with representative users and stakeholders, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block }
-    bundleApproval: { mode: bundle, authorities: [product-approvers], minimum: 1, allowSelfApproval: true }
+      - {id: solution-validated, label: Proposed solution validated with representative users and stakeholders, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block}
+    bundleApproval: {mode: bundle, authorities: [product-approvers], minimum: 1, allowSelfApproval: true}
 
   pre-inception:
     label: Product Gate / Pre-Inception
@@ -378,13 +378,13 @@ initiativePhases:
     lanes: [business-product, design-architecture]
     worldModelViews: [business, architecture, security]
     outputs:
-      - { id: initiative-scope, label: High-level initiative scope, kind: markdown, path: initiative-scope.md, template: initiatives/initiative-scope.md, consumes: [discover-define/requirements, design-iterate/solution-validation] }
-      - { id: compliance-assessment, label: Legal risk and compliance assessment, kind: markdown, path: compliance-assessment.md, template: initiatives/compliance-assessment.md, consumes: [discover-define/requirements, discover-define/business-case], approval: { mode: individual, authorities: [risk-reviewers], minimum: 1, allowSelfApproval: true } }
+      - {id: initiative-scope, label: High-level initiative scope, kind: markdown, path: initiative-scope.md, template: initiatives/initiative-scope.md, consumes: [discover-define/requirements, design-iterate/solution-validation]}
+      - {id: compliance-assessment, label: Legal risk and compliance assessment, kind: markdown, path: compliance-assessment.md, template: initiatives/compliance-assessment.md, consumes: [discover-define/requirements, discover-define/business-case], approval: {mode: individual, authorities: [risk-reviewers], minimum: 1, allowSelfApproval: true}}
     checklist:
-      - { id: business-case-exists, label: Approved business case exists, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: initiative-created-and-scoped, label: Initiative created and scoped at a high level, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block }
-      - { id: compliance-assessment-complete, label: Legal risk and compliance assessment completed, requirement: must, acceptedAssurance: [human-approved, system-verified], freshness: { validFor: 180d, revalidateAt: [delivery] }, gate: block }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: business-case-exists, label: Approved business case exists, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: initiative-created-and-scoped, label: Initiative created and scoped at a high level, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block}
+      - {id: compliance-assessment-complete, label: Legal risk and compliance assessment completed, requirement: must, acceptedAssurance: [human-approved, system-verified], freshness: {validFor: 180d, revalidateAt: [delivery]}, gate: block}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
 
   inception:
     label: Inception
@@ -392,25 +392,25 @@ initiativePhases:
     lanes: [business-product, design-architecture, engineering]
     worldModelViews: [business, architecture, testing, security]
     outputs:
-      - { id: stakeholder-raci, label: Stakeholder register and RACI, kind: markdown, path: stakeholder-raci.md, template: initiatives/stakeholder-raci.md, consumes: [pre-inception/initiative-scope] }
-      - { id: intake-record, label: Accepted intake record, kind: markdown, path: intake-record.md, template: initiatives/intake-record.md, consumes: [pre-inception/initiative-scope] }
-      - { id: epic-record, label: Epic and initiative linkage, kind: yaml, path: epic-record.yml, template: initiatives/epic-record.yml, consumes: [pre-inception/initiative-scope] }
-      - { id: prfaq, label: PRFAQ, kind: markdown, path: prfaq.md, template: initiatives/prfaq.md, consumes: [pre-inception/initiative-scope], approval: { mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true } }
-      - { id: test-data-inventory, label: Test data entity inventory, kind: markdown, path: test-data-inventory.md, template: initiatives/test-data-inventory.md, consumes: [pre-inception/initiative-scope] }
-      - { id: feasibility-report, label: Feasibility report, kind: markdown, path: feasibility-report.md, template: initiatives/feasibility-report.md, consumes: [pre-inception/initiative-scope] }
-      - { id: release-scope, label: Release scope and rollout, kind: markdown, path: release-scope.md, template: initiatives/release-scope.md, consumes: [pre-inception/initiative-scope] }
-      - { id: ux-concept, label: UX concept design, kind: markdown, path: ux-concept.md, template: initiatives/ux-concept.md, consumes: [design-iterate/design-specification], required: false }
-      - { id: poc-results, label: POC summary and results, kind: markdown, path: poc-results.md, template: initiatives/poc-results.md, consumes: [pre-inception/initiative-scope], required: false }
+      - {id: stakeholder-raci, label: Stakeholder register and RACI, kind: markdown, path: stakeholder-raci.md, template: initiatives/stakeholder-raci.md, consumes: [pre-inception/initiative-scope]}
+      - {id: intake-record, label: Accepted intake record, kind: markdown, path: intake-record.md, template: initiatives/intake-record.md, consumes: [pre-inception/initiative-scope]}
+      - {id: epic-record, label: Epic and initiative linkage, kind: yaml, path: epic-record.yml, template: initiatives/epic-record.yml, consumes: [pre-inception/initiative-scope]}
+      - {id: prfaq, label: PRFAQ, kind: markdown, path: prfaq.md, template: initiatives/prfaq.md, consumes: [pre-inception/initiative-scope], approval: {mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true}}
+      - {id: test-data-inventory, label: Test data entity inventory, kind: markdown, path: test-data-inventory.md, template: initiatives/test-data-inventory.md, consumes: [pre-inception/initiative-scope]}
+      - {id: feasibility-report, label: Feasibility report, kind: markdown, path: feasibility-report.md, template: initiatives/feasibility-report.md, consumes: [pre-inception/initiative-scope]}
+      - {id: release-scope, label: Release scope and rollout, kind: markdown, path: release-scope.md, template: initiatives/release-scope.md, consumes: [pre-inception/initiative-scope]}
+      - {id: ux-concept, label: UX concept design, kind: markdown, path: ux-concept.md, template: initiatives/ux-concept.md, consumes: [design-iterate/design-specification], required: false}
+      - {id: poc-results, label: POC summary and results, kind: markdown, path: poc-results.md, template: initiatives/poc-results.md, consumes: [pre-inception/initiative-scope], required: false}
     checklist:
-      - { id: stakeholder-map-complete, label: Cross-functional stakeholder map and RACI completed, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: intake-accepted, label: Required product and engineering intake completed, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block }
-      - { id: epic-linked, label: Epic created and linked to the initiative, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block }
-      - { id: prfaq-approved, label: PRFAQ created and approved, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: test-data-entities-identified, label: Test data entities identified, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: feasibility-complete, label: Feasibility analysis completed, requirement: must, acceptedAssurance: [human-approved, machine-verified], gate: block }
-      - { id: ux-concept-approved, label: UX concept design completed when applicable, requirement: conditional, applicability: { policy: ux-required }, acceptedAssurance: [human-approved], gate: block }
-      - { id: poc-complete, label: POC developed and tested, requirement: optional, acceptedAssurance: [human-approved, machine-verified], gate: warn }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: stakeholder-map-complete, label: Cross-functional stakeholder map and RACI completed, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: intake-accepted, label: Required product and engineering intake completed, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block}
+      - {id: epic-linked, label: Epic created and linked to the initiative, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block}
+      - {id: prfaq-approved, label: PRFAQ created and approved, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: test-data-entities-identified, label: Test data entities identified, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: feasibility-complete, label: Feasibility analysis completed, requirement: must, acceptedAssurance: [human-approved, machine-verified], gate: block}
+      - {id: ux-concept-approved, label: UX concept design completed when applicable, requirement: conditional, applicability: {policy: ux-required}, acceptedAssurance: [human-approved], gate: block}
+      - {id: poc-complete, label: POC developed and tested, requirement: optional, acceptedAssurance: [human-approved, machine-verified], gate: warn}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
 
   elaboration:
     label: Elaboration
@@ -418,36 +418,36 @@ initiativePhases:
     lanes: [business-product, design-architecture, engineering]
     worldModelViews: [business, architecture, development, testing, security, operations]
     outputs:
-      - { id: functional-tests, label: Functional test catalog and acceptance criteria, kind: markdown, path: functional-tests.md, template: initiatives/functional-tests.md, consumes: [inception/prfaq] }
-      - { id: nfr-specification, label: Non-functional requirements, kind: markdown, path: nfr-specification.md, template: initiatives/nfr-specification.md, consumes: [inception/feasibility-report] }
-      - { id: story-plan, label: Repository story plan, kind: yaml, path: story-plan.yml, template: initiatives/epic/story-plan.yml, consumes: [inception/epic-record, inception/prfaq], approval: { mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true } }
-      - { id: data-source-decision, label: Test data source decision, kind: markdown, path: data-source-decision.md, template: initiatives/data-source-decision.md, consumes: [inception/test-data-inventory] }
-      - { id: data-readiness, label: Test data readiness, kind: markdown, path: data-readiness.md, template: initiatives/data-readiness.md, consumes: [inception/test-data-inventory] }
-      - { id: solution-architecture, label: Solution architecture, kind: markdown, path: solution-architecture.md, template: initiatives/solution-architecture.md, consumes: [inception/feasibility-report], approval: { mode: individual, authorities: [architecture-reviewers], minimum: 1, allowSelfApproval: true } }
-      - { id: adr-log, label: Architecture decision record log, kind: markdown, path: adr-log.md, template: initiatives/adr-log.md, consumes: [inception/feasibility-report] }
-      - { id: dependency-matrix, label: Dependency and communication matrix, kind: markdown, path: dependency-matrix.md, template: initiatives/dependency-matrix.md, consumes: [inception/stakeholder-raci] }
-      - { id: eta-register, label: Dependency ETA register, kind: markdown, path: eta-register.md, template: initiatives/eta-register.md, consumes: [inception/stakeholder-raci] }
-      - { id: measurement-plan, label: Measurement plan, kind: markdown, path: measurement-plan.md, template: initiatives/measurement-plan.md, consumes: [inception/release-scope] }
-      - { id: sequencing-plan, label: Prioritized backlog and sequencing plan, kind: markdown, path: sequencing-plan.md, template: initiatives/sequencing-plan.md, consumes: [inception/epic-record] }
-      - { id: interface-contracts, label: Cross-repository interface contracts, kind: interface-contract, path: interface-contracts.md, template: initiatives/interface-contract.md, consumes: [inception/feasibility-report], approval: { mode: individual, authorities: [architecture-reviewers], minimum: 1, allowSelfApproval: true } }
-      - { id: technical-poc-results, label: Technical POC results, kind: markdown, path: technical-poc-results.md, template: initiatives/technical-poc-results.md, consumes: [inception/feasibility-report], required: false }
+      - {id: functional-tests, label: Functional test catalog and acceptance criteria, kind: markdown, path: functional-tests.md, template: initiatives/functional-tests.md, consumes: [inception/prfaq]}
+      - {id: nfr-specification, label: Non-functional requirements, kind: markdown, path: nfr-specification.md, template: initiatives/nfr-specification.md, consumes: [inception/feasibility-report]}
+      - {id: story-plan, label: Repository story plan, kind: yaml, path: story-plan.yml, template: initiatives/epic/story-plan.yml, consumes: [inception/epic-record, inception/prfaq], approval: {mode: individual, authorities: [product-approvers], minimum: 1, allowSelfApproval: true}}
+      - {id: data-source-decision, label: Test data source decision, kind: markdown, path: data-source-decision.md, template: initiatives/data-source-decision.md, consumes: [inception/test-data-inventory]}
+      - {id: data-readiness, label: Test data readiness, kind: markdown, path: data-readiness.md, template: initiatives/data-readiness.md, consumes: [inception/test-data-inventory]}
+      - {id: solution-architecture, label: Solution architecture, kind: markdown, path: solution-architecture.md, template: initiatives/solution-architecture.md, consumes: [inception/feasibility-report], approval: {mode: individual, authorities: [architecture-reviewers], minimum: 1, allowSelfApproval: true}}
+      - {id: adr-log, label: Architecture decision record log, kind: markdown, path: adr-log.md, template: initiatives/adr-log.md, consumes: [inception/feasibility-report]}
+      - {id: dependency-matrix, label: Dependency and communication matrix, kind: markdown, path: dependency-matrix.md, template: initiatives/dependency-matrix.md, consumes: [inception/stakeholder-raci]}
+      - {id: eta-register, label: Dependency ETA register, kind: markdown, path: eta-register.md, template: initiatives/eta-register.md, consumes: [inception/stakeholder-raci]}
+      - {id: measurement-plan, label: Measurement plan, kind: markdown, path: measurement-plan.md, template: initiatives/measurement-plan.md, consumes: [inception/release-scope]}
+      - {id: sequencing-plan, label: Prioritized backlog and sequencing plan, kind: markdown, path: sequencing-plan.md, template: initiatives/sequencing-plan.md, consumes: [inception/epic-record]}
+      - {id: interface-contracts, label: Cross-repository interface contracts, kind: interface-contract, path: interface-contracts.md, template: initiatives/interface-contract.md, consumes: [inception/feasibility-report], approval: {mode: individual, authorities: [architecture-reviewers], minimum: 1, allowSelfApproval: true}}
+      - {id: technical-poc-results, label: Technical POC results, kind: markdown, path: technical-poc-results.md, template: initiatives/technical-poc-results.md, consumes: [inception/feasibility-report], required: false}
     checklist:
-      - { id: behavioral-tests-defined, label: Behavioral test cases and acceptance criteria defined, requirement: must, acceptedAssurance: [human-approved, machine-verified], gate: block }
-      - { id: nfrs-defined, label: Security performance reliability accessibility observability and privacy requirements defined, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: stories-linked, label: Estimated user stories documented and linked to the epic, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block }
-      - { id: data-source-identified, label: Test data source identified, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: test-data-ready, label: Test data created or available, requirement: must, acceptedAssurance: [system-verified, human-approved], freshness: { validFor: 30d, revalidateAt: [construction] }, gate: block }
-      - { id: architecture-reviewed, label: Solution architecture documented and reviewed, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: adrs-complete, label: Architecture decision records complete, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: dependencies-consulted, label: Dependent teams identified and consulted, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block }
-      - { id: dependency-etas-received, label: ETA commitments received from dependencies, requirement: must, acceptedAssurance: [human-approved, system-verified], freshness: { validFor: 30d, revalidateAt: [construction] }, gate: block }
-      - { id: work-sequenced, label: Work prioritized and sequenced, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: technical-pocs-complete, label: Technical POCs for unresolved risks completed, requirement: optional, acceptedAssurance: [machine-verified, human-approved], gate: warn }
-      - { id: ai-feasibility-approved, label: AI technical feasibility approved when applicable, requirement: conditional, applicability: { policy: ai-use-case }, acceptedAssurance: [human-approved, machine-verified], gate: block }
-      - { id: security-review-complete, label: Security review completed when required by policy, requirement: conditional, applicability: { policy: security-review-required }, acceptedAssurance: [system-verified, human-approved], freshness: { validFor: 90d, revalidateAt: [delivery] }, gate: block }
-      - { id: domain-architecture-approved, label: Domain architecture sign-off obtained when applicable, requirement: conditional, applicability: { policy: domain-review-required }, acceptedAssurance: [human-approved], gate: block }
-      - { id: ux-design-approved, label: Detailed UX design approved when applicable, requirement: conditional, applicability: { policy: ux-required }, acceptedAssurance: [human-approved], gate: block }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: behavioral-tests-defined, label: Behavioral test cases and acceptance criteria defined, requirement: must, acceptedAssurance: [human-approved, machine-verified], gate: block}
+      - {id: nfrs-defined, label: Security performance reliability accessibility observability and privacy requirements defined, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: stories-linked, label: Estimated user stories documented and linked to the epic, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block}
+      - {id: data-source-identified, label: Test data source identified, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: test-data-ready, label: Test data created or available, requirement: must, acceptedAssurance: [system-verified, human-approved], freshness: {validFor: 30d, revalidateAt: [construction]}, gate: block}
+      - {id: architecture-reviewed, label: Solution architecture documented and reviewed, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: adrs-complete, label: Architecture decision records complete, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: dependencies-consulted, label: Dependent teams identified and consulted, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block}
+      - {id: dependency-etas-received, label: ETA commitments received from dependencies, requirement: must, acceptedAssurance: [human-approved, system-verified], freshness: {validFor: 30d, revalidateAt: [construction]}, gate: block}
+      - {id: work-sequenced, label: Work prioritized and sequenced, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: technical-pocs-complete, label: Technical POCs for unresolved risks completed, requirement: optional, acceptedAssurance: [machine-verified, human-approved], gate: warn}
+      - {id: ai-feasibility-approved, label: AI technical feasibility approved when applicable, requirement: conditional, applicability: {policy: ai-use-case}, acceptedAssurance: [human-approved, machine-verified], gate: block}
+      - {id: security-review-complete, label: Security review completed when required by policy, requirement: conditional, applicability: {policy: security-review-required}, acceptedAssurance: [system-verified, human-approved], freshness: {validFor: 90d, revalidateAt: [delivery]}, gate: block}
+      - {id: domain-architecture-approved, label: Domain architecture sign-off obtained when applicable, requirement: conditional, applicability: {policy: domain-review-required}, acceptedAssurance: [human-approved], gate: block}
+      - {id: ux-design-approved, label: Detailed UX design approved when applicable, requirement: conditional, applicability: {policy: ux-required}, acceptedAssurance: [human-approved], gate: block}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
 
   construction:
     label: Construction
@@ -455,22 +455,22 @@ initiativePhases:
     lanes: [engineering]
     worldModelViews: [architecture, development, testing, security, operations]
     outputs:
-      - { id: implementation-index, label: Cross-repository implementation evidence, kind: markdown, path: implementation-index.md, template: initiatives/implementation-index.md, consumes: [elaboration/story-plan, elaboration/interface-contracts] }
-      - { id: test-attestation, label: Testing attestation, kind: markdown, path: test-attestation.md, template: initiatives/test-attestation.md, consumes: [elaboration/functional-tests, elaboration/nfr-specification] }
-      - { id: cicd-readiness, label: CI/CD readiness, kind: markdown, path: cicd-readiness.md, template: initiatives/cicd-readiness.md, consumes: [elaboration/story-plan] }
-      - { id: nfr-assessment, label: NFR assessment, kind: markdown, path: nfr-assessment.md, template: initiatives/nfr-assessment.md, consumes: [elaboration/nfr-specification] }
-      - { id: operational-readiness, label: Operational readiness, kind: markdown, path: operational-readiness.md, template: initiatives/operational-readiness.md, consumes: [elaboration/nfr-specification], approval: { mode: individual, authorities: [operations-reviewers], minimum: 1, allowSelfApproval: true } }
+      - {id: implementation-index, label: Cross-repository implementation evidence, kind: markdown, path: implementation-index.md, template: initiatives/implementation-index.md, consumes: [elaboration/story-plan, elaboration/interface-contracts]}
+      - {id: test-attestation, label: Testing attestation, kind: markdown, path: test-attestation.md, template: initiatives/test-attestation.md, consumes: [elaboration/functional-tests, elaboration/nfr-specification]}
+      - {id: cicd-readiness, label: CI/CD readiness, kind: markdown, path: cicd-readiness.md, template: initiatives/cicd-readiness.md, consumes: [elaboration/story-plan]}
+      - {id: nfr-assessment, label: NFR assessment, kind: markdown, path: nfr-assessment.md, template: initiatives/nfr-assessment.md, consumes: [elaboration/nfr-specification]}
+      - {id: operational-readiness, label: Operational readiness, kind: markdown, path: operational-readiness.md, template: initiatives/operational-readiness.md, consumes: [elaboration/nfr-specification], approval: {mode: individual, authorities: [operations-reviewers], minimum: 1, allowSelfApproval: true}}
     checklist:
-      - { id: stories-accepted, label: All blocking stories implemented accepted and conformant, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block }
-      - { id: tests-complete, label: Applicable test artifacts pass and meet standards, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block }
-      - { id: testing-attested, label: Formal testing attestation completed, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block }
-      - { id: cicd-functional, label: CI/CD build test deploy quality security and composition checks pass, requirement: must, acceptedAssurance: [machine-verified, system-verified], freshness: { validFor: 7d, revalidateAt: [delivery] }, gate: block }
-      - { id: nfr-assessed, label: Performance security and resiliency assessed, requirement: must, acceptedAssurance: [machine-verified, system-verified, human-approved], gate: block }
-      - { id: e2e-complete, label: Cross-squad end-to-end testing completed, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block }
-      - { id: operational-ready, label: Operational readiness and SRE standards approved, requirement: must, acceptedAssurance: [human-approved, system-verified], freshness: { validFor: 30d, revalidateAt: [delivery] }, gate: block }
-      - { id: field-readiness-submitted, label: Business or field readiness intake submitted, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block }
-      - { id: operations-ready, label: Operations and back-office readiness assessed, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: stories-accepted, label: All blocking stories implemented accepted and conformant, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block}
+      - {id: tests-complete, label: Applicable test artifacts pass and meet standards, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block}
+      - {id: testing-attested, label: Formal testing attestation completed, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block}
+      - {id: cicd-functional, label: CI/CD build test deploy quality security and composition checks pass, requirement: must, acceptedAssurance: [machine-verified, system-verified], freshness: {validFor: 7d, revalidateAt: [delivery]}, gate: block}
+      - {id: nfr-assessed, label: Performance security and resiliency assessed, requirement: must, acceptedAssurance: [machine-verified, system-verified, human-approved], gate: block}
+      - {id: e2e-complete, label: Cross-squad end-to-end testing completed, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block}
+      - {id: operational-ready, label: Operational readiness and SRE standards approved, requirement: must, acceptedAssurance: [human-approved, system-verified], freshness: {validFor: 30d, revalidateAt: [delivery]}, gate: block}
+      - {id: field-readiness-submitted, label: Business or field readiness intake submitted, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block}
+      - {id: operations-ready, label: Operations and back-office readiness assessed, requirement: must, acceptedAssurance: [human-approved, system-verified], gate: block}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
 
   delivery:
     label: Delivery
@@ -478,17 +478,17 @@ initiativePhases:
     lanes: [business-product, engineering]
     worldModelViews: [release, operations, testing, security]
     outputs:
-      - { id: deployment-record, label: Production deployment record, kind: markdown, path: deployment-record.md, template: initiatives/deployment-record.md, consumes: [construction/implementation-index] }
-      - { id: production-validation, label: Production validation, kind: markdown, path: production-validation.md, template: initiatives/production-validation.md, consumes: [construction/test-attestation] }
-      - { id: observability-handoff, label: Observability and monitoring handoff, kind: markdown, path: observability-handoff.md, template: initiatives/observability-handoff.md, consumes: [construction/operational-readiness] }
-      - { id: production-learning, label: Production learning, kind: markdown, path: production-learning.md, template: initiatives/production-learning.md, consumes: [elaboration/measurement-plan] }
-      - { id: initiative-conformance, label: Initiative conformance and epic closure, kind: markdown, path: initiative-conformance.md, template: initiatives/initiative-conformance.md, consumes: [construction/implementation-index, construction/test-attestation, construction/nfr-assessment], approval: { mode: individual, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true } }
+      - {id: deployment-record, label: Production deployment record, kind: markdown, path: deployment-record.md, template: initiatives/deployment-record.md, consumes: [construction/implementation-index]}
+      - {id: production-validation, label: Production validation, kind: markdown, path: production-validation.md, template: initiatives/production-validation.md, consumes: [construction/test-attestation]}
+      - {id: observability-handoff, label: Observability and monitoring handoff, kind: markdown, path: observability-handoff.md, template: initiatives/observability-handoff.md, consumes: [construction/operational-readiness]}
+      - {id: production-learning, label: Production learning, kind: markdown, path: production-learning.md, template: initiatives/production-learning.md, consumes: [elaboration/measurement-plan]}
+      - {id: initiative-conformance, label: Initiative conformance and epic closure, kind: markdown, path: initiative-conformance.md, template: initiatives/initiative-conformance.md, consumes: [construction/implementation-index, construction/test-attestation, construction/nfr-assessment], approval: {mode: individual, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}}
     checklist:
-      - { id: production-deployed, label: Code successfully deployed to production, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block }
-      - { id: environment-validated, label: Passive environment validation completed, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block }
-      - { id: install-window-tested, label: Production normal testing completed during the install window, requirement: must, acceptedAssurance: [machine-verified, system-verified, human-approved], gate: block }
-      - { id: monitoring-healthy, label: No abnormal error latency or reliability signals observed, requirement: must, acceptedAssurance: [machine-verified, system-verified], freshness: { validFor: 24h, revalidateAt: [delivery] }, gate: block }
-      - { id: business-validated, label: Business stakeholder validation completed, requirement: must, acceptedAssurance: [human-approved], gate: block }
-      - { id: change-record-closed, label: Change-management record closed after installation, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block }
-      - { id: epic-closure-ready, label: Acceptance criteria reviewed and all blocking stories and the epic closed, requirement: must, acceptedAssurance: [machine-verified, system-verified, human-approved], gate: block }
-    bundleApproval: { mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true }
+      - {id: production-deployed, label: Code successfully deployed to production, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block}
+      - {id: environment-validated, label: Passive environment validation completed, requirement: must, acceptedAssurance: [machine-verified, system-verified], gate: block}
+      - {id: install-window-tested, label: Production normal testing completed during the install window, requirement: must, acceptedAssurance: [machine-verified, system-verified, human-approved], gate: block}
+      - {id: monitoring-healthy, label: No abnormal error latency or reliability signals observed, requirement: must, acceptedAssurance: [machine-verified, system-verified], freshness: {validFor: 24h, revalidateAt: [delivery]}, gate: block}
+      - {id: business-validated, label: Business stakeholder validation completed, requirement: must, acceptedAssurance: [human-approved], gate: block}
+      - {id: change-record-closed, label: Change-management record closed after installation, requirement: must, acceptedAssurance: [system-verified, human-approved], gate: block}
+      - {id: epic-closure-ready, label: Acceptance criteria reviewed and all blocking stories and the epic closed, requirement: must, acceptedAssurance: [machine-verified, system-verified, human-approved], gate: block}
+    bundleApproval: {mode: bundle, authorities: [initiative-owners], minimum: 1, allowSelfApproval: true}
