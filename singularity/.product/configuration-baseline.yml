@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: 4e0942da73a392af6f2a334cd985690d9feff68a
+  revision: 82b123b611fddc7cae49a5e26c3d49bd47bd1b14
 workflow:
   version: 2
   inputsMode: enforce
