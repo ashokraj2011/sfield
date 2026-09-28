@@ -1,0 +1,78 @@
+{
+  "payload": {
+    "schema": "sflow-workflow-request@2",
+    "intent": "create",
+    "id": "skp-team-notes",
+    "label": "SKP team notes",
+    "description": "Produce one artifact-only findings note from approved Story intake for independent human review.",
+    "target": {
+      "governs": "story",
+      "authority": "selected-repository",
+      "hosts": []
+    },
+    "definitions": {
+      "workflows": [
+        {
+          "id": "skp-team-notes",
+          "phases": ["intake", "skp-team-note", "conformance"]
+        }
+      ],
+      "phases": [
+        {
+          "id": "skp-team-note",
+          "kind": "skill",
+          "label": "Team note",
+          "agent": "skp-note-writer",
+          "skill": { "id": "skp-analysis-procedure" },
+          "contract": {
+            "task": "analyze",
+            "consumes": [
+              { "phase": "intake", "output": "primary", "required": true, "state": "approved" }
+            ],
+            "produces": [
+              {
+                "id": "primary",
+                "path": "artifacts/skp-team-note/note.md",
+                "kind": "custom:note",
+                "mediaType": "text/markdown",
+                "encoding": "utf-8",
+                "minimumBytes": 20,
+                "maximumBytes": 16384,
+                "clauses": "none",
+                "claimRole": "findings"
+              }
+            ],
+            "checks": [],
+            "writeScope": "artifact-only",
+            "readScope": { "inputs": true, "sourcePaths": [] },
+            "approval": { "authorities": ["product-approvers"], "minimum": 1 }
+          }
+        }
+      ],
+      "skills": [
+        {
+          "id": "skp-analysis-procedure",
+          "description": "Produce an inert note from approved Story intake",
+          "instructions": "Read the exact approved intake artifact. Produce only the selected Markdown findings artifact. State observations, uncertainties, and source references. Do not read or modify application source, invoke external tools, publish, submit, or approve. Stop for human review.",
+          "operationBindings": [],
+          "qualityBindings": [],
+          "resources": [],
+          "producerClassification": {
+            "profile": "local-reviewed-artifact-producer/v1",
+            "eligibility": "candidate-producer"
+          }
+        }
+      ],
+      "agents": [
+        {
+          "id": "skp-note-writer",
+          "description": "Write one reviewed team note from approved intake",
+          "prompt": "Use only the exact approved intake supplied to this phase. Produce the selected findings note, identify uncertainty, and stop for human review. Never publish or approve.",
+          "toolBindings": [],
+          "skillRefs": []
+        }
+      ]
+    }
+  },
+  "assets": []
+}
