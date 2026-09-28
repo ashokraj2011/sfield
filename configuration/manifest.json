@@ -3,15 +3,15 @@
   "layout": "canonical-paths",
   "source": {
     "branch": "sflow/config",
-    "commit": "6bde8d35f7ba1860d142a3d2fdef06625d3ea65f"
+    "commit": "8151d8b1a1afe399e1bec7de96db71457ea36b1e"
   },
   "history": {
-    "branch": "sflow/config-history/6bde8d35f7ba1860d142a3d2fdef06625d3ea65f",
-    "commit": "6bde8d35f7ba1860d142a3d2fdef06625d3ea65f"
+    "branch": "sflow/config-history/8151d8b1a1afe399e1bec7de96db71457ea36b1e",
+    "commit": "8151d8b1a1afe399e1bec7de96db71457ea36b1e"
   },
   "product": {
     "version": "0.9.0",
-    "revision": "fed2ba94e9f52b9aa84376d13579ad14a33191d3"
+    "revision": "b9bcb152bb00a34672f9c276d9ed77a96b78d908"
   },
   "files": {
     ".github/agents/architect.agent.md": "c17746841c5afad787e9a33c8a97aa6de15bf44a798d541f1d4c61659485d872",
@@ -134,6 +134,8 @@
     "singularity/templates/spec-driven/plan.md": "e8af98405a723a55c572c705e34a5b2fc05a11b3efe632e169ba6becf6c1a04f",
     "singularity/templates/spec-driven/release.md": "ce6e1d1995c68158f4209063b3cb954eceab8576e1c8db76bfaed27a805a8908",
     "singularity/templates/spec-driven/spec.md": "27424a624b1dab57323fd7482ac62708bd42d11ba42e41c102f94e15182fe485",
+    "singularity/templates/starter-packs/skp-team-notes/draft-input.json": "14b4b8deafa8a5434edd7046e7203e4520792c5951350f9d7a7f5c4b904d7ced",
+    "singularity/templates/starter-packs/skp-team-notes/README.md": "1880cb24e0dbc1ce84677b183dfd672ed7e85ae86e5735a1e8b9f1cb94817f4c",
     "singularity/workflow.yml": "a2ab3f06895cd38675c26e7fcbc5adf4a49609fc7ca45363e5efb3f4e0f6ca09"
   },
   "assets": {
@@ -735,6 +737,16 @@
     "singularity/templates/spec-driven/spec.md": {
       "sha256": "27424a624b1dab57323fd7482ac62708bd42d11ba42e41c102f94e15182fe485",
       "object": "fab042e3a6b7b83fa6986644e05e9e898d1fb6d0",
+      "mode": "100644"
+    },
+    "singularity/templates/starter-packs/skp-team-notes/draft-input.json": {
+      "sha256": "14b4b8deafa8a5434edd7046e7203e4520792c5951350f9d7a7f5c4b904d7ced",
+      "object": "734de4ce4b0c79a610cd388e4f37407ed10766f7",
+      "mode": "100644"
+    },
+    "singularity/templates/starter-packs/skp-team-notes/README.md": {
+      "sha256": "1880cb24e0dbc1ce84677b183dfd672ed7e85ae86e5735a1e8b9f1cb94817f4c",
+      "object": "437b9ed08c2fe29e85b04f2def01f6835f6fae2a",
       "mode": "100644"
     },
     "singularity/workflow.yml": {
