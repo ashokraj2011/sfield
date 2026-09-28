@@ -4,17 +4,24 @@
     "intent": "create",
     "id": "skp-team-notes",
     "label": "SKP team notes",
-    "description": "Produce one artifact-only findings note from approved Story intake for independent human review.",
+    "description": "Produce a findings note from approved Story intake, then review and finish it without code conformance.",
     "target": {
       "governs": "story",
       "authority": "selected-repository",
       "hosts": []
     },
+    "bindings": {
+      "analysisTask": { "kind": "execution-task", "id": "analyze" },
+      "productReview": { "kind": "approval-authority", "id": "product-approvers" }
+    },
     "definitions": {
       "workflows": [
         {
           "id": "skp-team-notes",
-          "phases": ["intake", "skp-team-note", "conformance"]
+          "phases": ["intake", "skp-team-note", "skp-team-review"],
+          "reworkLoops": [
+            { "from": "skp-team-review", "to": "skp-team-note", "maxAttempts": 3 }
+          ]
         }
       ],
       "phases": [
@@ -47,6 +54,23 @@
             "readScope": { "inputs": true, "sourcePaths": [] },
             "approval": { "authorities": ["product-approvers"], "minimum": 1 }
           }
+        },
+        {
+          "id": "skp-team-review",
+          "label": "Team note review",
+          "artifact": {
+            "path": "artifacts/skp-team-review/review.md",
+            "kind": "custom:note-review",
+            "minimumBytes": 20,
+            "maximumBytes": 16384
+          },
+          "inputs": ["intake", "skp-team-note"],
+          "template": "skp-team-review-template",
+          "agent": "skp-note-reviewer",
+          "taskBinding": "analysisTask",
+          "approvalBinding": "productReview",
+          "qualityBindings": [],
+          "writeScope": "artifact-only"
         }
       ],
       "skills": [
@@ -70,6 +94,20 @@
           "prompt": "Use only the exact approved intake supplied to this phase. Produce the selected findings note, identify uncertainty, and stop for human review. Never publish or approve.",
           "toolBindings": [],
           "skillRefs": []
+        },
+        {
+          "id": "skp-note-reviewer",
+          "description": "Compare the team note to approved intake for human disposition",
+          "prompt": "Read the exact approved intake and team note. Produce only the selected review record: identify supported findings, gaps, and questions for the human approver. Do not read application source, publish, or approve.",
+          "toolBindings": [],
+          "skillRefs": []
+        }
+      ],
+      "templates": [
+        {
+          "id": "skp-team-review-template",
+          "label": "Team note review record",
+          "content": "# Team note review — {{work.id}}\n\n## Approved intake and note\n\n## Supported findings\n\n## Gaps and questions\n\n## Human disposition\n\nRecord the human decision in the governed approval step. This artifact is review context, not an approval receipt.\n"
         }
       ]
     }
