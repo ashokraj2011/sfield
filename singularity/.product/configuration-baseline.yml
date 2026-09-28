@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: b9bcb152bb00a34672f9c276d9ed77a96b78d908
+  revision: aed577784c3a41410afcb815fc92a3c5b66c80c8
 workflow:
   version: 2
   inputsMode: enforce
@@ -2615,9 +2615,9 @@ assets:
   singularity/templates/spec-driven/spec.md:
     sha256: 27424a624b1dab57323fd7482ac62708bd42d11ba42e41c102f94e15182fe485
   singularity/templates/starter-packs/skp-team-notes/draft-input.json:
-    sha256: 14b4b8deafa8a5434edd7046e7203e4520792c5951350f9d7a7f5c4b904d7ced
+    sha256: 71b39ad32ea3d376bf3a9b45a3f3e6cedea81a1cd95948108635be4aca08c6c5
   singularity/templates/starter-packs/skp-team-notes/README.md:
-    sha256: 1880cb24e0dbc1ce84677b183dfd672ed7e85ae86e5735a1e8b9f1cb94817f4c
+    sha256: ab3e66d1654df81922a6022c491ac85868cb3b644e0eace77c4f9089c4f599ea
 ownership:
   workflow:
     workTypes:
