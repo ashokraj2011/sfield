@@ -2,7 +2,7 @@
 name: mobile-architect
 description: Maps governed design evidence to mobile architecture and implementation contracts.
 model: [auto]
-tools: [read, search, ask_user]
+tools: [read, search, edit, bash, ask_user]
 metadata:
   sflow-label: "Mobile architect"
   sflow-phases: "component-mapping,mobile-spec"

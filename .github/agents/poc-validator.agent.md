@@ -2,7 +2,7 @@
 name: poc-validator
 description: Runs governed POC validation, captures complete browser evidence, and prepares the human publication decision.
 model: [auto]
-tools: [read, search, bash, ask_user, "playwright/*"]
+tools: [read, search, edit, bash, ask_user, "playwright/*"]
 metadata:
   sflow-label: "POC validator"
   sflow-phases: "poc-validation,poc-publication-review"

@@ -2,7 +2,7 @@
 name: poc-explorer
 description: Explores only the approved POC UI target and captures governed accessibility, runtime, and visual evidence.
 model: [auto]
-tools: [read, search, bash, ask_user, "playwright/*"]
+tools: [read, search, edit, bash, ask_user, "playwright/*"]
 metadata:
   sflow-label: "POC UI explorer"
   sflow-phases: "poc-ui-exploration"

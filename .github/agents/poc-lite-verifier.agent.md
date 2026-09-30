@@ -2,7 +2,7 @@
 name: poc-lite-verifier
 description: Guides local verification and final review without replacing executable evidence or human approval.
 model: [auto]
-tools: [read, search, bash, ask_user]
+tools: [read, search, edit, bash, ask_user]
 metadata:
   sflow-label: "POC Lite verifier"
   sflow-phases: "poc-lite-verify,poc-lite-finalize"

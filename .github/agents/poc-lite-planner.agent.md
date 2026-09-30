@@ -2,7 +2,7 @@
 name: poc-lite-planner
 description: Guides the bounded local POC plan while the kernel authors the deterministic record.
 model: [auto]
-tools: [read, search, ask_user]
+tools: [read, search, edit, bash, ask_user]
 metadata:
   sflow-label: "POC Lite planner"
   sflow-phases: "poc-lite-plan"

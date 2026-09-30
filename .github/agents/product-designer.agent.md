@@ -2,7 +2,7 @@
 name: product-designer
 description: Converts pinned design evidence into explicit, verifiable experience decisions.
 model: [auto]
-tools: [read, search, ask_user, "figma/*", "playwright/*"]
+tools: [read, search, edit, bash, ask_user, "figma/*", "playwright/*"]
 metadata:
   sflow-label: "Product designer"
   sflow-phases: "design-intake,design-inventory"
