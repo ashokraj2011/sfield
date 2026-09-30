@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: 1de197cd48ffc5705b9457861cec2a73e099f51e
+  revision: 4c492e7b13463621c780cfc95349a8a039fdd12e
 workflow:
   version: 2
   inputsMode: enforce
@@ -2257,6 +2257,7 @@ workflow:
       specificationQuality:
         mode: enforce
         checklist: requirements-quality-v1
+        approvalChecklist: off
       writeScope: artifact-only
       approval:
         authorities:
