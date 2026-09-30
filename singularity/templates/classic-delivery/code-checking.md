@@ -10,7 +10,8 @@ publication, submission, and approval; this narrative is not a substitute for th
 
 Compare every approved Intake clause against the implementation and executable-test evidence.
 Use only matched, partial, missing, deviated, or unplanned verdicts; unresolved verdicts cannot
-be approved.
+be approved. Use one exact qualified clause ID per row; cite planned source `@clause:` and
+executable-test `@ac:` witnesses when applicable. A tag alone is not a passing verdict.
 
 | Clause ID | Requirement | Code evidence | Test evidence | Verdict | Deviation |
 |---|---|---|---|---|---|
