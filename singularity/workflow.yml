@@ -146,6 +146,7 @@ codeDelivery:
     source: pinned-spec-index
     requireNamespaceQualifiedIds: true
     bareIdCompatibility: unique-only
+    sourceBindings: enforce
   publication:
     idempotency: generation-intent
   display:
@@ -260,6 +261,7 @@ spec:
   compositionCache: local
   testCommands: {}
   excludes: []
+  conformanceRows: qualified
 faultRepair:
   enabled: true
   maxAttempts: 3

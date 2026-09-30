@@ -7,10 +7,12 @@ says what it proves.
 
 Use the complete governed anchors from the approved specification, for example
 `[{{work.id}}:REQ-001]` and `[{{work.id}}:AC-001]`. Bare display labels such as `REQ-001` do not
-bind release evidence to the approved clause.
+bind release evidence to the approved clause. Put one exact qualified approved clause ID in
+each Clause row; a planned source tag or test tag alone is not a release verdict.
 
 | Clause | Evidence | Verdict |
 |---|---|---|
+| `{{work.id}}:REQ-001` | TODO: exact source/test evidence | TODO: matched/partial/missing/deviated/unplanned |
 
 ## Constitution conformance
 

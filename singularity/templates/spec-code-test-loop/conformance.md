@@ -11,6 +11,8 @@ evidence rather than reusing a prior verdict.
 
 Compare each approved Specification clause with exact source/test paths and observed browser
 evidence. A browser observation supports review but is not an independent structured test receipt.
+Use one exact qualified approved clause ID per row. Cite planned `@clause:` product-source
+and `@ac:` executable-test witnesses where applicable, then review actual behavior separately.
 
 | Clause ID | Approved requirement | Code and structured test evidence | Playwright observation | Verdict | Deviation |
 |---|---|---|---|---|---|
