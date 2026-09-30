@@ -114,7 +114,7 @@ templatesRoot: singularity/templates
 noModel:
   unknownExternalCommands: warn
 repositoryReadiness:
-  requiredBeforeStory: false
+  requiredBeforeStory: true
   dependencyHydration: when-detected
   build: off
   structuredTests: required-for-code
