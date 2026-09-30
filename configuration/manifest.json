@@ -3,15 +3,15 @@
   "layout": "canonical-paths",
   "source": {
     "branch": "sflow/config",
-    "commit": "377f82ff8b387d249a005c51663ee43f3d57d606"
+    "commit": "f8ee78e444024d79bb2c03d1e7c049a8f33e993b"
   },
   "history": {
-    "branch": "sflow/config-history/377f82ff8b387d249a005c51663ee43f3d57d606",
-    "commit": "377f82ff8b387d249a005c51663ee43f3d57d606"
+    "branch": "sflow/config-history/f8ee78e444024d79bb2c03d1e7c049a8f33e993b",
+    "commit": "f8ee78e444024d79bb2c03d1e7c049a8f33e993b"
   },
   "product": {
     "version": "0.9.0",
-    "revision": "c565c6d32bfbc671af554e83de2e3a2233660ac0"
+    "revision": "0a03309160518def6b94e2b27af1c7e88c03e212"
   },
   "files": {
     ".github/agents/architect.agent.md": "cb10e2ec957759b702df2935ed7889192da5946814c97f9ca6c9e53b173f3342",
@@ -58,7 +58,7 @@
     "singularity/templates/feature/requirements.md": "32016db8ed6fadd6596e7dc702647cff95cdee1a203b38395d7ba5626dd8134e",
     "singularity/templates/figma-mobile/component-mapping.md": "cdea8a1e3defa73ade72bdaaac162ecd9b8b43817aa319d7e712e2de2eb296a3",
     "singularity/templates/figma-mobile/conformance.md": "f96e5271156d2dadca7cbf5687599724c4e47e328db6635ccf46b4adacaac147",
-    "singularity/templates/figma-mobile/design-intake.md": "f84db46cdf86cf8c4da4de0062d7150466d5dd291baf6495bd9523affa9a6453",
+    "singularity/templates/figma-mobile/design-intake.md": "5cb9495b64189d9f73d6aae23201197d7634cbf46d03176544badfc7683518ef",
     "singularity/templates/figma-mobile/design-inventory.md": "822ea61a75a25ec5a6b42dd887c842d5126233b36f7f0fc875402f9a43125079",
     "singularity/templates/figma-mobile/implementation.md": "69b5b75886dcc41da4e3063c7ceb6ff805251f98dd40ee41b2bf5de660dc74da",
     "singularity/templates/figma-mobile/mobile-spec.md": "18c583c10c597c595cd0be9c11ddf16e92a0b85147efcd4fd3fb1a9bbd96fc44",
@@ -133,10 +133,10 @@
     "singularity/templates/spec-driven/convergence.md": "eb257477afca0229ed858875499736c57498015aaee0a527b714356819a9dde2",
     "singularity/templates/spec-driven/plan.md": "e8af98405a723a55c572c705e34a5b2fc05a11b3efe632e169ba6becf6c1a04f",
     "singularity/templates/spec-driven/release.md": "a78b2eb703b2dfc70ccb33d30d94b24fe39247ca06ba79e6a988054e94a737b7",
-    "singularity/templates/spec-driven/spec.md": "27424a624b1dab57323fd7482ac62708bd42d11ba42e41c102f94e15182fe485",
+    "singularity/templates/spec-driven/spec.md": "55b0d6c4c9aa5ba19739493825f6c993f03d63bed9e1a5e2bb7d5c099b8b91bb",
     "singularity/templates/starter-packs/skp-team-notes/draft-input.json": "71b39ad32ea3d376bf3a9b45a3f3e6cedea81a1cd95948108635be4aca08c6c5",
     "singularity/templates/starter-packs/skp-team-notes/README.md": "ab3e66d1654df81922a6022c491ac85868cb3b644e0eace77c4f9089c4f599ea",
-    "singularity/workflow.yml": "1e18d69863dd7075a20c8703d2558cccc11d51b6ea3490cf076b1b52b8e6e04d"
+    "singularity/workflow.yml": "1eabb8bd88362300becb11cf7fdb8920be9d4a31222b2cca38754866723e17f8"
   },
   "assets": {
     ".github/agents/architect.agent.md": {
@@ -360,8 +360,8 @@
       "mode": "100644"
     },
     "singularity/templates/figma-mobile/design-intake.md": {
-      "sha256": "f84db46cdf86cf8c4da4de0062d7150466d5dd291baf6495bd9523affa9a6453",
-      "object": "6d7b3a16eb55a852c2a402c74f6e03b2a3af5a69",
+      "sha256": "5cb9495b64189d9f73d6aae23201197d7634cbf46d03176544badfc7683518ef",
+      "object": "9335d2a5a66f9bbe0366fae7503a33951ea07fa5",
       "mode": "100644"
     },
     "singularity/templates/figma-mobile/design-inventory.md": {
@@ -735,8 +735,8 @@
       "mode": "100644"
     },
     "singularity/templates/spec-driven/spec.md": {
-      "sha256": "27424a624b1dab57323fd7482ac62708bd42d11ba42e41c102f94e15182fe485",
-      "object": "fab042e3a6b7b83fa6986644e05e9e898d1fb6d0",
+      "sha256": "55b0d6c4c9aa5ba19739493825f6c993f03d63bed9e1a5e2bb7d5c099b8b91bb",
+      "object": "27de3aa0d35a7fed2f455d9ba641523dab915882",
       "mode": "100644"
     },
     "singularity/templates/starter-packs/skp-team-notes/draft-input.json": {
@@ -750,8 +750,8 @@
       "mode": "100644"
     },
     "singularity/workflow.yml": {
-      "sha256": "1e18d69863dd7075a20c8703d2558cccc11d51b6ea3490cf076b1b52b8e6e04d",
-      "object": "ba8133fea1746a4a6a22d2718081f275cf655a23",
+      "sha256": "1eabb8bd88362300becb11cf7fdb8920be9d4a31222b2cca38754866723e17f8",
+      "object": "4891df434a673c91db1af3d9b1c14c8745484113",
       "mode": "100644"
     }
   }

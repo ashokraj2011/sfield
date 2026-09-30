@@ -10,7 +10,7 @@
 | Exported at | TODO |
 | Imported commit | TODO |
 
-Confirm that the complete exported directory was imported with `singularity-flow documents upload <DIRECTORY> --kind figma-export`. Record missing or intentionally excluded content.
+Confirm that the complete exported directory was imported with `singularity-flow documents upload <DIRECTORY> --kind figma-export --name "<NAME>"`. Record missing or intentionally excluded content.
 
 The committed, SHA-recorded PNG exports are the canonical design baseline for later visual-verification approval. A Figma URL may be recorded as convenient live context, but it can change after intake and never replaces the pinned exports.
 
