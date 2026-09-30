@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: 4c492e7b13463621c780cfc95349a8a039fdd12e
+  revision: c565c6d32bfbc671af554e83de2e3a2233660ac0
 workflow:
   version: 2
   inputsMode: enforce
@@ -1177,6 +1177,13 @@ workflow:
       label: Spec-Driven Standard
       spec:
         mode: enforce
+        coverage: enforce
+      sourceReview:
+        mode: enforce
+        phases:
+          - specification
+          - planning
+        reviewerAgent: sflow-source-reviewer
       plannedClaims:
         mode: required
         clausePhases:
@@ -1217,9 +1224,15 @@ workflow:
             - phase: specification
               projection: approved-summary
               preserve:
+                - Actors
+                - User scenarios
+                - Failure and empty states
+                - Permissions
+                - Boundary conditions
                 - Requirements
                 - Non-functional requirements
-                - Boundary conditions
+                - Assumptions
+                - Out of scope
               maximumSummaryBytes: 32768
               expansion: hash-bound-reference
               fallback: block
@@ -1228,9 +1241,15 @@ workflow:
             - phase: specification
               projection: approved-summary
               preserve:
+                - Actors
+                - User scenarios
+                - Failure and empty states
+                - Permissions
+                - Boundary conditions
                 - Requirements
                 - Non-functional requirements
-                - Boundary conditions
+                - Assumptions
+                - Out of scope
               maximumSummaryBytes: 32768
               expansion: hash-bound-reference
               fallback: block
@@ -1247,9 +1266,15 @@ workflow:
             - phase: specification
               projection: approved-summary
               preserve:
+                - Actors
+                - User scenarios
+                - Failure and empty states
+                - Permissions
+                - Boundary conditions
                 - Requirements
                 - Non-functional requirements
-                - Boundary conditions
+                - Assumptions
+                - Out of scope
               maximumSummaryBytes: 32768
               expansion: hash-bound-reference
               fallback: block
@@ -1274,9 +1299,15 @@ workflow:
             - phase: specification
               projection: approved-summary
               preserve:
+                - Actors
+                - User scenarios
+                - Failure and empty states
+                - Permissions
+                - Boundary conditions
                 - Requirements
                 - Non-functional requirements
-                - Boundary conditions
+                - Assumptions
+                - Out of scope
               maximumSummaryBytes: 32768
               expansion: hash-bound-reference
               fallback: block
