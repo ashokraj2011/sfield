@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: ecff620623fa65247687e6ce3129ad482eb81ac5
+  revision: 1de197cd48ffc5705b9457861cec2a73e099f51e
 workflow:
   version: 2
   inputsMode: enforce
@@ -469,6 +469,12 @@ workflow:
             - implementation-spec
             - implementation
             - verification
+          approval:
+            rejectTo:
+              - implementation-spec
+              - implementation
+              - verification
+              - conformance
     bugfix:
       label: Bug fix
       phases:
@@ -513,6 +519,12 @@ workflow:
             - fix-spec
             - implementation
             - verification
+          approval:
+            rejectTo:
+              - fix-spec
+              - implementation
+              - verification
+              - conformance
     chore:
       label: Chore
       phases:
@@ -535,6 +547,11 @@ workflow:
           inputs:
             - implementation
             - verification
+          approval:
+            rejectTo:
+              - implementation
+              - verification
+              - conformance
     figma-mobile:
       label: Figma export to mobile app
       phases:
@@ -2381,33 +2398,33 @@ workflow:
       - .github/skills
 assets:
   .github/agents/architect.agent.md:
-    sha256: c17746841c5afad787e9a33c8a97aa6de15bf44a798d541f1d4c61659485d872
+    sha256: cb10e2ec957759b702df2935ed7889192da5946814c97f9ca6c9e53b173f3342
   .github/agents/developer.agent.md:
     sha256: edfba1ce014ba9a5cf379303efa3841eb4345dd1602f2b2566c8e5001d4c99d1
   .github/agents/mobile-architect.agent.md:
-    sha256: 830219deadfb61f600397ae9c63402b7954fbc4c21f4a893058a4a138df24903
+    sha256: 314f95afdbc297e47a40fca9bfb8621ebb915d21d40cac18c6978032cd996cd7
   .github/agents/poc-analyst.agent.md:
-    sha256: 7b7690a834615919f4a4417a60783359965a848f8775dfa67acadb818684411d
+    sha256: 8edf5a781b1cfab7af89b4ce53f8ac52343d31cd1cb65cfe929da7660dc737ec
   .github/agents/poc-automation.agent.md:
     sha256: ec5709c720d979d389ebb20cb73977f0efc485d87781b62135857c622c625a7c
   .github/agents/poc-explorer.agent.md:
-    sha256: 6c471ac9d6bf14f865e73cd1a39a3cef635e3bdc7c4f455d182ae9b0845b7277
+    sha256: 73135df4f261fa3e08f8f5676f985da4f3c4b139833413c9d6ffd7db0c6d9a07
   .github/agents/poc-lite-implementer.agent.md:
     sha256: 8fa2344494618a1200b987aec80600b8d05cde24c3dee57e7ef6934fdd42e064
   .github/agents/poc-lite-planner.agent.md:
-    sha256: 85b821ac88fb52eb7972f1026f605f04144fb27df5afc2e42fc0c06212562a9b
+    sha256: 13269e0e0dd315c053c81d50d0de27a94a7e1a8621ea1230b24d3a3a53d6c2e1
   .github/agents/poc-lite-verifier.agent.md:
-    sha256: d2a01fd1beebae0b2399d0a2908d4ac0db5ad8cbc803020f40697914a2b7ee60
+    sha256: 32cea87f319945c6ef3963aebf92e55ee15a291f8d7cf5691ca28a38fe68dd42
   .github/agents/poc-test-developer.agent.md:
     sha256: 4c82f12e6642c42e60ef6b0e4a19b9c37b70a73c2089b8dfd2c525858d7a4681
   .github/agents/poc-validator.agent.md:
-    sha256: 904954066c83b071fc03c8077733027bb5741b8f870c869e8754a896eeca8714
+    sha256: 970a1539220c22ba61eac4f80a743328437a0913d83fbeec20a6a3ed6f74a10f
   .github/agents/product-designer.agent.md:
-    sha256: b08909068f12c3caa816fa6fab8855428e40902797a1e78316ff38a367574f16
+    sha256: b46014bafb6a5fe79642e8e1917f28ef37adc3a8304408534cdcee1e75d47016
   .github/agents/product-owner.agent.md:
-    sha256: 86fc702216b2e84cd7ed65ff7ea05b569af345180e9cac6ac14fa5d8bf8526ce
+    sha256: a9c322786305e1eee80229c696ae19ff21e0f4fc2843d4c7f28a80ccd24e96ff
   .github/agents/qa.agent.md:
-    sha256: e4b50c0b7fa8c2cc84d9cfd5794a9406d91216a024e4b44200b276032d1822ad
+    sha256: 5c00c8126703c867854c06c23bfd376e7a191735c438e9545b8a655c06ea71ab
   singularity/agent-mappings.yml:
     sha256: 1b39a4f4caa3242749889a291e2259a361c815712bd762abde3db3cbe9f8a688
   singularity/impact.yml:
@@ -2613,7 +2630,7 @@ assets:
   singularity/templates/spec-driven/plan.md:
     sha256: e8af98405a723a55c572c705e34a5b2fc05a11b3efe632e169ba6becf6c1a04f
   singularity/templates/spec-driven/release.md:
-    sha256: bd63555c657657c238da547e8794ca053affbf14c45bd4322a51401bd09fb82f
+    sha256: a78b2eb703b2dfc70ccb33d30d94b24fe39247ca06ba79e6a988054e94a737b7
   singularity/templates/spec-driven/spec.md:
     sha256: 27424a624b1dab57323fd7482ac62708bd42d11ba42e41c102f94e15182fe485
   singularity/templates/starter-packs/skp-team-notes/draft-input.json:

@@ -2,7 +2,7 @@
 name: poc-analyst
 description: Clarifies POC intent and produces evidence-based regression impact analysis without changing source or browsing live systems.
 model: [auto]
-tools: [read, search, ask_user]
+tools: [read, search, edit, bash, ask_user]
 metadata:
   sflow-label: "POC analyst"
   sflow-phases: "poc-intake,poc-impact-analysis"

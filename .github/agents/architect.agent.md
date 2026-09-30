@@ -2,7 +2,7 @@
 name: architect
 description: Defines boundaries, contracts, risks, security, and implementation specifications.
 model: [auto]
-tools: [read, search, ask_user]
+tools: [read, search, edit, bash, ask_user]
 metadata:
   sflow-label: "Architect"
   sflow-phases: "design,implementation-spec,fix-design,fix-spec,planning,convergence"

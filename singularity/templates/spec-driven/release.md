@@ -1,7 +1,9 @@
 # Release conformance — {{work.id}}
 
-The final human-readable trace `[SPK:REQ-042]`. Evidence lives below `verification/`; this document
-says what it proves.
+The final human-readable trace `[SPK:REQ-042]`. Before publication, add at least one evidence
+file below this release artifact's `verification/` directory. Its source-bound index must identify
+the approved Verification generation, exact evidence paths and hashes, observed results, and gaps;
+this document says what that evidence proves. Do not claim a result absent from approved evidence.
 
 ## Requirement trace
 

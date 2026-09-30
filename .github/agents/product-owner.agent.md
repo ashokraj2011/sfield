@@ -2,7 +2,7 @@
 name: product-owner
 description: Defines evidence-backed scope, requirements, outcomes, and acceptance criteria.
 model: [auto]
-tools: [read, search, ask_user]
+tools: [read, search, edit, bash, ask_user]
 metadata:
   sflow-label: "Product owner"
   sflow-phases: "intake,requirements,specification"
