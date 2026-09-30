@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: c565c6d32bfbc671af554e83de2e3a2233660ac0
+  revision: 0a03309160518def6b94e2b27af1c7e88c03e212
 workflow:
   version: 2
   inputsMode: enforce
@@ -1140,6 +1140,10 @@ workflow:
         - convergence
         - verification
         - release
+      documents:
+        allowedPhases:
+          - specification
+          - planning
       spec:
         mode: enforce
       plannedClaims:
@@ -1184,6 +1188,10 @@ workflow:
           - specification
           - planning
         reviewerAgent: sflow-source-reviewer
+      documents:
+        allowedPhases:
+          - specification
+          - planning
       plannedClaims:
         mode: required
         clausePhases:
@@ -2514,7 +2522,7 @@ assets:
   singularity/templates/figma-mobile/conformance.md:
     sha256: f96e5271156d2dadca7cbf5687599724c4e47e328db6635ccf46b4adacaac147
   singularity/templates/figma-mobile/design-intake.md:
-    sha256: f84db46cdf86cf8c4da4de0062d7150466d5dd291baf6495bd9523affa9a6453
+    sha256: 5cb9495b64189d9f73d6aae23201197d7634cbf46d03176544badfc7683518ef
   singularity/templates/figma-mobile/design-inventory.md:
     sha256: 822ea61a75a25ec5a6b42dd887c842d5126233b36f7f0fc875402f9a43125079
   singularity/templates/figma-mobile/implementation.md:
@@ -2664,7 +2672,7 @@ assets:
   singularity/templates/spec-driven/release.md:
     sha256: a78b2eb703b2dfc70ccb33d30d94b24fe39247ca06ba79e6a988054e94a737b7
   singularity/templates/spec-driven/spec.md:
-    sha256: 27424a624b1dab57323fd7482ac62708bd42d11ba42e41c102f94e15182fe485
+    sha256: 55b0d6c4c9aa5ba19739493825f6c993f03d63bed9e1a5e2bb7d5c099b8b91bb
   singularity/templates/starter-packs/skp-team-notes/draft-input.json:
     sha256: 71b39ad32ea3d376bf3a9b45a3f3e6cedea81a1cd95948108635be4aca08c6c5
   singularity/templates/starter-packs/skp-team-notes/README.md:

@@ -106,3 +106,9 @@ change request, not a defect — which is only true if it was written down.
 ## Out of scope
 
 Named explicitly, so the boundary is reviewable rather than inferred.
+
+## Sources
+
+Each supporting document this specification relies on, cited as `DOC-nnn — <name>`, and each one
+offered to this phase that could not be read or was not available here, named as a gap. Without
+supporting documents, say so.
