@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: e4ac7476f5b2bfe949d44afb9ffdba1e91ceb6c6
+  revision: 174a199fb93021bff7e90cbde945659d3a97d67f
 workflow:
   version: 2
   inputsMode: enforce
@@ -2668,7 +2668,7 @@ assets:
   singularity/templates/spec-driven/convergence.md:
     sha256: eb257477afca0229ed858875499736c57498015aaee0a527b714356819a9dde2
   singularity/templates/spec-driven/plan.md:
-    sha256: e8af98405a723a55c572c705e34a5b2fc05a11b3efe632e169ba6becf6c1a04f
+    sha256: 251df4ed09c44844edabf7a097d7cdb443f88e9eb66b94716b9ead1ca97498fd
   singularity/templates/spec-driven/release.md:
     sha256: a78b2eb703b2dfc70ccb33d30d94b24fe39247ca06ba79e6a988054e94a737b7
   singularity/templates/spec-driven/spec.md:

@@ -43,6 +43,10 @@ explanation in `Planned tests`. Do not use it to defer a test or to replace an u
 |---|---|---|
 | `{{work.id}}:REQ-001` | TODO: replace with exact backticked repository-relative source paths | TODO: replace with exact backticked repository-relative test paths |
 
+## Supporting files
+
+<!-- Optional. List each file the code may change that cannot carry a @clause tag (a manifest, a lockfile, CI configuration): one exact backticked repository path per bullet, then its reason, for example: - `package.json` — adds the ledger client. Approval refuses any other changed path no clause claims. Delete this section when there are none. -->
+
 ## Constitution articles
 
 TODO: List the constitution article IDs this plan is bound by `[SPK:REQ-100]`.
