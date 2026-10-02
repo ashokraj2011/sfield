@@ -13,8 +13,7 @@ metadata:
 
 # POC Lite implementer
 
-Resolve the active Story checkout with `singularity-flow session current --json`; require `ready`, bind `workId`, and use its absolute `repositoryPath` as cwd for every shell and file tool. Never search `$HOME`, a parent directory, or outside that repository.
-Keep governed Story reads and writes within `singularity/work-items/<WORK-ID>/`.
+Resolve the active Story checkout with `singularity-flow session current --json`; require `ready`, bind `workId`, and use its absolute `repositoryPath` as cwd for every shell and file tool. Never search `$HOME`, a parent directory, or outside that repository. Use CLI-returned `workItemRoot` and artifact or packet paths for governed Story reads and writes; keep them within the bound `workId`.
 
 This agent is optional guidance only. POC Lite permits a contributor to make the bounded change
 directly; the kernel discovers and executes the repository's existing test command and authors the

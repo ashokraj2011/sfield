@@ -3,31 +3,31 @@
   "layout": "canonical-paths",
   "source": {
     "branch": "sflow/config",
-    "commit": "a5f7b33b4e70a8d32a23d54f0c2b28c72fda5fce"
+    "commit": "2772046b97b81598f2e78239c72387db9bab248f"
   },
   "history": {
-    "branch": "sflow/config-history/a5f7b33b4e70a8d32a23d54f0c2b28c72fda5fce",
-    "commit": "a5f7b33b4e70a8d32a23d54f0c2b28c72fda5fce"
+    "branch": "sflow/config-history/2772046b97b81598f2e78239c72387db9bab248f",
+    "commit": "2772046b97b81598f2e78239c72387db9bab248f"
   },
   "product": {
     "version": "0.9.0",
-    "revision": "10e6b02b564f8f53a58b95413557826c0335f74a"
+    "revision": "a609a48ff6c9d40a8ac720373a842ffa3ef180a9"
   },
   "files": {
-    ".github/agents/architect.agent.md": "cb10e2ec957759b702df2935ed7889192da5946814c97f9ca6c9e53b173f3342",
-    ".github/agents/developer.agent.md": "edfba1ce014ba9a5cf379303efa3841eb4345dd1602f2b2566c8e5001d4c99d1",
-    ".github/agents/mobile-architect.agent.md": "314f95afdbc297e47a40fca9bfb8621ebb915d21d40cac18c6978032cd996cd7",
-    ".github/agents/poc-analyst.agent.md": "8edf5a781b1cfab7af89b4ce53f8ac52343d31cd1cb65cfe929da7660dc737ec",
-    ".github/agents/poc-automation.agent.md": "ec5709c720d979d389ebb20cb73977f0efc485d87781b62135857c622c625a7c",
-    ".github/agents/poc-explorer.agent.md": "73135df4f261fa3e08f8f5676f985da4f3c4b139833413c9d6ffd7db0c6d9a07",
-    ".github/agents/poc-lite-implementer.agent.md": "8fa2344494618a1200b987aec80600b8d05cde24c3dee57e7ef6934fdd42e064",
-    ".github/agents/poc-lite-planner.agent.md": "13269e0e0dd315c053c81d50d0de27a94a7e1a8621ea1230b24d3a3a53d6c2e1",
-    ".github/agents/poc-lite-verifier.agent.md": "32cea87f319945c6ef3963aebf92e55ee15a291f8d7cf5691ca28a38fe68dd42",
-    ".github/agents/poc-test-developer.agent.md": "4c82f12e6642c42e60ef6b0e4a19b9c37b70a73c2089b8dfd2c525858d7a4681",
-    ".github/agents/poc-validator.agent.md": "970a1539220c22ba61eac4f80a743328437a0913d83fbeec20a6a3ed6f74a10f",
-    ".github/agents/product-designer.agent.md": "b46014bafb6a5fe79642e8e1917f28ef37adc3a8304408534cdcee1e75d47016",
-    ".github/agents/product-owner.agent.md": "a9c322786305e1eee80229c696ae19ff21e0f4fc2843d4c7f28a80ccd24e96ff",
-    ".github/agents/qa.agent.md": "5c00c8126703c867854c06c23bfd376e7a191735c438e9545b8a655c06ea71ab",
+    ".github/agents/architect.agent.md": "184ad9effaad2977008687601def19a0677bb72c6a02365ef81b945f54ae6443",
+    ".github/agents/developer.agent.md": "319bdfa6ac51ff128d8caad683f637f76c04818dc5fc7b05224d5275a76b8c41",
+    ".github/agents/mobile-architect.agent.md": "06685d32114d1278a825dfc9313d2c1ca6e4b84de9cf1c112b4b84f82367176d",
+    ".github/agents/poc-analyst.agent.md": "7f4fe9ad6e2bcf0aeab4aa0e2bb5245b38bb1a0434f23b1b604f2869fd9590e8",
+    ".github/agents/poc-automation.agent.md": "5c113c502f9e02362ff280947747684130b9f0975391b6cbe27462e1faaac0f6",
+    ".github/agents/poc-explorer.agent.md": "fc8ecbccd7fbfdcfcd318c45a1219bcb3354a09a87a30e941153df43ea390667",
+    ".github/agents/poc-lite-implementer.agent.md": "f97cc8d1cfb1b920e4643337fcc6d5a2b44428249c39a475565015c28ba68a04",
+    ".github/agents/poc-lite-planner.agent.md": "dbe9682cf65511b5d5ea77fecbb2abb1c3ea691c20961ab2faa046924ab16689",
+    ".github/agents/poc-lite-verifier.agent.md": "e6d98806f989c1d6e284223d97725cfc69523ef531c0d2805b32b71d8a42bbc6",
+    ".github/agents/poc-test-developer.agent.md": "da7785d620f669c41fa07921bcc6ef8bb26bc5fbb7eaca81f470b3fdf1feef8c",
+    ".github/agents/poc-validator.agent.md": "b2bed98021cfb9dd5a9b8ae31d9f0fbea0fee920d0bf968f7d3f9217dd89719d",
+    ".github/agents/product-designer.agent.md": "0f5fe7ec6f8e75d85493266f0982db49bac9fb20673867d119ff8e65cc3b54cf",
+    ".github/agents/product-owner.agent.md": "84bba38e1fe4dfa812b213255283c202c8a96b81179841bb3cb909f073b99b39",
+    ".github/agents/qa.agent.md": "1e1500d7ce6ccf22197bf77d7983f16ac7ad2617de2fa6bcd9dd08aae02ddf71",
     "singularity/agent-mappings.yml": "1b39a4f4caa3242749889a291e2259a361c815712bd762abde3db3cbe9f8a688",
     "singularity/capabilities.yml": "944c77d88016296c4b3188a6a5aa00775f4d665901cb7a013a30f42befc980ff",
     "singularity/impact.yml": "e91000c4f19ba8f8c08812ebea1d3e825919f5b31dadd1f3e22f1749e3b05313",
@@ -140,73 +140,73 @@
   },
   "assets": {
     ".github/agents/architect.agent.md": {
-      "sha256": "cb10e2ec957759b702df2935ed7889192da5946814c97f9ca6c9e53b173f3342",
-      "object": "1208f3cf19d2e5198f32d93827531c16f53c235a",
+      "sha256": "184ad9effaad2977008687601def19a0677bb72c6a02365ef81b945f54ae6443",
+      "object": "103d78c244c6127d95488ec9f7efdd9dd9b950a2",
       "mode": "100644"
     },
     ".github/agents/developer.agent.md": {
-      "sha256": "edfba1ce014ba9a5cf379303efa3841eb4345dd1602f2b2566c8e5001d4c99d1",
-      "object": "663383a98b5ba9b4993f78da8ca08868051cc08d",
+      "sha256": "319bdfa6ac51ff128d8caad683f637f76c04818dc5fc7b05224d5275a76b8c41",
+      "object": "73b6786aff6392a15f340ecd3558efd4369efe0b",
       "mode": "100644"
     },
     ".github/agents/mobile-architect.agent.md": {
-      "sha256": "314f95afdbc297e47a40fca9bfb8621ebb915d21d40cac18c6978032cd996cd7",
-      "object": "16f53d791aad791b7d72da875764c888cbef0b80",
+      "sha256": "06685d32114d1278a825dfc9313d2c1ca6e4b84de9cf1c112b4b84f82367176d",
+      "object": "08e0fe6f53ad28ea80cfc56e6f0824460f3467ba",
       "mode": "100644"
     },
     ".github/agents/poc-analyst.agent.md": {
-      "sha256": "8edf5a781b1cfab7af89b4ce53f8ac52343d31cd1cb65cfe929da7660dc737ec",
-      "object": "be208c6d639efd949c9f99bc76ef5b09a0d71d90",
+      "sha256": "7f4fe9ad6e2bcf0aeab4aa0e2bb5245b38bb1a0434f23b1b604f2869fd9590e8",
+      "object": "c1c11c46d676d54aae7000a65f2836fc9902fcca",
       "mode": "100644"
     },
     ".github/agents/poc-automation.agent.md": {
-      "sha256": "ec5709c720d979d389ebb20cb73977f0efc485d87781b62135857c622c625a7c",
-      "object": "887fd6922f98bfb3f2d667bf1662746f30a02fe7",
+      "sha256": "5c113c502f9e02362ff280947747684130b9f0975391b6cbe27462e1faaac0f6",
+      "object": "4297b135ea528ba71583781bebc8b82bcddb966b",
       "mode": "100644"
     },
     ".github/agents/poc-explorer.agent.md": {
-      "sha256": "73135df4f261fa3e08f8f5676f985da4f3c4b139833413c9d6ffd7db0c6d9a07",
-      "object": "e3b098fedd3a3c3a41ad8a97a521c5d9f6996d76",
+      "sha256": "fc8ecbccd7fbfdcfcd318c45a1219bcb3354a09a87a30e941153df43ea390667",
+      "object": "5dcf15b1ffc1d81282ab0eb46efd74f98334b3f2",
       "mode": "100644"
     },
     ".github/agents/poc-lite-implementer.agent.md": {
-      "sha256": "8fa2344494618a1200b987aec80600b8d05cde24c3dee57e7ef6934fdd42e064",
-      "object": "9035829971d2ea878f084a53ad3668b8d343201b",
+      "sha256": "f97cc8d1cfb1b920e4643337fcc6d5a2b44428249c39a475565015c28ba68a04",
+      "object": "252016048018d8795660d3a98dc15d5ebf9e4d2c",
       "mode": "100644"
     },
     ".github/agents/poc-lite-planner.agent.md": {
-      "sha256": "13269e0e0dd315c053c81d50d0de27a94a7e1a8621ea1230b24d3a3a53d6c2e1",
-      "object": "c62b8f7d2cd7895b0ddc8ee0bb1bc084b6ef258a",
+      "sha256": "dbe9682cf65511b5d5ea77fecbb2abb1c3ea691c20961ab2faa046924ab16689",
+      "object": "389abac4410803ffd8e3ae04b5fce29671f9a6ed",
       "mode": "100644"
     },
     ".github/agents/poc-lite-verifier.agent.md": {
-      "sha256": "32cea87f319945c6ef3963aebf92e55ee15a291f8d7cf5691ca28a38fe68dd42",
-      "object": "ad2febacff23e70af87eaae2f75b0101b0dbed75",
+      "sha256": "e6d98806f989c1d6e284223d97725cfc69523ef531c0d2805b32b71d8a42bbc6",
+      "object": "2a93121d3ba22ab0fd24f9deb247b33ce2da46c6",
       "mode": "100644"
     },
     ".github/agents/poc-test-developer.agent.md": {
-      "sha256": "4c82f12e6642c42e60ef6b0e4a19b9c37b70a73c2089b8dfd2c525858d7a4681",
-      "object": "a69493c54ad634d2746848e2e9adf05ded90b250",
+      "sha256": "da7785d620f669c41fa07921bcc6ef8bb26bc5fbb7eaca81f470b3fdf1feef8c",
+      "object": "e45fd72c7bfbc078aa646f8ffc2a7af70cd8d948",
       "mode": "100644"
     },
     ".github/agents/poc-validator.agent.md": {
-      "sha256": "970a1539220c22ba61eac4f80a743328437a0913d83fbeec20a6a3ed6f74a10f",
-      "object": "dc95825eaddf4ee04321c6ec6a6f179a6bbc9321",
+      "sha256": "b2bed98021cfb9dd5a9b8ae31d9f0fbea0fee920d0bf968f7d3f9217dd89719d",
+      "object": "47a0c60bcf0775bee6ed70ca5e4111ff1e94204b",
       "mode": "100644"
     },
     ".github/agents/product-designer.agent.md": {
-      "sha256": "b46014bafb6a5fe79642e8e1917f28ef37adc3a8304408534cdcee1e75d47016",
-      "object": "d6ea0282667ccfafc98daf711a4f3e273dc4caaf",
+      "sha256": "0f5fe7ec6f8e75d85493266f0982db49bac9fb20673867d119ff8e65cc3b54cf",
+      "object": "21cb884bafb0cad9deab3553ce8b219d02a88f29",
       "mode": "100644"
     },
     ".github/agents/product-owner.agent.md": {
-      "sha256": "a9c322786305e1eee80229c696ae19ff21e0f4fc2843d4c7f28a80ccd24e96ff",
-      "object": "e92816162f090d3aabcdb4c1f97b0aef2624c33e",
+      "sha256": "84bba38e1fe4dfa812b213255283c202c8a96b81179841bb3cb909f073b99b39",
+      "object": "e62c636869950fb69a5bcd0ea8778d71ba985323",
       "mode": "100644"
     },
     ".github/agents/qa.agent.md": {
-      "sha256": "5c00c8126703c867854c06c23bfd376e7a191735c438e9545b8a655c06ea71ab",
-      "object": "c91e237703a8de981adbc4ef669fca2f4e29fc6d",
+      "sha256": "1e1500d7ce6ccf22197bf77d7983f16ac7ad2617de2fa6bcd9dd08aae02ddf71",
+      "object": "d5fa2368c6a74c892f04d76f681509a79a2baaf3",
       "mode": "100644"
     },
     "singularity/agent-mappings.yml": {

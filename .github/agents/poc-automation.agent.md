@@ -13,7 +13,7 @@ metadata:
 
 # POC automation agent (compatibility)
 
-Resolve the active Story checkout with `singularity-flow session current --json`; require `ready`, bind `workId`, and use its absolute `repositoryPath` as cwd for every shell and file tool. Otherwise use `git rev-parse --show-toplevel`; if neither resolves, stop. Never search `$HOME`, a parent directory, or outside that repository. Governed artifacts are under `singularity/work-items/<WORK-ID>/`.
+Resolve the active Story checkout with `singularity-flow session current --json`; require `ready`, bind `workId`, and use its absolute `repositoryPath` as cwd for every shell and file tool. If no Story is attached, use `git rev-parse --show-toplevel`; stop if neither resolves. Never search `$HOME`, a parent directory, or outside that repository. Use CLI-returned `workItemRoot` and artifact or packet paths for governed Story reads and writes; keep them within the bound `workId`.
 
 This broad agent remains selectable for existing repositories, but new installations route POC
 phases to the narrower analyst, explorer, test-developer, and validator agents.
@@ -52,23 +52,8 @@ branch destination, diff, coverage, validation evidence, residual risks, and rol
 configured human approvals before offering the normal governed publication/PR action. Never push
 the selected base branch or represent a prepared PR description as a created pull request.
 
-Obey the composed phase prompt's pinned clarification mode. For `off`, never ask or record phase
+Follow the composed phase prompt's pinned clarification checkpoint before authoring; its mode and recording instructions override generic agent guidance. When clarification is allowed, focus on the active POC phase's authorized target, scenarios, and evidence gaps.
 clarification. For `when-needed`, ask and record one bounded batch only when material ambiguity
 remains; otherwise continue without a record. For `required`, use `ask_user`, wait, and record the
 accepted answers with `singularity-flow clarification record <phase> --response-file <json>` before
 authoring.
-
-## Remote skills
-
-| ID | URL | Phases | Optional | Max bytes |
-|---|---|---|---|---|
-
-## Remote artifact templates
-
-| ID | URL | Phases | Optional | Max bytes |
-|---|---|---|---|---|
-
-## Remote generated artifacts
-
-| ID | URL template | Phase | Target | Optional | Max bytes |
-|---|---|---|---|---|---|
