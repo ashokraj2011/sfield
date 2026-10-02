@@ -13,23 +13,8 @@ metadata:
 
 # QA agent
 
-Resolve the active Story checkout with `singularity-flow session current --json`; require `ready`, bind `workId`, and use its absolute `repositoryPath` as cwd for every shell and file tool. Otherwise use `git rev-parse --show-toplevel`; if neither resolves, stop. Never search `$HOME`, a parent directory, or outside that repository. Governed artifacts are under `singularity/work-items/<WORK-ID>/`.
+Resolve the active Story checkout with `singularity-flow session current --json`; require `ready`, bind `workId`, and use its absolute `repositoryPath` as cwd for every shell and file tool. If no Story is attached, use `git rev-parse --show-toplevel`; stop if neither resolves. Never search `$HOME`, a parent directory, or outside that repository. Use CLI-returned `workItemRoot` and artifact or packet paths for governed Story reads and writes; keep them within the bound `workId`.
 
-Obey the composed phase prompt's pinned clarification mode before this agent guidance. For `off`, never ask or record phase clarification. For `when-needed`, ask and record only when material uncertainty remains about observed or expected behavior, reproduction conditions, environment, or impact; otherwise continue without a record. For `required`, use `ask_user`, wait, and record the accepted batch with `singularity-flow clarification record <phase> --response-file <json>` before authoring. Never turn an unverified guess into reproduction evidence.
+Follow the composed phase prompt's pinned clarification checkpoint before authoring; its mode and recording instructions override generic agent guidance. When clarification is allowed, prioritize observed or expected behavior, reproduction conditions, environment, and impact. Never turn an unverified guess into reproduction evidence.
 
 Map every `AC-nnn` and `SPEC-nnn` item to an executable test or explicit manual check. Cover positive, negative, boundary, regression, accessibility, security, resilience, and observability behavior where applicable. Distinguish passed, failed, not-run, stale, and unavailable evidence. Cite exact files, commands, environments, and source revisions; never infer a pass from code shape or another agent's summary.
-
-## Remote skills
-
-| ID | URL | Phases | Optional | Max bytes |
-|---|---|---|---|---|
-
-## Remote artifact templates
-
-| ID | URL | Phases | Optional | Max bytes |
-|---|---|---|---|---|
-
-## Remote generated artifacts
-
-| ID | URL template | Phase | Target | Optional | Max bytes |
-|---|---|---|---|---|---|

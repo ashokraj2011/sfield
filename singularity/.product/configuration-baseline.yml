@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: 10e6b02b564f8f53a58b95413557826c0335f74a
+  revision: a609a48ff6c9d40a8ac720373a842ffa3ef180a9
 workflow:
   version: 2
   inputsMode: enforce
@@ -2438,33 +2438,33 @@ workflow:
       - .github/skills
 assets:
   .github/agents/architect.agent.md:
-    sha256: cb10e2ec957759b702df2935ed7889192da5946814c97f9ca6c9e53b173f3342
+    sha256: 184ad9effaad2977008687601def19a0677bb72c6a02365ef81b945f54ae6443
   .github/agents/developer.agent.md:
-    sha256: edfba1ce014ba9a5cf379303efa3841eb4345dd1602f2b2566c8e5001d4c99d1
+    sha256: 319bdfa6ac51ff128d8caad683f637f76c04818dc5fc7b05224d5275a76b8c41
   .github/agents/mobile-architect.agent.md:
-    sha256: 314f95afdbc297e47a40fca9bfb8621ebb915d21d40cac18c6978032cd996cd7
+    sha256: 06685d32114d1278a825dfc9313d2c1ca6e4b84de9cf1c112b4b84f82367176d
   .github/agents/poc-analyst.agent.md:
-    sha256: 8edf5a781b1cfab7af89b4ce53f8ac52343d31cd1cb65cfe929da7660dc737ec
+    sha256: 7f4fe9ad6e2bcf0aeab4aa0e2bb5245b38bb1a0434f23b1b604f2869fd9590e8
   .github/agents/poc-automation.agent.md:
-    sha256: ec5709c720d979d389ebb20cb73977f0efc485d87781b62135857c622c625a7c
+    sha256: 5c113c502f9e02362ff280947747684130b9f0975391b6cbe27462e1faaac0f6
   .github/agents/poc-explorer.agent.md:
-    sha256: 73135df4f261fa3e08f8f5676f985da4f3c4b139833413c9d6ffd7db0c6d9a07
+    sha256: fc8ecbccd7fbfdcfcd318c45a1219bcb3354a09a87a30e941153df43ea390667
   .github/agents/poc-lite-implementer.agent.md:
-    sha256: 8fa2344494618a1200b987aec80600b8d05cde24c3dee57e7ef6934fdd42e064
+    sha256: f97cc8d1cfb1b920e4643337fcc6d5a2b44428249c39a475565015c28ba68a04
   .github/agents/poc-lite-planner.agent.md:
-    sha256: 13269e0e0dd315c053c81d50d0de27a94a7e1a8621ea1230b24d3a3a53d6c2e1
+    sha256: dbe9682cf65511b5d5ea77fecbb2abb1c3ea691c20961ab2faa046924ab16689
   .github/agents/poc-lite-verifier.agent.md:
-    sha256: 32cea87f319945c6ef3963aebf92e55ee15a291f8d7cf5691ca28a38fe68dd42
+    sha256: e6d98806f989c1d6e284223d97725cfc69523ef531c0d2805b32b71d8a42bbc6
   .github/agents/poc-test-developer.agent.md:
-    sha256: 4c82f12e6642c42e60ef6b0e4a19b9c37b70a73c2089b8dfd2c525858d7a4681
+    sha256: da7785d620f669c41fa07921bcc6ef8bb26bc5fbb7eaca81f470b3fdf1feef8c
   .github/agents/poc-validator.agent.md:
-    sha256: 970a1539220c22ba61eac4f80a743328437a0913d83fbeec20a6a3ed6f74a10f
+    sha256: b2bed98021cfb9dd5a9b8ae31d9f0fbea0fee920d0bf968f7d3f9217dd89719d
   .github/agents/product-designer.agent.md:
-    sha256: b46014bafb6a5fe79642e8e1917f28ef37adc3a8304408534cdcee1e75d47016
+    sha256: 0f5fe7ec6f8e75d85493266f0982db49bac9fb20673867d119ff8e65cc3b54cf
   .github/agents/product-owner.agent.md:
-    sha256: a9c322786305e1eee80229c696ae19ff21e0f4fc2843d4c7f28a80ccd24e96ff
+    sha256: 84bba38e1fe4dfa812b213255283c202c8a96b81179841bb3cb909f073b99b39
   .github/agents/qa.agent.md:
-    sha256: 5c00c8126703c867854c06c23bfd376e7a191735c438e9545b8a655c06ea71ab
+    sha256: 1e1500d7ce6ccf22197bf77d7983f16ac7ad2617de2fa6bcd9dd08aae02ddf71
   singularity/agent-mappings.yml:
     sha256: 1b39a4f4caa3242749889a291e2259a361c815712bd762abde3db3cbe9f8a688
   singularity/impact.yml:
