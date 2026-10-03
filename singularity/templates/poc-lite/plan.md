@@ -19,8 +19,9 @@ network-backed validation is added by this profile.
 
 ## Specification claims
 
-POC Lite deliberately opts out of a specification-clause contract. Its bounded intent and final
-human decision remain visible without manufacturing acceptance clauses.
+POC Lite defines no requirement clauses: the workflow declares that it omits scope, and the final
+reviewer records why scope does not apply to this Story before it can finish. Its bounded intent
+and final human decision remain visible without manufacturing acceptance clauses.
 
 ## Governed inputs
 

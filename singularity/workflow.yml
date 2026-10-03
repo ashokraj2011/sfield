@@ -557,6 +557,9 @@ workTypes:
             - implementation
             - verification
             - conformance
+      intake:
+        artifact:
+          kind: requirements
   figma-mobile:
     label: Figma export to mobile app
     phases:
@@ -658,19 +661,44 @@ workTypes:
   quick-fix:
     label: Quick fix
     phases:
+      - intake
       - implement
       - verify
     plannedClaims:
-      mode: opt-out
-      reason: This low-risk two-phase profile intentionally has no approved pre-code
-        specification phase.
+      mode: required
+      clausePhases:
+        - intake
+      owners:
+        implement: intake
     templateOverrides:
       implement: quick-fix/implement.md
       verify: quick-fix/verify.md
+      intake: quick-fix/intake.md
     phaseOverrides:
       verify:
         inputs:
+          - intake
           - implement
+      intake:
+        label: Scope and plan
+        artifact:
+          kind: requirements
+        clarification:
+          mode: when-needed
+          maxQuestions: 3
+          topics:
+            - acceptance criteria
+            - changed paths
+            - tests
+        approval:
+          authorities:
+            - engineering-reviewers
+          minimum: 1
+          rejectTo:
+            - intake
+      implement:
+        inputs:
+          - intake
   classic-delivery:
     label: Classic delivery
     description: Intake, code, testing, and code checking with committed test
@@ -866,10 +894,6 @@ workTypes:
       - poc-lite-act
       - poc-lite-verify
       - poc-lite-finalize
-    plannedClaims:
-      mode: opt-out
-      reason: This deliberately small demonstration records a bounded plan but does
-        not establish a specification-clause contract.
     intelligence:
       worldModel: off
       ast: off
@@ -892,6 +916,11 @@ workTypes:
           - poc-lite-plan
           - poc-lite-act
           - poc-lite-verify
+    omits:
+      - responsibility: scope
+        reason: POC Lite demonstrates the governed lifecycle on one bounded local change
+          and defines no requirement clauses.
+        authority: quality-reviewers
   benchmarking-a:
     label: Benchmark A — governed intelligence
     description: Measures governed world-model, bounded AST, and approval-bound
@@ -1835,7 +1864,6 @@ phases:
         - missing
         - deviated
         - unplanned
-      exactFileLineEvidence: true
     approval:
       authorities:
         - quality-reviewers
@@ -2358,7 +2386,7 @@ phases:
     defaultTemplate: spec-driven/convergence.md
     artifact:
       path: artifacts/convergence/convergence.md
-      kind: verification-report
+      kind: convergence-report
       minimumBytes: 200
     generation:
       requirement: required

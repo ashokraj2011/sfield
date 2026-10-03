@@ -31,3 +31,10 @@ Every constitution exception, with article, reason, scope, authority, and expiry
 ## Deviations
 
 Accepted deviations carried from convergence, and the authority that accepted each.
+
+## Self-approval disclosures
+
+A conformance report discloses every phase approved by the identity that produced it, with that
+identity, so self-approval is never read as independent review.
+
+TODO: List every self-approved phase and the identity that approved it, or explicitly state none.
