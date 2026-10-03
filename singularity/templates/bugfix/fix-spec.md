@@ -7,9 +7,11 @@ repository-relative source and test paths in backticks; do not use directories, 
 or prose in path cells. For a genuinely non-testable clause, write `not-applicable:` followed by
 your concrete reviewed explanation under `Planned tests`; never defer a regression test or replace an unknown path.
 
-| Clause | Expected paths | Planned tests |
-|---|---|---|
-| `{{work.id}}:BEH-001` | TODO: replace with exact backticked repository-relative source paths | TODO: replace with exact backticked repository-relative regression test paths |
+| Clause | Expected paths | Planned tests | Fulfillment | Observable result |
+|---|---|---|---|---|
+| `{{work.id}}:BEH-001` | TODO: replace with exact backticked repository-relative source paths | TODO: replace with exact backticked repository-relative regression test paths | modified | TODO: what a person can observe when it works |
+
+<!-- Fulfillment: new, modified, existing (the behaviour already exists at the listed paths), removed, test-only (the tests are the whole delivery; write - under Expected paths), document or configuration. Observable result: what a person can observe when the row is met. A plan that feeds several code steps adds a Steps column naming the step that delivers each row. -->
 
 ## Exact change
 

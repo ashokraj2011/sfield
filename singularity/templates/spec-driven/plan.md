@@ -39,9 +39,11 @@ names, and prose are not paths. Multiple exact paths may be listed as separate b
 For a genuinely non-testable clause, write `not-applicable:` followed by your concrete reviewed
 explanation in `Planned tests`. Do not use it to defer a test or to replace an unknown path.
 
-| Clause | Expected paths | Planned tests |
-|---|---|---|
-| `{{work.id}}:REQ-001` | TODO: replace with exact backticked repository-relative source paths | TODO: replace with exact backticked repository-relative test paths |
+| Clause | Expected paths | Planned tests | Fulfillment | Observable result |
+|---|---|---|---|---|
+| `{{work.id}}:REQ-001` | TODO: replace with exact backticked repository-relative source paths | TODO: replace with exact backticked repository-relative test paths | new | TODO: what a person can observe when it works |
+
+<!-- Fulfillment: new, modified, existing (the behaviour already exists at the listed paths), removed, test-only (the tests are the whole delivery; write - under Expected paths), document or configuration. Observable result: what a person can observe when the row is met. A plan that feeds several code steps adds a Steps column naming the step that delivers each row. -->
 
 ## Supporting files
 
