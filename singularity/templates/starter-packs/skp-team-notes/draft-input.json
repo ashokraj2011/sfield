@@ -21,6 +21,12 @@
           "phases": ["intake", "skp-team-note", "skp-team-review"],
           "reworkLoops": [
             { "from": "skp-team-review", "to": "skp-team-note", "maxAttempts": 3 }
+          ],
+          "omits": [
+            { "responsibility": "scope", "reason": "Team notes are reviewed documents: the workflow defines no requirements and changes no repository code.", "authority": "product-approvers" },
+            { "responsibility": "plan", "reason": "Team notes are reviewed documents: the workflow defines no requirements and changes no repository code.", "authority": "product-approvers" },
+            { "responsibility": "implement", "reason": "Team notes are reviewed documents: the workflow defines no requirements and changes no repository code.", "authority": "product-approvers" },
+            { "responsibility": "verify", "reason": "Team notes are reviewed documents: the workflow defines no requirements and changes no repository code.", "authority": "product-approvers" }
           ]
         }
       ],

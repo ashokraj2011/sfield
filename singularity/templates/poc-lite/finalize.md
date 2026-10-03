@@ -20,7 +20,8 @@ presenting stale evidence as current.
 ## Specification claims
 
 POC Lite makes no clause-level conformance claim. The human reviewer decides whether the bounded
-change, executable evidence, residual risk, and rollback are sufficient.
+change, executable evidence, residual risk, and rollback are sufficient, and records why scope does
+not apply to this Story.
 
 ## Governed inputs
 

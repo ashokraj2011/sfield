@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: fe825d6116db0ce82ed84e6fd49faa7f8ada8289
+  revision: de99afe203b59983fe63e7a621b2ac990cc8b2a5
 workflow:
   version: 2
   inputsMode: enforce
@@ -535,6 +535,9 @@ workflow:
       templateOverrides:
         intake: chore/intake.md
       phaseOverrides:
+        intake:
+          artifact:
+            kind: requirements
         implementation:
           inputs:
             - intake
@@ -653,18 +656,43 @@ workflow:
     quick-fix:
       label: Quick fix
       phases:
+        - intake
         - implement
         - verify
       plannedClaims:
-        mode: opt-out
-        reason: This low-risk two-phase profile intentionally has no approved pre-code
-          specification phase.
+        mode: required
+        clausePhases:
+          - intake
+        owners:
+          implement: intake
       templateOverrides:
+        intake: quick-fix/intake.md
         implement: quick-fix/implement.md
         verify: quick-fix/verify.md
       phaseOverrides:
+        intake:
+          label: Scope and plan
+          artifact:
+            kind: requirements
+          clarification:
+            mode: when-needed
+            maxQuestions: 3
+            topics:
+              - acceptance criteria
+              - changed paths
+              - tests
+          approval:
+            authorities:
+              - engineering-reviewers
+            minimum: 1
+            rejectTo:
+              - intake
+        implement:
+          inputs:
+            - intake
         verify:
           inputs:
+            - intake
             - implement
     classic-delivery:
       label: Classic delivery
@@ -861,10 +889,11 @@ workflow:
         - poc-lite-act
         - poc-lite-verify
         - poc-lite-finalize
-      plannedClaims:
-        mode: opt-out
-        reason: This deliberately small demonstration records a bounded plan but does
-          not establish a specification-clause contract.
+      omits:
+        - responsibility: scope
+          reason: POC Lite demonstrates the governed lifecycle on one bounded local change
+            and defines no requirement clauses.
+          authority: quality-reviewers
       intelligence:
         worldModel: off
         ast: off
@@ -1830,7 +1859,6 @@ workflow:
           - missing
           - deviated
           - unplanned
-        exactFileLineEvidence: true
       approval:
         authorities:
           - quality-reviewers
@@ -2353,7 +2381,7 @@ workflow:
       defaultTemplate: spec-driven/convergence.md
       artifact:
         path: artifacts/convergence/convergence.md
-        kind: verification-report
+        kind: convergence-report
         minimumBytes: 200
       generation:
         requirement: required
@@ -2494,7 +2522,7 @@ assets:
   singularity/templates/bugfix/reproduction.md:
     sha256: 083e0361f6ffe9e84905b21558554c8335ab1a036719cb37f104e03f255f3567
   singularity/templates/chore/intake.md:
-    sha256: d4632690fa411f3926eee1bfd474f5907aae5efdd31313576acdac04e8934441
+    sha256: 18db52fe527c00d8520463524acd6c2858d93564883b7d024a648ea5b2a7b457
   singularity/templates/classic-delivery/code-checking.md:
     sha256: cb2a69e08768ab6d38ef3ee3e4326f47f854ec80d9012362d5765f88f58ecda1
   singularity/templates/classic-delivery/intake.md:
@@ -2638,9 +2666,9 @@ assets:
   singularity/templates/poc-lite/act.md:
     sha256: f9c3c015c593a51b7d3fd11ba5ec9fc104eaf00f45e2c78ea50a9b78d061c383
   singularity/templates/poc-lite/finalize.md:
-    sha256: 6e46b121db6e48206916719e66b927c19e3db86bb829c661bff89db74e814940
+    sha256: 7e9e55b2d7199199b757780b78c83abcc35c0f9a48b6760e68b106282ef9cc57
   singularity/templates/poc-lite/plan.md:
-    sha256: cac46909b752b8d14cb4bab3399dd9d57da540e5ba443f171b4c1fb4695882c6
+    sha256: b4748d5dca1e0fdef282f9f679c32ed360d5534a975a4361a2e925dfb1beca8e
   singularity/templates/poc-lite/verify.md:
     sha256: c31624345a1b3803f1cfe267b670e570e1ad1ae3742e88898d123f962b913a58
   singularity/templates/poc-workflow/impact-analysis.md:
@@ -2657,6 +2685,8 @@ assets:
     sha256: b1d121afbd49c09538d221cbac60b352a21f7eb7699bc4cba08d35b88ba47fb6
   singularity/templates/quick-fix/implement.md:
     sha256: dff093133a1be4c93115cfbbb0d994c8ce391fc19279caee30b441ec27a05c0a
+  singularity/templates/quick-fix/intake.md:
+    sha256: 275f44dee383c77be256be2e070b901d053b1a0a95a2ae92e0c44289c3576983
   singularity/templates/quick-fix/verify.md:
     sha256: a21900d99d044d35de501f0e43888a8a3ebcfe860e702a5d1b3eec61fdd06f27
   singularity/templates/spec-code-test-loop/conformance.md:
@@ -2668,13 +2698,13 @@ assets:
   singularity/templates/spec-driven/convergence.md:
     sha256: eb257477afca0229ed858875499736c57498015aaee0a527b714356819a9dde2
   singularity/templates/spec-driven/plan.md:
-    sha256: 251df4ed09c44844edabf7a097d7cdb443f88e9eb66b94716b9ead1ca97498fd
+    sha256: 5e70231c6271f9b637f876862847c10ad938bafcab33ad56cdb1d3ad8e5bee5f
   singularity/templates/spec-driven/release.md:
-    sha256: a78b2eb703b2dfc70ccb33d30d94b24fe39247ca06ba79e6a988054e94a737b7
+    sha256: 3d6717eace80085585d04c9c3f5c67f10d7a2e9c4e535a862c8b5aa900d556fe
   singularity/templates/spec-driven/spec.md:
     sha256: 55b0d6c4c9aa5ba19739493825f6c993f03d63bed9e1a5e2bb7d5c099b8b91bb
   singularity/templates/starter-packs/skp-team-notes/draft-input.json:
-    sha256: 71b39ad32ea3d376bf3a9b45a3f3e6cedea81a1cd95948108635be4aca08c6c5
+    sha256: fbc136911e7dfecf14be06091b6d759770fa72c133c39de74710511bfee57410
   singularity/templates/starter-packs/skp-team-notes/README.md:
     sha256: ab3e66d1654df81922a6022c491ac85868cb3b644e0eace77c4f9089c4f599ea
 ownership:
@@ -2844,6 +2874,7 @@ ownership:
     singularity/templates/poc-workflow/ui-exploration.md: framework
     singularity/templates/poc-workflow/validation.md: framework
     singularity/templates/quick-fix/implement.md: framework
+    singularity/templates/quick-fix/intake.md: framework
     singularity/templates/quick-fix/verify.md: framework
     singularity/templates/spec-code-test-loop/conformance.md: framework
     singularity/templates/spec-code-test-loop/specification.md: framework
