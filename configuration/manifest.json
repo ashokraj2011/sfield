@@ -3,15 +3,15 @@
   "layout": "canonical-paths",
   "source": {
     "branch": "sflow/config",
-    "commit": "0fb4150f8cc8818df033a03ed5764276986d889f"
+    "commit": "3b24675aeb5adad292f5bcedf4f1e6d537f823dc"
   },
   "history": {
-    "branch": "sflow/config-history/0fb4150f8cc8818df033a03ed5764276986d889f",
-    "commit": "0fb4150f8cc8818df033a03ed5764276986d889f"
+    "branch": "sflow/config-history/3b24675aeb5adad292f5bcedf4f1e6d537f823dc",
+    "commit": "3b24675aeb5adad292f5bcedf4f1e6d537f823dc"
   },
   "product": {
     "version": "0.9.0",
-    "revision": "de99afe203b59983fe63e7a621b2ac990cc8b2a5"
+    "revision": "5c5b4271f5b7f44020ac71e7320ecea9cd2126a0"
   },
   "files": {
     ".github/agents/architect.agent.md": "184ad9effaad2977008687601def19a0677bb72c6a02365ef81b945f54ae6443",
@@ -36,24 +36,24 @@
     "singularity/prompts/copilot-planning.md": "4128acc6930949e4ba1e50e8b8c7c4f7beb23f4361c2e8428475b081712b77db",
     "singularity/prompts/worldmodel-builder.md": "cd93d41ccc98e4ccc09550c60cc79ad6c5a6004d7f8ea66cec596640ab73ffb4",
     "singularity/templates/benchmark/conformance.md": "6a767297e22cab241d2dfff38c6c5b3fe8298e21c65399825c657f014411ced8",
-    "singularity/templates/benchmark/design.md": "92ba1c0684e20d201a7bfa1c9ae7b61a87001ca0c724ff0a61af2d387b23f9ba",
+    "singularity/templates/benchmark/design.md": "e0bf570cf7f35a123025a41d7b3d3b3977fdc17acc06d8ab85399cb233345fdc",
     "singularity/templates/benchmark/implementation.md": "e25ab3d9104c4ddaef541191d544ea032c35f551b9538ad77a38628ca1a58db6",
     "singularity/templates/benchmark/intake.md": "49107281e2e461ede0e000edb51bf9f22aec85ddc84acbd1781680076f795f5c",
     "singularity/templates/benchmark/testing.md": "a9338f04dbe1be3ad988c331f9b45bab335a4661fb367f2c4f110609049fb9a8",
     "singularity/templates/bugfix/fix-design.md": "cee7774777fd55a3740ebd9f2cafd100702d52617ae307f80e35764229c7867e",
-    "singularity/templates/bugfix/fix-spec.md": "c1bbc5602eded66e1387f3fa95a835d7bb49f05a2fd813b193c0cada7c420c87",
+    "singularity/templates/bugfix/fix-spec.md": "22558a91a03dbb58569863c24b4d25aee092d1a04138e0285d587d0dab267343",
     "singularity/templates/bugfix/intake.md": "c0aa89555e400e9c78c782021b1928175607f32ad20773c70fae04b28ced320c",
     "singularity/templates/bugfix/reproduction.md": "083e0361f6ffe9e84905b21558554c8335ab1a036719cb37f104e03f255f3567",
     "singularity/templates/chore/intake.md": "18db52fe527c00d8520463524acd6c2858d93564883b7d024a648ea5b2a7b457",
     "singularity/templates/classic-delivery/code-checking.md": "cb2a69e08768ab6d38ef3ee3e4326f47f854ec80d9012362d5765f88f58ecda1",
-    "singularity/templates/classic-delivery/intake.md": "d91d55500e7dbc30a388633bce723623157619bca0bbc9bbaf8e64dfd85308a8",
+    "singularity/templates/classic-delivery/intake.md": "556120c9a16a8b6b57df8e001b27a8c769a4ee1c9a783251b1e9f4c47146310e",
     "singularity/templates/classic-delivery/testing.md": "d84b65e54ff4210a7fab6cc1af3a2ea45bbba61fbee383a1ef985f31848ff177",
     "singularity/templates/common/conformance.md": "4d0d9502b65b257e2d8b315634b7e6c17c64c531a9efe42849c37be1b3366b1b",
     "singularity/templates/common/implementation.md": "cf46a21cdcb12035defbb5b6a74c7acd6c6d1e751556964f416f27bb5acb5482",
     "singularity/templates/common/intake.md": "e16cd8b47f472973823a1a53294c77ac6551285c4df75e916c739611c3bc1d23",
     "singularity/templates/common/verification.md": "31e8dc7c915c96c7bce79e3138af0537875f077350a13af5250e50c4c571728b",
     "singularity/templates/feature/design.md": "8b7455f464a7025efa92942c272a04e3c0a3ab2a4d3eb438703cc14e230bc856",
-    "singularity/templates/feature/implementation-spec.md": "adc2b93c3cf849c4b335237cea68c05fc2fdeb4ef087a8b4236493be574a0a37",
+    "singularity/templates/feature/implementation-spec.md": "39f379c3e28aad96d421aa179a2478457f6903a86ba01aa642bf55791fa5c2fb",
     "singularity/templates/feature/intake.md": "eb53814f46f12ea3d93d1629164bd7ff22a3a54feceff7f7dd55670caeb5dbab",
     "singularity/templates/feature/requirements.md": "32016db8ed6fadd6596e7dc702647cff95cdee1a203b38395d7ba5626dd8134e",
     "singularity/templates/figma-mobile/component-mapping.md": "cdea8a1e3defa73ade72bdaaac162ecd9b8b43817aa319d7e712e2de2eb296a3",
@@ -61,7 +61,7 @@
     "singularity/templates/figma-mobile/design-intake.md": "5cb9495b64189d9f73d6aae23201197d7634cbf46d03176544badfc7683518ef",
     "singularity/templates/figma-mobile/design-inventory.md": "822ea61a75a25ec5a6b42dd887c842d5126233b36f7f0fc875402f9a43125079",
     "singularity/templates/figma-mobile/implementation.md": "69b5b75886dcc41da4e3063c7ceb6ff805251f98dd40ee41b2bf5de660dc74da",
-    "singularity/templates/figma-mobile/mobile-spec.md": "18c583c10c597c595cd0be9c11ddf16e92a0b85147efcd4fd3fb1a9bbd96fc44",
+    "singularity/templates/figma-mobile/mobile-spec.md": "cdb4cc328b7a60c87fe5e00818f6b04ee8f066ed7dd2840c56bd5c78d413b4e4",
     "singularity/templates/figma-mobile/visual-verification.md": "aca2f864d6cc1b5321e466f80d0751ab4874049271b2fabab03dde7b0ec0e835",
     "singularity/templates/initiatives/adr-log.md": "4ece55ac194e15395cbc331d382d6464f76e013b33576050895092a5dcebce12",
     "singularity/templates/initiatives/business-case.md": "155faec79961574f8dd12556f0874ec8bb396f5a546ca792b2ab41dc34aa6a17",
@@ -123,16 +123,16 @@
     "singularity/templates/poc-workflow/intake.md": "511fa3a7c281bf8a4c84977668478392b5f73d14273d3149db6392eeba3b805d",
     "singularity/templates/poc-workflow/publication-review.md": "e5d0e59595e5dd01899883adf781a728bdc6636a07efe4290b57c55b808288d1",
     "singularity/templates/poc-workflow/test-generation.md": "6fa0c17056fe263eb9f47699a84a0759a899b8e67c35a3d53df8961f1ca59b25",
-    "singularity/templates/poc-workflow/ui-exploration.md": "14d107cc9778b9e737327e363e84e60975076a7003016d0798e92496ef1d61f5",
+    "singularity/templates/poc-workflow/ui-exploration.md": "f0b14cf81aa72451e3cbf0de71a2dad050200177d66622d0f575541066d6ddf9",
     "singularity/templates/poc-workflow/validation.md": "b1d121afbd49c09538d221cbac60b352a21f7eb7699bc4cba08d35b88ba47fb6",
     "singularity/templates/quick-fix/implement.md": "dff093133a1be4c93115cfbbb0d994c8ce391fc19279caee30b441ec27a05c0a",
-    "singularity/templates/quick-fix/intake.md": "275f44dee383c77be256be2e070b901d053b1a0a95a2ae92e0c44289c3576983",
+    "singularity/templates/quick-fix/intake.md": "0b69eba907e67c38617d1ced288986f9ce13a5e9c9ceb2e2be7f942d362d54d9",
     "singularity/templates/quick-fix/verify.md": "a21900d99d044d35de501f0e43888a8a3ebcfe860e702a5d1b3eec61fdd06f27",
     "singularity/templates/spec-code-test-loop/conformance.md": "b22de4f73720b8bf645faef0e2484031838d511fe4ea06810c6bf9b16c8bae1a",
-    "singularity/templates/spec-code-test-loop/specification.md": "4a487088d8275fc54afcb7932c18a4fb04774e85309b26b3ae72618ce9762bc6",
+    "singularity/templates/spec-code-test-loop/specification.md": "15a6f55c50ed316695a172dbeda36594a2c345af7817d50b3244d1dcf119a41e",
     "singularity/templates/spec-code-test-loop/testing.md": "eef65b164a45b3df7843d76ef071e9d9932304ec9861c8ed19c646db105f9284",
     "singularity/templates/spec-driven/convergence.md": "eb257477afca0229ed858875499736c57498015aaee0a527b714356819a9dde2",
-    "singularity/templates/spec-driven/plan.md": "5e70231c6271f9b637f876862847c10ad938bafcab33ad56cdb1d3ad8e5bee5f",
+    "singularity/templates/spec-driven/plan.md": "bbe153af31a1554ae96d3b3e0314e40d5bc543eb501fd6d18e7dd3f5e619a064",
     "singularity/templates/spec-driven/release.md": "3d6717eace80085585d04c9c3f5c67f10d7a2e9c4e535a862c8b5aa900d556fe",
     "singularity/templates/spec-driven/spec.md": "55b0d6c4c9aa5ba19739493825f6c993f03d63bed9e1a5e2bb7d5c099b8b91bb",
     "singularity/templates/starter-packs/skp-team-notes/draft-input.json": "fbc136911e7dfecf14be06091b6d759770fa72c133c39de74710511bfee57410",
@@ -251,8 +251,8 @@
       "mode": "100644"
     },
     "singularity/templates/benchmark/design.md": {
-      "sha256": "92ba1c0684e20d201a7bfa1c9ae7b61a87001ca0c724ff0a61af2d387b23f9ba",
-      "object": "becbdaf2ff3ddf8559054fc108a89026a587246c",
+      "sha256": "e0bf570cf7f35a123025a41d7b3d3b3977fdc17acc06d8ab85399cb233345fdc",
+      "object": "712a40abc1383ac508bc1f365f6fb74da3d9da87",
       "mode": "100644"
     },
     "singularity/templates/benchmark/implementation.md": {
@@ -276,8 +276,8 @@
       "mode": "100644"
     },
     "singularity/templates/bugfix/fix-spec.md": {
-      "sha256": "c1bbc5602eded66e1387f3fa95a835d7bb49f05a2fd813b193c0cada7c420c87",
-      "object": "7b0dc63e84007b8b12a7e200dd8075809d71248f",
+      "sha256": "22558a91a03dbb58569863c24b4d25aee092d1a04138e0285d587d0dab267343",
+      "object": "b634e883349d2f657b6b8809ea685d4842f75d2b",
       "mode": "100644"
     },
     "singularity/templates/bugfix/intake.md": {
@@ -301,8 +301,8 @@
       "mode": "100644"
     },
     "singularity/templates/classic-delivery/intake.md": {
-      "sha256": "d91d55500e7dbc30a388633bce723623157619bca0bbc9bbaf8e64dfd85308a8",
-      "object": "140408224f2fae03db30c656f2dcdf9b151434da",
+      "sha256": "556120c9a16a8b6b57df8e001b27a8c769a4ee1c9a783251b1e9f4c47146310e",
+      "object": "480c07fd1d9d911752074631587dfc4ac3134ac6",
       "mode": "100644"
     },
     "singularity/templates/classic-delivery/testing.md": {
@@ -336,8 +336,8 @@
       "mode": "100644"
     },
     "singularity/templates/feature/implementation-spec.md": {
-      "sha256": "adc2b93c3cf849c4b335237cea68c05fc2fdeb4ef087a8b4236493be574a0a37",
-      "object": "384a33451906dfc6b13434fb8710ac69f98de65e",
+      "sha256": "39f379c3e28aad96d421aa179a2478457f6903a86ba01aa642bf55791fa5c2fb",
+      "object": "ac2337be94929acb1b8142e0358c39c3d6f71d0c",
       "mode": "100644"
     },
     "singularity/templates/feature/intake.md": {
@@ -376,8 +376,8 @@
       "mode": "100644"
     },
     "singularity/templates/figma-mobile/mobile-spec.md": {
-      "sha256": "18c583c10c597c595cd0be9c11ddf16e92a0b85147efcd4fd3fb1a9bbd96fc44",
-      "object": "eea8aeeaf6911aa62adc338e96bb895116983351",
+      "sha256": "cdb4cc328b7a60c87fe5e00818f6b04ee8f066ed7dd2840c56bd5c78d413b4e4",
+      "object": "fb513fe0d7539817d27622d5aa67d19bd6cb5983",
       "mode": "100644"
     },
     "singularity/templates/figma-mobile/visual-verification.md": {
@@ -686,8 +686,8 @@
       "mode": "100644"
     },
     "singularity/templates/poc-workflow/ui-exploration.md": {
-      "sha256": "14d107cc9778b9e737327e363e84e60975076a7003016d0798e92496ef1d61f5",
-      "object": "4985d3c994f82652b674dccc8a12561e46febf93",
+      "sha256": "f0b14cf81aa72451e3cbf0de71a2dad050200177d66622d0f575541066d6ddf9",
+      "object": "0f2ddaed1662fa62ea82fec38dfb6537df72dfc7",
       "mode": "100644"
     },
     "singularity/templates/poc-workflow/validation.md": {
@@ -701,8 +701,8 @@
       "mode": "100644"
     },
     "singularity/templates/quick-fix/intake.md": {
-      "sha256": "275f44dee383c77be256be2e070b901d053b1a0a95a2ae92e0c44289c3576983",
-      "object": "182310fba7ea8225cbfee968543072c50a508914",
+      "sha256": "0b69eba907e67c38617d1ced288986f9ce13a5e9c9ceb2e2be7f942d362d54d9",
+      "object": "f99cda1c64f7c4f22b8cd0456545fb4a340d6f7c",
       "mode": "100644"
     },
     "singularity/templates/quick-fix/verify.md": {
@@ -716,8 +716,8 @@
       "mode": "100644"
     },
     "singularity/templates/spec-code-test-loop/specification.md": {
-      "sha256": "4a487088d8275fc54afcb7932c18a4fb04774e85309b26b3ae72618ce9762bc6",
-      "object": "4311df2e3d71bccc46de077be2c4eb1d62ce09a9",
+      "sha256": "15a6f55c50ed316695a172dbeda36594a2c345af7817d50b3244d1dcf119a41e",
+      "object": "18137576ab5fe549c1dee83f0874f0a278cb61c2",
       "mode": "100644"
     },
     "singularity/templates/spec-code-test-loop/testing.md": {
@@ -731,8 +731,8 @@
       "mode": "100644"
     },
     "singularity/templates/spec-driven/plan.md": {
-      "sha256": "5e70231c6271f9b637f876862847c10ad938bafcab33ad56cdb1d3ad8e5bee5f",
-      "object": "0a2b90470f3926fee8c756705bb23d4d455e21ec",
+      "sha256": "bbe153af31a1554ae96d3b3e0314e40d5bc543eb501fd6d18e7dd3f5e619a064",
+      "object": "11e0b55f68f31368e0c5af646b1fa1a727b7b7c7",
       "mode": "100644"
     },
     "singularity/templates/spec-driven/release.md": {

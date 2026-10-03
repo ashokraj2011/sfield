@@ -38,10 +38,12 @@ repository-relative source and executable-test paths in backticks, not directori
 If a clause truly cannot be tested, use `not-applicable:` followed by a concrete reviewer-approved
 reason. Browser observations may supplement the planned executable tests, never replace them.
 
-| Clause | Expected paths | Planned tests |
-|---|---|---|
-| `{{work.id}}:REQ-001` | TODO: `src/example.js` | TODO: `test/example.test.js` |
-| `{{work.id}}:AC-001` | TODO: `src/example.js` | TODO: `test/example.test.js` |
+| Clause | Expected paths | Planned tests | Fulfillment | Observable result |
+|---|---|---|---|---|
+| `{{work.id}}:REQ-001` | TODO: `src/example.js` | TODO: `test/example.test.js` | new | TODO: what a person can observe when it works |
+| `{{work.id}}:AC-001` | TODO: `src/example.js` | TODO: `test/example.test.js` | new | TODO: what a person can observe when it works |
+
+<!-- Fulfillment: new, modified, existing (the behaviour already exists at the listed paths), removed, test-only (the tests are the whole delivery; write - under Expected paths), document or configuration. Observable result: what a person can observe when the row is met. A plan that feeds several code steps adds a Steps column naming the step that delivers each row. -->
 
 ## Evidence and assumptions
 

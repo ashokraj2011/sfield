@@ -21,9 +21,11 @@ while placeholders remain.
 One row for each clause above, with exact repository-relative source and executable-test paths
 in backticks. If a clause truly cannot be tested, write `not-applicable:` and a specific reason.
 
-| Clause | Expected paths | Planned tests |
-|---|---|---|
-| `{{work.id}}:AC-001` | TODO: `src/example.js` | TODO: `test/example.test.js` |
+| Clause | Expected paths | Planned tests | Fulfillment | Observable result |
+|---|---|---|---|---|
+| `{{work.id}}:AC-001` | TODO: `src/example.js` | TODO: `test/example.test.js` | new | TODO: what a person can observe when it works |
+
+<!-- Fulfillment: new, modified, existing (the behaviour already exists at the listed paths), removed, test-only (the tests are the whole delivery; write - under Expected paths), document or configuration. Observable result: what a person can observe when the row is met. A plan that feeds several code steps adds a Steps column naming the step that delivers each row. -->
 
 ## Out of scope
 
