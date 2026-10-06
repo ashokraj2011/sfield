@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: 9bcb071a412b4cbd2fde60a3ab1f38a1743aaa0b
+  revision: 79ebe42df487a6d7c1d82a7e0a6d7a2d3b24d6d1
 workflow:
   version: 2
   inputsMode: enforce
@@ -345,6 +345,7 @@ workflow:
         - poc-automation
         - poc-explorer
         - poc-validator
+        - scenario-tester
       phases:
         - design-intake
         - design-inventory
@@ -354,6 +355,8 @@ workflow:
         - conformance
         - poc-ui-exploration
         - poc-validation
+        - scenario-check
+        - scenario-retest
       tools:
         - browser_navigate
         - browser_snapshot
@@ -882,6 +885,87 @@ workflow:
               - implementation
               - testing
               - conformance
+    document-test-repair:
+      label: Document-led acceptance & repair
+      description: Turn approved documents or screenshots into scenarios, test
+        existing behavior first, repair only demonstrated defects, and retest.
+        Completion requires an evidence-backed agent pass and human approval.
+        Browser tools are optional; unavailable tests never count as passes.
+        After two automatic rework rounds, stop for explicit human direction.
+      phases:
+        - document-intake
+        - scenario-check
+        - scenario-repair
+        - scenario-retest
+      plannedClaims:
+        mode: required
+        clausePhases:
+          - document-intake
+        owners:
+          scenario-repair: document-intake
+      documents:
+        allowedPhases:
+          - document-intake
+      decisions:
+        - id: existing-behavior
+          after: scenario-check
+          kind: branch
+          label: Does the existing behavior satisfy every approved scenario?
+          enforceConditions: true
+          inputs:
+            - name: verdict
+              label: Agent scenario verdict
+              values:
+                - pass
+                - repair
+                - blocked
+          routes:
+            - id: already-satisfied
+              label: Accept existing behavior — no repair
+              when:
+                verdict: pass
+              to: end
+              omits:
+                - responsibility: implement
+                  reason: Fresh scenario evidence demonstrates the approved behavior already
+                    exists; no product implementation is needed for this Story.
+                  authority: quality-reviewers
+            - id: repair-defect
+              label: Repair the evidenced defect
+              when:
+                verdict: repair
+              to: scenario-repair
+            - id: restore-test-access
+              label: Resolve blocked test access and recheck
+              to: scenario-check
+          maxRounds: 2
+        - id: repaired-behavior
+          after: scenario-retest
+          kind: branch
+          label: Do the repaired behavior and fresh tests satisfy every approved scenario?
+          enforceConditions: true
+          inputs:
+            - name: verdict
+              label: Agent scenario verdict
+              values:
+                - pass
+                - repair
+                - blocked
+          routes:
+            - id: accepted
+              label: Accept the repaired behavior
+              when:
+                verdict: pass
+              to: end
+            - id: repair-again
+              label: Repair the remaining evidenced defect
+              when:
+                verdict: repair
+              to: scenario-repair
+            - id: restore-test-access
+              label: Resolve blocked test access and retest
+              to: scenario-retest
+          maxRounds: 2
     poc-lite:
       label: POC Lite — local governed change
       description: A model-free four-checkpoint demonstration with repository-native
@@ -1873,6 +1957,160 @@ workflow:
           - implementation
           - verification
           - conformance
+    document-intake:
+      label: Documents and scenario intake
+      defaultTemplate: document-test-repair/intake.md
+      artifact:
+        path: artifacts/document-intake/intake.md
+        kind: requirements
+        minimumBytes: 500
+        validation:
+          requiredHeadings:
+            - Approved sources
+            - Scope and acceptance criteria
+            - Scenario matrix
+            - Test tool and authorized environment
+            - Planned implementation evidence
+            - Repair and acceptance agreement
+      authoringSkill: sf-document-intake
+      clarification:
+        mode: required
+        maxQuestions: 5
+        topics:
+          - source interpretation
+          - observable acceptance
+          - test tool
+          - authorized target
+          - repair boundary
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: clarify
+      writeScope: artifact-only
+      approval:
+        authorities:
+          - product-approvers
+        minimum: 1
+        rejectTo:
+          - document-intake
+      qualityCommands: []
+    scenario-check:
+      label: Test existing behavior
+      defaultTemplate: document-test-repair/check.md
+      artifact:
+        path: artifacts/scenario-check/scenario-results.md
+        kind: test-evidence
+        minimumBytes: 500
+        validation:
+          requiredHeadings:
+            - Pinned inputs and tested revision
+            - Tool execution and evidence
+            - Scenario results
+            - Agent verdict and repair request
+            - Human acceptance
+      inputs:
+        - document-intake
+      authoringSkill: sf-scenario-check
+      clarification:
+        mode: when-needed
+        maxQuestions: 3
+        topics:
+          - test access
+          - inconclusive evidence
+          - defect classification
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: analyze
+      writeScope: artifact-only
+      approval:
+        authorities:
+          - quality-reviewers
+        minimum: 1
+        rejectTo:
+          - document-intake
+          - scenario-check
+      qualityCommands: []
+    scenario-repair:
+      label: Repair code and tests
+      defaultTemplate: document-test-repair/repair.md
+      artifact:
+        path: artifacts/scenario-repair/implementation-summary.md
+        kind: implementation-summary
+        minimumBytes: 400
+        validation:
+          requiredHeadings:
+            - Approved defect and scope
+            - Changes and clause bindings
+            - Test results and regression evidence
+            - Remaining risks
+      inputs:
+        - document-intake
+        - scenario-check
+      clarification:
+        mode: when-needed
+        maxQuestions: 3
+        topics:
+          - root cause
+          - authorized scope
+          - repair risks
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: code
+      writeScope: source-and-artifact
+      approval:
+        authorities:
+          - engineering-reviewers
+        minimum: 1
+        rejectTo:
+          - document-intake
+          - scenario-repair
+      qualityCommands: []
+    scenario-retest:
+      label: Retest and accept
+      defaultTemplate: document-test-repair/check.md
+      artifact:
+        path: artifacts/scenario-retest/scenario-results.md
+        kind: test-evidence
+        minimumBytes: 500
+        validation:
+          requiredHeadings:
+            - Pinned inputs and tested revision
+            - Tool execution and evidence
+            - Scenario results
+            - Agent verdict and repair request
+            - Human acceptance
+      inputs:
+        - document-intake
+        - scenario-check
+        - scenario-repair
+      testEvidenceFrom: scenario-repair
+      authoringSkill: sf-scenario-check
+      clarification:
+        mode: when-needed
+        maxQuestions: 3
+        topics:
+          - test access
+          - inconclusive evidence
+          - remaining defects
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: analyze
+      writeScope: artifact-only
+      approval:
+        authorities:
+          - quality-reviewers
+        minimum: 1
+        rejectTo:
+          - document-intake
+          - scenario-retest
+      qualityCommands: []
     poc-intake:
       label: POC intent and environment
       defaultTemplate: poc-workflow/intake.md
@@ -2472,6 +2710,8 @@ assets:
     sha256: 184ad9effaad2977008687601def19a0677bb72c6a02365ef81b945f54ae6443
   .github/agents/developer.agent.md:
     sha256: 319bdfa6ac51ff128d8caad683f637f76c04818dc5fc7b05224d5275a76b8c41
+  .github/agents/document-analyst.agent.md:
+    sha256: d889e7a7ea57b049a0a1a97f778cfbcc66d22f8a2f1768ee36b2e87849b5431c
   .github/agents/mobile-architect.agent.md:
     sha256: 06685d32114d1278a825dfc9313d2c1ca6e4b84de9cf1c112b4b84f82367176d
   .github/agents/poc-analyst.agent.md:
@@ -2496,6 +2736,10 @@ assets:
     sha256: 84bba38e1fe4dfa812b213255283c202c8a96b81179841bb3cb909f073b99b39
   .github/agents/qa.agent.md:
     sha256: 1e1500d7ce6ccf22197bf77d7983f16ac7ad2617de2fa6bcd9dd08aae02ddf71
+  .github/agents/scenario-developer.agent.md:
+    sha256: 3e17401a1e2aaa531456145dfa765445cc937e210ede38fad08d89c10185133b
+  .github/agents/scenario-tester.agent.md:
+    sha256: 075a2f13c8867245d11729dc9c0b304a40683d88424c8bed9587d7a4dc1aa3f1
   singularity/agent-mappings.yml:
     sha256: 1b39a4f4caa3242749889a291e2259a361c815712bd762abde3db3cbe9f8a688
   singularity/impact.yml:
@@ -2540,6 +2784,12 @@ assets:
     sha256: e16cd8b47f472973823a1a53294c77ac6551285c4df75e916c739611c3bc1d23
   singularity/templates/common/verification.md:
     sha256: 31e8dc7c915c96c7bce79e3138af0537875f077350a13af5250e50c4c571728b
+  singularity/templates/document-test-repair/check.md:
+    sha256: 2dcb5121d1577a3a26ca6527f9107336b632600dab21c5fe4c215c23cb84f438
+  singularity/templates/document-test-repair/intake.md:
+    sha256: 93554c5483a2b117dfb48612a432531950b6c0c96c122d83d023344b23e37906
+  singularity/templates/document-test-repair/repair.md:
+    sha256: 51f9d673c5614e202ff9e40aa5e5dd2ba8042fbe87354dd502a0e5497bca2628
   singularity/templates/feature/design.md:
     sha256: 8b7455f464a7025efa92942c272a04e3c0a3ab2a4d3eb438703cc14e230bc856
   singularity/templates/feature/implementation-spec.md:
@@ -2720,6 +2970,7 @@ ownership:
       quick-fix: framework
       classic-delivery: framework
       spec-code-test-loop: framework
+      document-test-repair: framework
       poc-lite: framework
       benchmarking-a: framework
       benchmarking-b: framework
@@ -2746,6 +2997,10 @@ ownership:
       verify: framework
       testing: framework
       specification: framework
+      document-intake: framework
+      scenario-check: framework
+      scenario-repair: framework
+      scenario-retest: framework
       poc-lite-plan: framework
       poc-lite-act: framework
       poc-lite-verify: framework
@@ -2769,6 +3024,7 @@ ownership:
   assets:
     .github/agents/architect.agent.md: framework
     .github/agents/developer.agent.md: framework
+    .github/agents/document-analyst.agent.md: framework
     .github/agents/mobile-architect.agent.md: framework
     .github/agents/poc-analyst.agent.md: framework
     .github/agents/poc-automation.agent.md: framework
@@ -2781,6 +3037,8 @@ ownership:
     .github/agents/product-designer.agent.md: framework
     .github/agents/product-owner.agent.md: framework
     .github/agents/qa.agent.md: framework
+    .github/agents/scenario-developer.agent.md: framework
+    .github/agents/scenario-tester.agent.md: framework
     singularity/agent-mappings.yml: framework
     singularity/impact.yml: framework
     singularity/modelTiers.yml: framework
@@ -2803,6 +3061,9 @@ ownership:
     singularity/templates/common/implementation.md: framework
     singularity/templates/common/intake.md: framework
     singularity/templates/common/verification.md: framework
+    singularity/templates/document-test-repair/check.md: framework
+    singularity/templates/document-test-repair/intake.md: framework
+    singularity/templates/document-test-repair/repair.md: framework
     singularity/templates/feature/design.md: framework
     singularity/templates/feature/implementation-spec.md: framework
     singularity/templates/feature/intake.md: framework
