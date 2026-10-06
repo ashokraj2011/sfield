@@ -3,22 +3,22 @@
   "layout": "canonical-paths",
   "source": {
     "branch": "sflow/config",
-    "commit": "7e57d06c08879a33aca6efb9fe3663d14746c7b0"
+    "commit": "b544c3f9cc49e2e4153144d3a762afd32e7aced3"
   },
   "history": {
-    "branch": "sflow/config-history/7e57d06c08879a33aca6efb9fe3663d14746c7b0",
-    "commit": "7e57d06c08879a33aca6efb9fe3663d14746c7b0"
+    "branch": "sflow/config-history/b544c3f9cc49e2e4153144d3a762afd32e7aced3",
+    "commit": "b544c3f9cc49e2e4153144d3a762afd32e7aced3"
   },
   "product": {
     "version": "0.9.0",
-    "revision": "b8b7c5caf100b2265da793ff76ba0021db6e33fa"
+    "revision": "9bcb071a412b4cbd2fde60a3ab1f38a1743aaa0b"
   },
   "files": {
     ".github/agents/architect.agent.md": "184ad9effaad2977008687601def19a0677bb72c6a02365ef81b945f54ae6443",
     ".github/agents/developer.agent.md": "319bdfa6ac51ff128d8caad683f637f76c04818dc5fc7b05224d5275a76b8c41",
     ".github/agents/mobile-architect.agent.md": "06685d32114d1278a825dfc9313d2c1ca6e4b84de9cf1c112b4b84f82367176d",
-    ".github/agents/poc-analyst.agent.md": "7f4fe9ad6e2bcf0aeab4aa0e2bb5245b38bb1a0434f23b1b604f2869fd9590e8",
-    ".github/agents/poc-automation.agent.md": "5c113c502f9e02362ff280947747684130b9f0975391b6cbe27462e1faaac0f6",
+    ".github/agents/poc-analyst.agent.md": "94623517e943daa5cbab969fa1a50887319e34e68d826d06e23d17bd171ad2d9",
+    ".github/agents/poc-automation.agent.md": "a45c1645749fe9595d5b8bca9c620583f60a9fa34798e492764932d5411c435f",
     ".github/agents/poc-explorer.agent.md": "fc8ecbccd7fbfdcfcd318c45a1219bcb3354a09a87a30e941153df43ea390667",
     ".github/agents/poc-lite-implementer.agent.md": "f97cc8d1cfb1b920e4643337fcc6d5a2b44428249c39a475565015c28ba68a04",
     ".github/agents/poc-lite-planner.agent.md": "dbe9682cf65511b5d5ea77fecbb2abb1c3ea691c20961ab2faa046924ab16689",
@@ -156,13 +156,13 @@
       "mode": "100644"
     },
     ".github/agents/poc-analyst.agent.md": {
-      "sha256": "7f4fe9ad6e2bcf0aeab4aa0e2bb5245b38bb1a0434f23b1b604f2869fd9590e8",
-      "object": "c1c11c46d676d54aae7000a65f2836fc9902fcca",
+      "sha256": "94623517e943daa5cbab969fa1a50887319e34e68d826d06e23d17bd171ad2d9",
+      "object": "353470d2d5950f156b78f8258d9ec55b9c09090c",
       "mode": "100644"
     },
     ".github/agents/poc-automation.agent.md": {
-      "sha256": "5c113c502f9e02362ff280947747684130b9f0975391b6cbe27462e1faaac0f6",
-      "object": "4297b135ea528ba71583781bebc8b82bcddb966b",
+      "sha256": "a45c1645749fe9595d5b8bca9c620583f60a9fa34798e492764932d5411c435f",
+      "object": "e2516d0a8b400c0320670ae1464db54532f26e88",
       "mode": "100644"
     },
     ".github/agents/poc-explorer.agent.md": {

@@ -53,7 +53,3 @@ configured human approvals before offering the normal governed publication/PR ac
 the selected base branch or represent a prepared PR description as a created pull request.
 
 Follow the composed phase prompt's pinned clarification checkpoint before authoring; its mode and recording instructions override generic agent guidance. When clarification is allowed, focus on the active POC phase's authorized target, scenarios, and evidence gaps.
-clarification. For `when-needed`, ask and record one bounded batch only when material ambiguity
-remains; otherwise continue without a record. For `required`, use `ask_user`, wait, and record the
-accepted answers with `singularity-flow clarification record <phase> --response-file <json>` before
-authoring.
