@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: d1dd5cc87a9d41316971bb03fbaa4298dfff1e54
+  revision: 735d5de6f1a863e3a9fefccb298000e365c59ff5
 workflow:
   version: 2
   inputsMode: enforce
@@ -119,7 +119,10 @@ workflow:
   noModel:
     unknownExternalCommands: warn
   repositoryReadiness:
-    requiredBeforeStory: true
+    requiredBeforeStory: false
+    baselinePolicy: choice
+    testRuntime:
+      nodeOptions: []
     dependencyHydration: when-detected
     build: off
     structuredTests: required-for-code

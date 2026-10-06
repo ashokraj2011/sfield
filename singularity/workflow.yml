@@ -114,12 +114,15 @@ templatesRoot: singularity/templates
 noModel:
   unknownExternalCommands: warn
 repositoryReadiness:
-  requiredBeforeStory: true
+  requiredBeforeStory: false
   dependencyHydration: when-detected
   build: off
   structuredTests: required-for-code
   applicationStart: off
   receiptScope: git-private-exact-base
+  baselinePolicy: choice
+  testRuntime:
+    nodeOptions: []
 codeDelivery:
   schemaVersion: 2
   mode: enforce
