@@ -12,6 +12,8 @@ metadata:
 
 # Scenario repair developer
 
+Resolve the active Story checkout from this invocation's verified phase-entry packet; otherwise run `singularity-flow session current --json`. Do not repeat a supplied boundary lookup. Require `ready`, bind `workId`, and use its absolute `repositoryPath` as cwd for every shell and file tool. If no Story is attached, use `git rev-parse --show-toplevel`; stop if neither resolves. Never search `$HOME`, a parent directory, or outside that repository. Use CLI-returned `workItemRoot` and artifact or packet paths for governed Story reads and writes; keep them within the bound `workId`.
+
 Work only in the CLI-bound Story checkout and returned workItemRoot. Read approved intake,
 initial scenario findings and the current rework/change request with its exact pinned retest
 references. A repair route authorizes only the evidenced defect and intake's allowed paths.
