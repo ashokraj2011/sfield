@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: 90e8f457c4c8daac0d837982e79a9ae8f589f52f
+  revision: c664e5e8c1fa7249bd9e89abccaca1a231debb20
 workflow:
   version: 2
   inputsMode: enforce
@@ -346,6 +346,7 @@ workflow:
         - poc-explorer
         - poc-validator
         - scenario-tester
+        - demo-web-tester
       phases:
         - design-intake
         - design-inventory
@@ -357,6 +358,8 @@ workflow:
         - poc-validation
         - scenario-check
         - scenario-retest
+        - demo-web-check
+        - demo-web-retest
       tools:
         - browser_navigate
         - browser_snapshot
@@ -965,6 +968,89 @@ workflow:
             - id: restore-test-access
               label: Resolve blocked test access and retest
               to: scenario-retest
+          maxRounds: 2
+    demo-web-e2e-testing:
+      label: Demo Web E2E Testing
+      description: Compare a web application with approved screenshots and interaction
+        scenarios using custom agents and skills. Test existing code first,
+        repair demonstrated defects, then retest with fresh evidence. A passing
+        agent verdict and human acceptance are both required. Playwright or an
+        approved repository E2E runner can be used; two automatic backward
+        routes are followed by explicit human direction.
+      phases:
+        - demo-web-intake
+        - demo-web-check
+        - demo-web-repair
+        - demo-web-retest
+      plannedClaims:
+        mode: required
+        clausePhases:
+          - demo-web-intake
+        owners:
+          demo-web-repair: demo-web-intake
+      documents:
+        allowedPhases:
+          - demo-web-intake
+      decisions:
+        - id: demo-existing-web-behavior
+          after: demo-web-check
+          kind: branch
+          label: Does the current web application meet the approved screenshot and
+            behavior?
+          enforceConditions: true
+          inputs:
+            - name: verdict
+              label: Agent web E2E verdict
+              values:
+                - pass
+                - repair
+                - blocked
+          routes:
+            - id: already-satisfied
+              label: Accept existing web behavior — no repair
+              when:
+                verdict: pass
+              to: end
+              omits:
+                - responsibility: implement
+                  reason: Fresh web scenario evidence demonstrates the approved screenshot and
+                    behavior already match; no product repair is needed.
+                  authority: quality-reviewers
+            - id: repair-web-defect
+              label: Repair the demonstrated web defect
+              when:
+                verdict: repair
+              to: demo-web-repair
+            - id: restore-web-access
+              label: Restore authorized test access and recheck
+              to: demo-web-check
+          maxRounds: 2
+        - id: demo-repaired-web-behavior
+          after: demo-web-retest
+          kind: branch
+          label: Do fresh web tests and screenshot comparison pass after repair?
+          enforceConditions: true
+          inputs:
+            - name: verdict
+              label: Agent web E2E verdict
+              values:
+                - pass
+                - repair
+                - blocked
+          routes:
+            - id: accepted
+              label: Accept the tested web repair
+              when:
+                verdict: pass
+              to: end
+            - id: repair-web-again
+              label: Repair the remaining web defect
+              when:
+                verdict: repair
+              to: demo-web-repair
+            - id: restore-web-access
+              label: Restore authorized test access and retest
+              to: demo-web-retest
           maxRounds: 2
     poc-lite:
       label: POC Lite — local governed change
@@ -2111,6 +2197,162 @@ workflow:
           - document-intake
           - scenario-retest
       qualityCommands: []
+    demo-web-intake:
+      label: Screenshot and web scenario intake
+      defaultTemplate: demo-web-e2e-testing/intake.md
+      artifact:
+        path: artifacts/demo-web-intake/intake.md
+        kind: requirements
+        minimumBytes: 500
+        validation:
+          requiredHeadings:
+            - Approved screenshots
+            - Scope and acceptance criteria
+            - Scenario matrix
+            - Test environment and commands
+            - Planned implementation evidence
+            - Repair and acceptance agreement
+      authoringSkill: sf-document-intake
+      clarification:
+        mode: required
+        maxQuestions: 5
+        topics:
+          - screenshot interpretation
+          - visual tolerance
+          - interaction expectations
+          - test environment
+          - repair boundary
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: clarify
+      writeScope: artifact-only
+      approval:
+        authorities:
+          - product-approvers
+        minimum: 1
+        rejectTo:
+          - demo-web-intake
+      qualityCommands: []
+    demo-web-check:
+      label: Check current web application
+      defaultTemplate: demo-web-e2e-testing/check.md
+      artifact:
+        path: artifacts/demo-web-check/web-e2e-results.md
+        kind: test-evidence
+        minimumBytes: 500
+        validation:
+          requiredHeadings:
+            - Pinned inputs and tested revision
+            - Browser and test execution
+            - Screenshot comparison
+            - Scenario results
+            - Agent verdict and repair request
+            - Human acceptance
+      inputs:
+        - demo-web-intake
+      authoringSkill: sf-scenario-check
+      clarification:
+        mode: when-needed
+        maxQuestions: 3
+        topics:
+          - test access
+          - ambiguous screenshots
+          - defect classification
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: analyze
+      writeScope: artifact-only
+      approval:
+        authorities:
+          - quality-reviewers
+        minimum: 1
+        rejectTo:
+          - demo-web-intake
+          - demo-web-check
+      qualityCommands: []
+    demo-web-repair:
+      label: Repair web code and regression tests
+      defaultTemplate: demo-web-e2e-testing/repair.md
+      artifact:
+        path: artifacts/demo-web-repair/implementation-summary.md
+        kind: implementation-summary
+        minimumBytes: 400
+        validation:
+          requiredHeadings:
+            - Approved defect and scope
+            - Changes and clause bindings
+            - Test results and regression evidence
+            - Remaining risks
+      inputs:
+        - demo-web-intake
+        - demo-web-check
+      clarification:
+        mode: when-needed
+        maxQuestions: 3
+        topics:
+          - root cause
+          - allowed paths
+          - repair risks
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: code
+      writeScope: source-and-artifact
+      approval:
+        authorities:
+          - engineering-reviewers
+        minimum: 1
+        rejectTo:
+          - demo-web-intake
+          - demo-web-repair
+      qualityCommands: []
+    demo-web-retest:
+      label: Retest web behavior and accept
+      defaultTemplate: demo-web-e2e-testing/check.md
+      artifact:
+        path: artifacts/demo-web-retest/web-e2e-results.md
+        kind: test-evidence
+        minimumBytes: 500
+        validation:
+          requiredHeadings:
+            - Pinned inputs and tested revision
+            - Browser and test execution
+            - Screenshot comparison
+            - Scenario results
+            - Agent verdict and repair request
+            - Human acceptance
+      inputs:
+        - demo-web-intake
+        - demo-web-check
+        - demo-web-repair
+      testEvidenceFrom: demo-web-repair
+      authoringSkill: sf-scenario-check
+      clarification:
+        mode: when-needed
+        maxQuestions: 3
+        topics:
+          - test access
+          - inconclusive evidence
+          - remaining defects
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: analyze
+      writeScope: artifact-only
+      approval:
+        authorities:
+          - quality-reviewers
+        minimum: 1
+        rejectTo:
+          - demo-web-intake
+          - demo-web-retest
+      qualityCommands: []
     poc-intake:
       label: POC intent and environment
       defaultTemplate: poc-workflow/intake.md
@@ -2708,6 +2950,12 @@ workflow:
 assets:
   .github/agents/architect.agent.md:
     sha256: 184ad9effaad2977008687601def19a0677bb72c6a02365ef81b945f54ae6443
+  .github/agents/demo-web-analyst.agent.md:
+    sha256: 4bf52173acab7a379c75157795e1a37ff5deb8154dd88894d60f0e4fde857e3f
+  .github/agents/demo-web-developer.agent.md:
+    sha256: 1f6b44af2a0b2e15c8f8c39fd44812055baeda5fdb9faf6073b4aab1ee03684f
+  .github/agents/demo-web-tester.agent.md:
+    sha256: 33cd834531b9bada674063a86c6d0569e4ec0103926ae044b115544e9f6a480c
   .github/agents/developer.agent.md:
     sha256: 319bdfa6ac51ff128d8caad683f637f76c04818dc5fc7b05224d5275a76b8c41
   .github/agents/document-analyst.agent.md:
@@ -2784,6 +3032,12 @@ assets:
     sha256: e16cd8b47f472973823a1a53294c77ac6551285c4df75e916c739611c3bc1d23
   singularity/templates/common/verification.md:
     sha256: 31e8dc7c915c96c7bce79e3138af0537875f077350a13af5250e50c4c571728b
+  singularity/templates/demo-web-e2e-testing/check.md:
+    sha256: 31bc19257b108572d3043066a8747ade34dc0facb9bc75e013a5b5ded599e2c5
+  singularity/templates/demo-web-e2e-testing/intake.md:
+    sha256: 937e5b69f618050e79cb76e384994ba6349d8bbe59914c7d9117920af35e94f7
+  singularity/templates/demo-web-e2e-testing/repair.md:
+    sha256: 5cf8165f7981c55d1b6d2b6f09e23e0230261eeb98312de213f11b93091f332f
   singularity/templates/document-test-repair/check.md:
     sha256: 2dcb5121d1577a3a26ca6527f9107336b632600dab21c5fe4c215c23cb84f438
   singularity/templates/document-test-repair/intake.md:
@@ -2971,6 +3225,7 @@ ownership:
       classic-delivery: framework
       spec-code-test-loop: framework
       document-test-repair: framework
+      demo-web-e2e-testing: framework
       poc-lite: framework
       benchmarking-a: framework
       benchmarking-b: framework
@@ -3001,6 +3256,10 @@ ownership:
       scenario-check: framework
       scenario-repair: framework
       scenario-retest: framework
+      demo-web-intake: framework
+      demo-web-check: framework
+      demo-web-repair: framework
+      demo-web-retest: framework
       poc-lite-plan: framework
       poc-lite-act: framework
       poc-lite-verify: framework
@@ -3023,6 +3282,9 @@ ownership:
       figma: framework
   assets:
     .github/agents/architect.agent.md: framework
+    .github/agents/demo-web-analyst.agent.md: framework
+    .github/agents/demo-web-developer.agent.md: framework
+    .github/agents/demo-web-tester.agent.md: framework
     .github/agents/developer.agent.md: framework
     .github/agents/document-analyst.agent.md: framework
     .github/agents/mobile-architect.agent.md: framework
@@ -3061,6 +3323,9 @@ ownership:
     singularity/templates/common/implementation.md: framework
     singularity/templates/common/intake.md: framework
     singularity/templates/common/verification.md: framework
+    singularity/templates/demo-web-e2e-testing/check.md: framework
+    singularity/templates/demo-web-e2e-testing/intake.md: framework
+    singularity/templates/demo-web-e2e-testing/repair.md: framework
     singularity/templates/document-test-repair/check.md: framework
     singularity/templates/document-test-repair/intake.md: framework
     singularity/templates/document-test-repair/repair.md: framework
