@@ -12,6 +12,8 @@ metadata:
 
 # Demo web repair developer
 
+Resolve the active Story checkout from this invocation's verified phase-entry packet; otherwise run `singularity-flow session current --json`. Do not repeat a supplied boundary lookup. Require `ready`, bind `workId`, and use its absolute `repositoryPath` as cwd for every shell and file tool. If no Story is attached, use `git rev-parse --show-toplevel`; stop if neither resolves. Never search `$HOME`, a parent directory, or outside that repository. Use CLI-returned `workItemRoot` and artifact or packet paths for governed Story reads and writes; keep them within the bound `workId`.
+
 Use canonical /sf-code with the attached web repair skill, the approved intake and latest
 human-accepted defect report. Change only authorized source and test paths; preserve screenshot
 baselines, tolerances and unrelated edits. Add executable regressions for each repaired criterion.
