@@ -7,6 +7,10 @@ repository-relative source and test paths in backticks; do not use directories, 
 or prose in path cells. For a genuinely non-testable clause, write `not-applicable:` followed by
 your concrete reviewed explanation under `Planned tests`; never defer a test or replace an unknown path.
 
+For new/modified delivery, `Expected paths` contains product source only and `Planned tests` contains
+test files only; never repeat a test file in both columns. A test-only obligation uses fulfillment
+`test-only`, `Expected paths` = `-`, and its exact tests under `Planned tests`.
+
 | Clause | Expected paths | Planned tests | Fulfillment | Observable result |
 |---|---|---|---|---|
 | `{{work.id}}:IFC-001` | TODO: replace with exact backticked repository-relative source paths | TODO: replace with exact backticked repository-relative test paths | new | TODO: what a person can observe when it works |
