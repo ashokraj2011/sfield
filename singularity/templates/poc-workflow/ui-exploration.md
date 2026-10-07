@@ -47,13 +47,14 @@ Separate application defects, access blockers, environment failures, and unknown
 Translate the approved `[POC:AC-nnn]` clauses and observed material risks into the exact repository
 contract for the next test-generation phase. Add exactly one row for every authoritative clause,
 using its fully qualified ID. List only exact repository-relative source and test paths in backticks;
-do not use directories, globs, module names, or prose in path cells. Here, `Expected paths` identifies
-the repository-owned test seam or helper expected to change; it never authorizes product-code changes.
+do not use directories, globs, module names, or prose in path cells. This workflow's test generation
+uses fulfillment `test-only`, `Expected paths` = `-`, and the exact test files under `Planned tests`.
+Never repeat a test file in both columns or authorize product-code changes through this row.
 For a genuinely non-testable clause, write `not-applicable:` followed by your concrete reviewed
 explanation under `Planned tests`; never defer a test or replace an unknown path with that disposition.
 
 | Clause | Expected paths | Planned tests | Fulfillment | Observable result |
 |---|---|---|---|---|
-| `POC:AC-001` | TODO: replace with exact backticked repository-relative test-automation paths | TODO: replace with exact backticked repository-relative Playwright test paths | new | TODO: what a person can observe when it works |
+| `POC:AC-001` | - | TODO: replace with exact backticked repository-relative Playwright test paths | test-only | TODO: what a person can observe when it works |
 
 <!-- Fulfillment: new, modified, existing (behaviour already at the listed paths), removed, test-only (tests are the whole delivery; Expected paths is -), document, configuration, or evidence (retained files under this Story's evidence/ directory). Do not put screenshots in Planned tests or product-source rows. An evidence AC needs a primary visual/inspection Verification contract; file presence is not a visual pass. Observable result states what is observed. Multi-code-step plans add Steps to allocate each row. -->

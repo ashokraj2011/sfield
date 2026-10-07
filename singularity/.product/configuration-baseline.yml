@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: 39de87b5fda10fb17bc2007383364dfddc37e1b0
+  revision: 8ccb822ad1ec2933c0a0550e088ae0ed1e317b9a
 workflow:
   version: 2
   inputsMode: enforce
@@ -3001,7 +3001,7 @@ assets:
   singularity/templates/benchmark/conformance.md:
     sha256: 6a767297e22cab241d2dfff38c6c5b3fe8298e21c65399825c657f014411ced8
   singularity/templates/benchmark/design.md:
-    sha256: 9c06dcf0182701345b6f4f6af8fe4b7740fc080afe23776d4a6d8749196cca26
+    sha256: fe3cdb987ebbe39d1e42464cf176f437e45287b589ffc66456c7ba4438bc025d
   singularity/templates/benchmark/implementation.md:
     sha256: e25ab3d9104c4ddaef541191d544ea032c35f551b9538ad77a38628ca1a58db6
   singularity/templates/benchmark/intake.md:
@@ -3011,7 +3011,7 @@ assets:
   singularity/templates/bugfix/fix-design.md:
     sha256: cee7774777fd55a3740ebd9f2cafd100702d52617ae307f80e35764229c7867e
   singularity/templates/bugfix/fix-spec.md:
-    sha256: fceed5a1f12fc2be09ec56f0bd1c165efabe8f335df4cf88e6258694bb513e18
+    sha256: f62cb2f1e2d275d6826b2f47c356db23a006594b3673d3727af387169851067d
   singularity/templates/bugfix/intake.md:
     sha256: c0aa89555e400e9c78c782021b1928175607f32ad20773c70fae04b28ced320c
   singularity/templates/bugfix/reproduction.md:
@@ -3047,7 +3047,7 @@ assets:
   singularity/templates/feature/design.md:
     sha256: 8b7455f464a7025efa92942c272a04e3c0a3ab2a4d3eb438703cc14e230bc856
   singularity/templates/feature/implementation-spec.md:
-    sha256: 033e2f8d2af5e8d762fb1cdbd1bcb5fcb8ba7ec629d158761be832f875cc6014
+    sha256: 775affeb36ab41074d9953109f7459efca860c5d31465c8d5592ad986f311adf
   singularity/templates/feature/intake.md:
     sha256: eb53814f46f12ea3d93d1629164bd7ff22a3a54feceff7f7dd55670caeb5dbab
   singularity/templates/feature/requirements.md:
@@ -3063,7 +3063,7 @@ assets:
   singularity/templates/figma-mobile/implementation.md:
     sha256: 69b5b75886dcc41da4e3063c7ceb6ff805251f98dd40ee41b2bf5de660dc74da
   singularity/templates/figma-mobile/mobile-spec.md:
-    sha256: 9a8203f044109f068ea6282a7352ac6a69eb8cc90139252610f60e106cb6b521
+    sha256: 5f25f3417be372a7073ac5ba2676b0e47ea302ff54d1db64270448d635db6d98
   singularity/templates/figma-mobile/visual-verification.md:
     sha256: aca2f864d6cc1b5321e466f80d0751ab4874049271b2fabab03dde7b0ec0e835
   singularity/templates/initiatives/adr-log.md:
@@ -3187,7 +3187,7 @@ assets:
   singularity/templates/poc-workflow/test-generation.md:
     sha256: 6fa0c17056fe263eb9f47699a84a0759a899b8e67c35a3d53df8961f1ca59b25
   singularity/templates/poc-workflow/ui-exploration.md:
-    sha256: 43e53c4476249bdd4a9b8af681ca77529d163ec66680d6c4514b0731b9cb1182
+    sha256: ba1d1918737d8753d51c1d59b368eab9980dbf0b587ddaab88174c68bdd986b1
   singularity/templates/poc-workflow/validation.md:
     sha256: b1d121afbd49c09538d221cbac60b352a21f7eb7699bc4cba08d35b88ba47fb6
   singularity/templates/quick-fix/implement.md:
@@ -3205,7 +3205,7 @@ assets:
   singularity/templates/spec-driven/convergence.md:
     sha256: eb257477afca0229ed858875499736c57498015aaee0a527b714356819a9dde2
   singularity/templates/spec-driven/plan.md:
-    sha256: d18e7af418ac8b89af1df8214c015d23828e5c0d9cfad65123c1d37579f295e5
+    sha256: ea181c89f78780be53165f1fbb4436efd4d5ed888e1286765f1bcb938bd06d21
   singularity/templates/spec-driven/release.md:
     sha256: 3d6717eace80085585d04c9c3f5c67f10d7a2e9c4e535a862c8b5aa900d556fe
   singularity/templates/spec-driven/spec.md:

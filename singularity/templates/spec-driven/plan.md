@@ -36,6 +36,9 @@ TODO: Explain how each authoritative clause will be proved. Add exactly one row 
 fully qualified ID (for example, `{{work.id}}:REQ-001`, never only `REQ-001`). `Expected paths` and
 `Planned tests` must contain exact repository-relative paths in backticks; directories, globs, module
 names, and prose are not paths. Multiple exact paths may be listed as separate backticked values.
+For new/modified delivery, `Expected paths` contains product source only and `Planned tests` contains
+test files only; never repeat a test file in both columns. A test-only obligation uses fulfillment
+`test-only`, `Expected paths` = `-`, and its exact tests under `Planned tests`.
 For a genuinely non-testable clause, write `not-applicable:` followed by your concrete reviewed
 explanation in `Planned tests`. Do not use it to defer a test or to replace an unknown path.
 
