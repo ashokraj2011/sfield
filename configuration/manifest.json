@@ -3,18 +3,21 @@
   "layout": "canonical-paths",
   "source": {
     "branch": "sflow/config",
-    "commit": "9d7713acf03892c0b78da4b4eca1d5c72072b171"
+    "commit": "3d4b64c9c3df51525330d57796d98a5c381b1021"
   },
   "history": {
-    "branch": "sflow/config-history/9d7713acf03892c0b78da4b4eca1d5c72072b171",
-    "commit": "9d7713acf03892c0b78da4b4eca1d5c72072b171"
+    "branch": "sflow/config-history/3d4b64c9c3df51525330d57796d98a5c381b1021",
+    "commit": "3d4b64c9c3df51525330d57796d98a5c381b1021"
   },
   "product": {
     "version": "0.9.0",
-    "revision": "90e8f457c4c8daac0d837982e79a9ae8f589f52f"
+    "revision": "c664e5e8c1fa7249bd9e89abccaca1a231debb20"
   },
   "files": {
     ".github/agents/architect.agent.md": "184ad9effaad2977008687601def19a0677bb72c6a02365ef81b945f54ae6443",
+    ".github/agents/demo-web-analyst.agent.md": "4bf52173acab7a379c75157795e1a37ff5deb8154dd88894d60f0e4fde857e3f",
+    ".github/agents/demo-web-developer.agent.md": "1f6b44af2a0b2e15c8f8c39fd44812055baeda5fdb9faf6073b4aab1ee03684f",
+    ".github/agents/demo-web-tester.agent.md": "33cd834531b9bada674063a86c6d0569e4ec0103926ae044b115544e9f6a480c",
     ".github/agents/developer.agent.md": "319bdfa6ac51ff128d8caad683f637f76c04818dc5fc7b05224d5275a76b8c41",
     ".github/agents/document-analyst.agent.md": "d889e7a7ea57b049a0a1a97f778cfbcc66d22f8a2f1768ee36b2e87849b5431c",
     ".github/agents/mobile-architect.agent.md": "06685d32114d1278a825dfc9313d2c1ca6e4b84de9cf1c112b4b84f82367176d",
@@ -55,6 +58,9 @@
     "singularity/templates/common/implementation.md": "cf46a21cdcb12035defbb5b6a74c7acd6c6d1e751556964f416f27bb5acb5482",
     "singularity/templates/common/intake.md": "e16cd8b47f472973823a1a53294c77ac6551285c4df75e916c739611c3bc1d23",
     "singularity/templates/common/verification.md": "31e8dc7c915c96c7bce79e3138af0537875f077350a13af5250e50c4c571728b",
+    "singularity/templates/demo-web-e2e-testing/check.md": "31bc19257b108572d3043066a8747ade34dc0facb9bc75e013a5b5ded599e2c5",
+    "singularity/templates/demo-web-e2e-testing/intake.md": "937e5b69f618050e79cb76e384994ba6349d8bbe59914c7d9117920af35e94f7",
+    "singularity/templates/demo-web-e2e-testing/repair.md": "5cf8165f7981c55d1b6d2b6f09e23e0230261eeb98312de213f11b93091f332f",
     "singularity/templates/document-test-repair/check.md": "2dcb5121d1577a3a26ca6527f9107336b632600dab21c5fe4c215c23cb84f438",
     "singularity/templates/document-test-repair/intake.md": "93554c5483a2b117dfb48612a432531950b6c0c96c122d83d023344b23e37906",
     "singularity/templates/document-test-repair/repair.md": "51f9d673c5614e202ff9e40aa5e5dd2ba8042fbe87354dd502a0e5497bca2628",
@@ -143,12 +149,27 @@
     "singularity/templates/spec-driven/spec.md": "55b0d6c4c9aa5ba19739493825f6c993f03d63bed9e1a5e2bb7d5c099b8b91bb",
     "singularity/templates/starter-packs/skp-team-notes/draft-input.json": "fbc136911e7dfecf14be06091b6d759770fa72c133c39de74710511bfee57410",
     "singularity/templates/starter-packs/skp-team-notes/README.md": "ab3e66d1654df81922a6022c491ac85868cb3b644e0eace77c4f9089c4f599ea",
-    "singularity/workflow.yml": "29625096142ebce7fdb85dd984d1ff8fbc7e1c423b04bb8f691c10e45f823b92"
+    "singularity/workflow.yml": "7c294a6b3ead06c4fe954407686486e37f7c7bc7c870582abbf73f5b60351816"
   },
   "assets": {
     ".github/agents/architect.agent.md": {
       "sha256": "184ad9effaad2977008687601def19a0677bb72c6a02365ef81b945f54ae6443",
       "object": "103d78c244c6127d95488ec9f7efdd9dd9b950a2",
+      "mode": "100644"
+    },
+    ".github/agents/demo-web-analyst.agent.md": {
+      "sha256": "4bf52173acab7a379c75157795e1a37ff5deb8154dd88894d60f0e4fde857e3f",
+      "object": "944e2c07c6b261c8466bfea43a3538bf780cdae0",
+      "mode": "100644"
+    },
+    ".github/agents/demo-web-developer.agent.md": {
+      "sha256": "1f6b44af2a0b2e15c8f8c39fd44812055baeda5fdb9faf6073b4aab1ee03684f",
+      "object": "0710f69bd12721ae1e07b3028676a475dd690641",
+      "mode": "100644"
+    },
+    ".github/agents/demo-web-tester.agent.md": {
+      "sha256": "33cd834531b9bada674063a86c6d0569e4ec0103926ae044b115544e9f6a480c",
+      "object": "b8457666a3aee9259aa3267343e4f4b0e05e9896",
       "mode": "100644"
     },
     ".github/agents/developer.agent.md": {
@@ -349,6 +370,21 @@
     "singularity/templates/common/verification.md": {
       "sha256": "31e8dc7c915c96c7bce79e3138af0537875f077350a13af5250e50c4c571728b",
       "object": "abb73cd7d3a4f918fd755511b82cb2462b78017c",
+      "mode": "100644"
+    },
+    "singularity/templates/demo-web-e2e-testing/check.md": {
+      "sha256": "31bc19257b108572d3043066a8747ade34dc0facb9bc75e013a5b5ded599e2c5",
+      "object": "034397637afd92b7bef8941e170e5b3c5a66af7a",
+      "mode": "100644"
+    },
+    "singularity/templates/demo-web-e2e-testing/intake.md": {
+      "sha256": "937e5b69f618050e79cb76e384994ba6349d8bbe59914c7d9117920af35e94f7",
+      "object": "61c460c2aff1dedf258ec3dace775e1342ede276",
+      "mode": "100644"
+    },
+    "singularity/templates/demo-web-e2e-testing/repair.md": {
+      "sha256": "5cf8165f7981c55d1b6d2b6f09e23e0230261eeb98312de213f11b93091f332f",
+      "object": "84d8e9c4129417ff515ffe4d678313a4799f39a9",
       "mode": "100644"
     },
     "singularity/templates/document-test-repair/check.md": {
@@ -792,8 +828,8 @@
       "mode": "100644"
     },
     "singularity/workflow.yml": {
-      "sha256": "29625096142ebce7fdb85dd984d1ff8fbc7e1c423b04bb8f691c10e45f823b92",
-      "object": "6967da5fc267073717db138e0956354fca50bdbf",
+      "sha256": "7c294a6b3ead06c4fe954407686486e37f7c7bc7c870582abbf73f5b60351816",
+      "object": "49e037e0115468afee7742e0d2278a208a4980d4",
       "mode": "100644"
     }
   }

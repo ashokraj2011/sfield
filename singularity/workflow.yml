@@ -341,6 +341,7 @@ mcpServers:
       - poc-explorer
       - poc-validator
       - scenario-tester
+      - demo-web-tester
     phases:
       - design-intake
       - design-inventory
@@ -352,6 +353,8 @@ mcpServers:
       - poc-validation
       - scenario-check
       - scenario-retest
+      - demo-web-check
+      - demo-web-retest
     tools:
       - browser_navigate
       - browser_snapshot
@@ -1445,6 +1448,82 @@ workTypes:
           - id: restore-test-access
             label: Resolve blocked test access and retest
             to: scenario-retest
+        maxRounds: 2
+  demo-web-e2e-testing:
+    label: Demo Web E2E Testing
+    description: Compare a web application with approved screenshots and interaction scenarios using custom agents and skills. Test existing code first, repair demonstrated defects, then retest with fresh evidence. A passing agent verdict and human acceptance are both required. Playwright or an approved repository E2E runner can be used; two automatic backward routes are followed by explicit human direction.
+    phases:
+      - demo-web-intake
+      - demo-web-check
+      - demo-web-repair
+      - demo-web-retest
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - demo-web-intake
+      owners:
+        demo-web-repair: demo-web-intake
+    documents:
+      allowedPhases:
+        - demo-web-intake
+    decisions:
+      - id: demo-existing-web-behavior
+        after: demo-web-check
+        kind: branch
+        label: Does the current web application meet the approved screenshot and behavior?
+        enforceConditions: true
+        inputs:
+          - name: verdict
+            label: Agent web E2E verdict
+            values:
+              - pass
+              - repair
+              - blocked
+        routes:
+          - id: already-satisfied
+            label: Accept existing web behavior — no repair
+            when:
+              verdict: pass
+            to: end
+            omits:
+              - responsibility: implement
+                reason: Fresh web scenario evidence demonstrates the approved screenshot and behavior already match; no product repair is needed.
+                authority: quality-reviewers
+          - id: repair-web-defect
+            label: Repair the demonstrated web defect
+            when:
+              verdict: repair
+            to: demo-web-repair
+          - id: restore-web-access
+            label: Restore authorized test access and recheck
+            to: demo-web-check
+        maxRounds: 2
+      - id: demo-repaired-web-behavior
+        after: demo-web-retest
+        kind: branch
+        label: Do fresh web tests and screenshot comparison pass after repair?
+        enforceConditions: true
+        inputs:
+          - name: verdict
+            label: Agent web E2E verdict
+            values:
+              - pass
+              - repair
+              - blocked
+        routes:
+          - id: accepted
+            label: Accept the tested web repair
+            when:
+              verdict: pass
+            to: end
+          - id: repair-web-again
+            label: Repair the remaining web defect
+            when:
+              verdict: repair
+            to: demo-web-repair
+          - id: restore-web-access
+            label: Restore authorized test access and retest
+            to: demo-web-retest
         maxRounds: 2
 phases:
   intake:
@@ -2674,6 +2753,162 @@ phases:
       rejectTo:
         - document-intake
         - scenario-retest
+    qualityCommands: []
+  demo-web-intake:
+    label: Screenshot and web scenario intake
+    defaultTemplate: demo-web-e2e-testing/intake.md
+    artifact:
+      path: artifacts/demo-web-intake/intake.md
+      kind: requirements
+      minimumBytes: 500
+      validation:
+        requiredHeadings:
+          - Approved screenshots
+          - Scope and acceptance criteria
+          - Scenario matrix
+          - Test environment and commands
+          - Planned implementation evidence
+          - Repair and acceptance agreement
+    authoringSkill: sf-document-intake
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - screenshot interpretation
+        - visual tolerance
+        - interaction expectations
+        - test environment
+        - repair boundary
+    worldModel:
+      views: []
+      depth: quick
+    generation:
+      task: clarify
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - product-approvers
+      minimum: 1
+      rejectTo:
+        - demo-web-intake
+    qualityCommands: []
+  demo-web-check:
+    label: Check current web application
+    defaultTemplate: demo-web-e2e-testing/check.md
+    artifact:
+      path: artifacts/demo-web-check/web-e2e-results.md
+      kind: test-evidence
+      minimumBytes: 500
+      validation:
+        requiredHeadings:
+          - Pinned inputs and tested revision
+          - Browser and test execution
+          - Screenshot comparison
+          - Scenario results
+          - Agent verdict and repair request
+          - Human acceptance
+    inputs:
+      - demo-web-intake
+    authoringSkill: sf-scenario-check
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - test access
+        - ambiguous screenshots
+        - defect classification
+    worldModel:
+      views: []
+      depth: quick
+    generation:
+      task: analyze
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - demo-web-intake
+        - demo-web-check
+    qualityCommands: []
+  demo-web-repair:
+    label: Repair web code and regression tests
+    defaultTemplate: demo-web-e2e-testing/repair.md
+    artifact:
+      path: artifacts/demo-web-repair/implementation-summary.md
+      kind: implementation-summary
+      minimumBytes: 400
+      validation:
+        requiredHeadings:
+          - Approved defect and scope
+          - Changes and clause bindings
+          - Test results and regression evidence
+          - Remaining risks
+    inputs:
+      - demo-web-intake
+      - demo-web-check
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - root cause
+        - allowed paths
+        - repair risks
+    worldModel:
+      views: []
+      depth: quick
+    generation:
+      task: code
+    writeScope: source-and-artifact
+    approval:
+      authorities:
+        - engineering-reviewers
+      minimum: 1
+      rejectTo:
+        - demo-web-intake
+        - demo-web-repair
+    qualityCommands: []
+  demo-web-retest:
+    label: Retest web behavior and accept
+    defaultTemplate: demo-web-e2e-testing/check.md
+    artifact:
+      path: artifacts/demo-web-retest/web-e2e-results.md
+      kind: test-evidence
+      minimumBytes: 500
+      validation:
+        requiredHeadings:
+          - Pinned inputs and tested revision
+          - Browser and test execution
+          - Screenshot comparison
+          - Scenario results
+          - Agent verdict and repair request
+          - Human acceptance
+    inputs:
+      - demo-web-intake
+      - demo-web-check
+      - demo-web-repair
+    testEvidenceFrom: demo-web-repair
+    authoringSkill: sf-scenario-check
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - test access
+        - inconclusive evidence
+        - remaining defects
+    worldModel:
+      views: []
+      depth: quick
+    generation:
+      task: analyze
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - demo-web-intake
+        - demo-web-retest
     qualityCommands: []
 governance:
   requireAcceptanceCriteriaTags: true
