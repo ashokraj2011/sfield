@@ -371,6 +371,29 @@ mcpServers:
     evidence:
       captureToolCalls: true
       captureResults: true
+  demo-playwright:
+    label: Demo acceptance browser
+    hostReference: playwright
+    agents:
+      - demo-code-checker
+    phases:
+      - demo-check
+    tools:
+      - browser_navigate
+      - browser_snapshot
+      - browser_click
+      - browser_fill_form
+      - browser_hover
+      - browser_press_key
+      - browser_resize
+      - browser_take_screenshot
+      - browser_console_messages
+      - browser_network_requests
+    required: false
+    approval: confirm
+    evidence:
+      captureToolCalls: true
+      captureResults: true
 approvalSecurity:
   profile: team
   allowSelfApproval: true
@@ -1525,6 +1548,80 @@ workTypes:
             label: Restore authorized test access and retest
             to: demo-web-retest
         maxRounds: 2
+  demo-check-repair-close:
+    label: Demo — Check, Repair & Close
+    description: Four phases with agent-attached custom skills. Capture screenshots, documents and observable scenarios; check existing code first; repair demonstrated defects and return to checking; close with a retained report only after a fresh pass and human acceptance. Automatic routing retains human checkpoints. Three backward routes per decision require renewed human direction, never a false pass.
+    phases:
+      - demo-intake
+      - demo-check
+      - demo-repair
+      - demo-close
+    omits:
+      - responsibility: implement
+        reason: The approved final check proves current code meets the scenarios; retained repair history is reported separately and no additional implementation is needed to close.
+        authority: quality-reviewers
+    plannedClaims:
+      mode: required
+      clausePhases:
+        - demo-intake
+      owners:
+        demo-repair: demo-intake
+    documents:
+      allowedPhases:
+        - demo-intake
+    decisions:
+      - id: demo-check-result
+        after: demo-check
+        kind: branch
+        label: Does fresh evidence satisfy every approved scenario?
+        enforceConditions: true
+        inputs:
+          - name: verdict
+            label: Evidence-backed checker verdict
+            values:
+              - pass
+              - repair
+              - blocked
+        routes:
+          - id: demo-pass-to-close
+            label: Accept the checked behavior and prepare closing documents
+            when:
+              verdict: pass
+            to: demo-close
+            omits:
+              - responsibility: implement
+                reason: Fresh checks demonstrate the current code already meets the approved scenarios, including any retained earlier repairs; no additional implementation is needed on this route.
+                authority: quality-reviewers
+          - id: demo-repair-defect
+            label: Repair the demonstrated defect
+            when:
+              verdict: repair
+            to: demo-repair
+          - id: demo-recheck-access
+            label: Resolve unavailable evidence or access and recheck
+            to: demo-check
+        maxRounds: 3
+      - id: demo-repair-handoff
+        after: demo-repair
+        kind: branch
+        label: Retest the repair or return changed scope to intake
+        enforceConditions: true
+        inputs:
+          - name: next
+            label: Reviewed repair handoff
+            values:
+              - recheck
+              - revise-intake
+        routes:
+          - id: demo-retest-repair
+            label: Independently check the repaired code
+            when:
+              next: recheck
+            to: demo-check
+          - id: demo-revise-intake
+            label: Review changed intent or repair scope
+            to: demo-intake
+        maxRounds: 3
 phases:
   intake:
     label: Intake
@@ -2909,6 +3006,163 @@ phases:
       rejectTo:
         - demo-web-intake
         - demo-web-retest
+    qualityCommands: []
+  demo-intake:
+    label: Intake and acceptance agreement
+    defaultTemplate: demo-check-repair-close/intake.md
+    artifact:
+      path: artifacts/demo-intake/intake.md
+      kind: requirements
+      minimumBytes: 500
+      validation:
+        requiredHeadings:
+          - Approved sources
+          - Scope and acceptance criteria
+          - Scenario matrix
+          - Test environment and commands
+          - Planned implementation evidence
+          - Routing and human checkpoints
+    authoringSkill: sf-document-intake
+    clarification:
+      mode: required
+      maxQuestions: 5
+      topics:
+        - source interpretation
+        - expected behavior
+        - test environment
+        - repair scope
+        - human checkpoints
+    worldModel:
+      views: []
+      depth: quick
+    generation:
+      task: clarify
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - product-approvers
+      minimum: 1
+      rejectTo:
+        - demo-intake
+    qualityCommands: []
+  demo-check:
+    label: Check code against approved scenarios
+    defaultTemplate: demo-check-repair-close/check.md
+    artifact:
+      path: artifacts/demo-check/check-results.md
+      kind: test-evidence
+      minimumBytes: 500
+      validation:
+        requiredHeadings:
+          - Pinned inputs and tested revision
+          - Test execution and evidence
+          - Source and visual comparison
+          - Scenario results
+          - Verdict and repair request
+          - Human checkpoint
+    inputs:
+      - demo-intake
+    authoringSkill: sf-scenario-check
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - test access
+        - inconclusive evidence
+        - defect classification
+    worldModel:
+      views: []
+      depth: quick
+    generation:
+      task: analyze
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - demo-intake
+        - demo-check
+    qualityCommands: []
+  demo-repair:
+    label: Repair code and regression tests
+    defaultTemplate: demo-check-repair-close/repair.md
+    artifact:
+      path: artifacts/demo-repair/implementation-summary.md
+      kind: implementation-summary
+      minimumBytes: 400
+      validation:
+        requiredHeadings:
+          - Agent brief
+          - Approved defect and scope
+          - Changes and clause bindings
+          - Test results and regression evidence
+          - Handoff and remaining risks
+    inputs:
+      - demo-intake
+      - demo-check
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - root cause
+        - allowed paths
+        - repair risks
+    worldModel:
+      views: []
+      depth: quick
+    generation:
+      task: code
+    writeScope: source-and-artifact
+    approval:
+      authorities:
+        - engineering-reviewers
+      minimum: 1
+      rejectTo:
+        - demo-intake
+        - demo-repair
+    qualityCommands: []
+  demo-close:
+    label: Closing documents and human acceptance
+    defaultTemplate: demo-check-repair-close/close.md
+    artifact:
+      path: artifacts/demo-close/closing-report.md
+      kind: publication-review
+      minimumBytes: 500
+      validation:
+        requiredHeadings:
+          - Agent brief
+          - Approved scope and final revision
+          - Final check and evidence
+          - Repair history and no-change accounting
+          - Residual risks and operational handoff
+          - Human closing decision
+    inputs:
+      - demo-intake
+      - demo-check
+      - phase: demo-repair
+        optional: true
+    clarification:
+      mode: when-needed
+      maxQuestions: 3
+      topics:
+        - residual risk
+        - final acceptance
+        - operational handoff
+    worldModel:
+      views: []
+      depth: quick
+    generation:
+      task: summarize
+    writeScope: artifact-only
+    approval:
+      authorities:
+        - quality-reviewers
+      minimum: 1
+      rejectTo:
+        - demo-intake
+        - demo-check
+        - demo-close
     qualityCommands: []
 governance:
   requireAcceptanceCriteriaTags: true

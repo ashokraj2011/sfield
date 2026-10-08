@@ -1,0 +1,13 @@
+attachments:
+  - skill: demo-web-screenshot-intake
+    agent: demo-web-analyst
+    steps: [demo-web-intake]
+    use: Before writing the screenshot acceptance contract
+  - skill: demo-web-screenshot-check
+    agent: demo-web-tester
+    steps: [demo-web-check, demo-web-retest]
+    use: On every initial check and fresh retest
+  - skill: demo-web-defect-repair
+    agent: demo-web-developer
+    steps: [demo-web-repair]
+    use: Before editing code and before publication
