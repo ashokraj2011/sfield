@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: 69b9e9e5cdc171220b59845fc1584b55b5d85ac0
+  revision: 35e901e97211b7afa8814807d90a29e8425c66ea
 workflow:
   version: 2
   inputsMode: enforce
@@ -360,6 +360,29 @@ workflow:
         - scenario-retest
         - demo-web-check
         - demo-web-retest
+      tools:
+        - browser_navigate
+        - browser_snapshot
+        - browser_click
+        - browser_fill_form
+        - browser_hover
+        - browser_press_key
+        - browser_resize
+        - browser_take_screenshot
+        - browser_console_messages
+        - browser_network_requests
+      required: false
+      approval: confirm
+      evidence:
+        captureToolCalls: true
+        captureResults: true
+    demo-playwright:
+      label: Demo acceptance browser
+      hostReference: playwright
+      agents:
+        - demo-code-checker
+      phases:
+        - demo-check
       tools:
         - browser_navigate
         - browser_snapshot
@@ -1052,6 +1075,89 @@ workflow:
               label: Restore authorized test access and retest
               to: demo-web-retest
           maxRounds: 2
+    demo-check-repair-close:
+      label: Demo — Check, Repair & Close
+      description: Four phases with agent-attached custom skills. Capture screenshots,
+        documents and observable scenarios; check existing code first; repair
+        demonstrated defects and return to checking; close with a retained
+        report only after a fresh pass and human acceptance. Automatic routing
+        retains human checkpoints. Three backward routes per decision require
+        renewed human direction, never a false pass.
+      phases:
+        - demo-intake
+        - demo-check
+        - demo-repair
+        - demo-close
+      omits:
+        - responsibility: implement
+          reason: The approved final check proves current code meets the scenarios;
+            retained repair history is reported separately and no additional
+            implementation is needed to close.
+          authority: quality-reviewers
+      plannedClaims:
+        mode: required
+        clausePhases:
+          - demo-intake
+        owners:
+          demo-repair: demo-intake
+      documents:
+        allowedPhases:
+          - demo-intake
+      decisions:
+        - id: demo-check-result
+          after: demo-check
+          kind: branch
+          label: Does fresh evidence satisfy every approved scenario?
+          enforceConditions: true
+          inputs:
+            - name: verdict
+              label: Evidence-backed checker verdict
+              values:
+                - pass
+                - repair
+                - blocked
+          routes:
+            - id: demo-pass-to-close
+              label: Accept the checked behavior and prepare closing documents
+              when:
+                verdict: pass
+              to: demo-close
+              omits:
+                - responsibility: implement
+                  reason: Fresh checks demonstrate the current code already meets the approved
+                    scenarios, including any retained earlier repairs; no
+                    additional implementation is needed on this route.
+                  authority: quality-reviewers
+            - id: demo-repair-defect
+              label: Repair the demonstrated defect
+              when:
+                verdict: repair
+              to: demo-repair
+            - id: demo-recheck-access
+              label: Resolve unavailable evidence or access and recheck
+              to: demo-check
+          maxRounds: 3
+        - id: demo-repair-handoff
+          after: demo-repair
+          kind: branch
+          label: Retest the repair or return changed scope to intake
+          enforceConditions: true
+          inputs:
+            - name: next
+              label: Reviewed repair handoff
+              values:
+                - recheck
+                - revise-intake
+          routes:
+            - id: demo-retest-repair
+              label: Independently check the repaired code
+              when:
+                next: recheck
+              to: demo-check
+            - id: demo-revise-intake
+              label: Review changed intent or repair scope
+              to: demo-intake
+          maxRounds: 3
     poc-lite:
       label: POC Lite — local governed change
       description: A model-free four-checkpoint demonstration with repository-native
@@ -2353,6 +2459,163 @@ workflow:
           - demo-web-intake
           - demo-web-retest
       qualityCommands: []
+    demo-intake:
+      label: Intake and acceptance agreement
+      defaultTemplate: demo-check-repair-close/intake.md
+      artifact:
+        path: artifacts/demo-intake/intake.md
+        kind: requirements
+        minimumBytes: 500
+        validation:
+          requiredHeadings:
+            - Approved sources
+            - Scope and acceptance criteria
+            - Scenario matrix
+            - Test environment and commands
+            - Planned implementation evidence
+            - Routing and human checkpoints
+      authoringSkill: sf-document-intake
+      clarification:
+        mode: required
+        maxQuestions: 5
+        topics:
+          - source interpretation
+          - expected behavior
+          - test environment
+          - repair scope
+          - human checkpoints
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: clarify
+      writeScope: artifact-only
+      approval:
+        authorities:
+          - product-approvers
+        minimum: 1
+        rejectTo:
+          - demo-intake
+      qualityCommands: []
+    demo-check:
+      label: Check code against approved scenarios
+      defaultTemplate: demo-check-repair-close/check.md
+      artifact:
+        path: artifacts/demo-check/check-results.md
+        kind: test-evidence
+        minimumBytes: 500
+        validation:
+          requiredHeadings:
+            - Pinned inputs and tested revision
+            - Test execution and evidence
+            - Source and visual comparison
+            - Scenario results
+            - Verdict and repair request
+            - Human checkpoint
+      inputs:
+        - demo-intake
+      authoringSkill: sf-scenario-check
+      clarification:
+        mode: when-needed
+        maxQuestions: 3
+        topics:
+          - test access
+          - inconclusive evidence
+          - defect classification
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: analyze
+      writeScope: artifact-only
+      approval:
+        authorities:
+          - quality-reviewers
+        minimum: 1
+        rejectTo:
+          - demo-intake
+          - demo-check
+      qualityCommands: []
+    demo-repair:
+      label: Repair code and regression tests
+      defaultTemplate: demo-check-repair-close/repair.md
+      artifact:
+        path: artifacts/demo-repair/implementation-summary.md
+        kind: implementation-summary
+        minimumBytes: 400
+        validation:
+          requiredHeadings:
+            - Agent brief
+            - Approved defect and scope
+            - Changes and clause bindings
+            - Test results and regression evidence
+            - Handoff and remaining risks
+      inputs:
+        - demo-intake
+        - demo-check
+      clarification:
+        mode: when-needed
+        maxQuestions: 3
+        topics:
+          - root cause
+          - allowed paths
+          - repair risks
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: code
+      writeScope: source-and-artifact
+      approval:
+        authorities:
+          - engineering-reviewers
+        minimum: 1
+        rejectTo:
+          - demo-intake
+          - demo-repair
+      qualityCommands: []
+    demo-close:
+      label: Closing documents and human acceptance
+      defaultTemplate: demo-check-repair-close/close.md
+      artifact:
+        path: artifacts/demo-close/closing-report.md
+        kind: publication-review
+        minimumBytes: 500
+        validation:
+          requiredHeadings:
+            - Agent brief
+            - Approved scope and final revision
+            - Final check and evidence
+            - Repair history and no-change accounting
+            - Residual risks and operational handoff
+            - Human closing decision
+      inputs:
+        - demo-intake
+        - demo-check
+        - phase: demo-repair
+          optional: true
+      clarification:
+        mode: when-needed
+        maxQuestions: 3
+        topics:
+          - residual risk
+          - final acceptance
+          - operational handoff
+      worldModel:
+        views: []
+        depth: quick
+      generation:
+        task: summarize
+      writeScope: artifact-only
+      approval:
+        authorities:
+          - quality-reviewers
+        minimum: 1
+        rejectTo:
+          - demo-intake
+          - demo-check
+          - demo-close
+      qualityCommands: []
     poc-intake:
       label: POC intent and environment
       defaultTemplate: poc-workflow/intake.md
@@ -2950,6 +3213,14 @@ workflow:
 assets:
   .github/agents/architect.agent.md:
     sha256: 6b04a0161f445d0d585933d3891e07522cd652683e580752b5497f14ac86deb0
+  .github/agents/demo-code-checker.agent.md:
+    sha256: 05ac1874b8e0b6a48efde26fd1a77e0c9ce2ecab27de28761a51460fa82deb03
+  .github/agents/demo-code-repairer.agent.md:
+    sha256: c79919043b5c93cd43cdd6b297949d948796e8e56c7548d89ebb457472c02bff
+  .github/agents/demo-intake-analyst.agent.md:
+    sha256: f2fb5a528c8cc3966901868436afd640489e82fc4c5703787e1d010ef9c2b36e
+  .github/agents/demo-story-closer.agent.md:
+    sha256: 098d10ddb1af9624cdd93f9fe53909e1fef79d666cd197a2b330c6076f12a5b0
   .github/agents/demo-web-analyst.agent.md:
     sha256: a06f1b514eec22d8e75b2d8b609348f3d43b118f00e456de5b1c3e25ca72e2b1
   .github/agents/demo-web-developer.agent.md:
@@ -2998,6 +3269,22 @@ assets:
     sha256: 4128acc6930949e4ba1e50e8b8c7c4f7beb23f4361c2e8428475b081712b77db
   singularity/prompts/worldmodel-builder.md:
     sha256: cd93d41ccc98e4ccc09550c60cc79ad6c5a6004d7f8ea66cec596640ab73ffb4
+  singularity/skill-library/attachments.yml:
+    sha256: 34bb3311f72976388ce8279974354142ccffff182da90ceb7c0cef033bedd027
+  singularity/skill-library/demo-acceptance-intake/SKILL.md:
+    sha256: 0ca1d2e0fec9b529070e7ec7128e632e2efc9c6e8089b05443ea928190304896
+  singularity/skill-library/demo-code-acceptance-check/SKILL.md:
+    sha256: 57cd19310b68568853ac9339b4d4d73cece27ff2df57b2fc1110a4e26e7c8870
+  singularity/skill-library/demo-evidence-bound-close/SKILL.md:
+    sha256: e18a418b84f1371fa7b86dbf30e9a9015d1ab348bddbb034ff12004f771f7926
+  singularity/skill-library/demo-scoped-code-repair/SKILL.md:
+    sha256: 8b5dad40926ef0f95a9d1c9295b2cdcbe9a43f1182636b1d82ff3fa69c2c9871
+  singularity/skill-library/demo-web-defect-repair/SKILL.md:
+    sha256: c968f300ac02c798ec54a9b7c83744534b529372fdb60539f164effd251416fb
+  singularity/skill-library/demo-web-screenshot-check/SKILL.md:
+    sha256: 77a7ca8a6afb9a73cbbfda626ce72cec6d07d6b82287b3deaf61159785b0ee5f
+  singularity/skill-library/demo-web-screenshot-intake/SKILL.md:
+    sha256: 225d981bbf356ccbe63033940b4c81172d5985f9453330af275bdd21c4510a63
   singularity/templates/benchmark/conformance.md:
     sha256: 6a767297e22cab241d2dfff38c6c5b3fe8298e21c65399825c657f014411ced8
   singularity/templates/benchmark/design.md:
@@ -3032,6 +3319,14 @@ assets:
     sha256: e16cd8b47f472973823a1a53294c77ac6551285c4df75e916c739611c3bc1d23
   singularity/templates/common/verification.md:
     sha256: 31e8dc7c915c96c7bce79e3138af0537875f077350a13af5250e50c4c571728b
+  singularity/templates/demo-check-repair-close/check.md:
+    sha256: cbde6d2812b782f32589db7f95f33c44586ce6e552ce636541326e912c3a1663
+  singularity/templates/demo-check-repair-close/close.md:
+    sha256: 9070bc1135edfa168c5c63b43df230dd5997f527e7b7a2931311eb8cca78a2d6
+  singularity/templates/demo-check-repair-close/intake.md:
+    sha256: b711a8f37bebf0dda05a99d4bf3efdcbb1bfc424d70d8f69d5c9289c2a6e2b2f
+  singularity/templates/demo-check-repair-close/repair.md:
+    sha256: 66af2bad38c83317e4ccd2d96c7713234f64149e7d7015235b98047770f7df30
   singularity/templates/demo-web-e2e-testing/check.md:
     sha256: 31bc19257b108572d3043066a8747ade34dc0facb9bc75e013a5b5ded599e2c5
   singularity/templates/demo-web-e2e-testing/intake.md:
@@ -3226,6 +3521,7 @@ ownership:
       spec-code-test-loop: framework
       document-test-repair: framework
       demo-web-e2e-testing: framework
+      demo-check-repair-close: framework
       poc-lite: framework
       benchmarking-a: framework
       benchmarking-b: framework
@@ -3260,6 +3556,10 @@ ownership:
       demo-web-check: framework
       demo-web-repair: framework
       demo-web-retest: framework
+      demo-intake: framework
+      demo-check: framework
+      demo-repair: framework
+      demo-close: framework
       poc-lite-plan: framework
       poc-lite-act: framework
       poc-lite-verify: framework
@@ -3280,8 +3580,13 @@ ownership:
     mcpServers:
       playwright: framework
       figma: framework
+      demo-playwright: framework
   assets:
     .github/agents/architect.agent.md: framework
+    .github/agents/demo-code-checker.agent.md: framework
+    .github/agents/demo-code-repairer.agent.md: framework
+    .github/agents/demo-intake-analyst.agent.md: framework
+    .github/agents/demo-story-closer.agent.md: framework
     .github/agents/demo-web-analyst.agent.md: framework
     .github/agents/demo-web-developer.agent.md: framework
     .github/agents/demo-web-tester.agent.md: framework
@@ -3306,6 +3611,14 @@ ownership:
     singularity/modelTiers.yml: framework
     singularity/prompts/copilot-planning.md: framework
     singularity/prompts/worldmodel-builder.md: framework
+    singularity/skill-library/attachments.yml: framework
+    singularity/skill-library/demo-acceptance-intake/SKILL.md: framework
+    singularity/skill-library/demo-code-acceptance-check/SKILL.md: framework
+    singularity/skill-library/demo-evidence-bound-close/SKILL.md: framework
+    singularity/skill-library/demo-scoped-code-repair/SKILL.md: framework
+    singularity/skill-library/demo-web-defect-repair/SKILL.md: framework
+    singularity/skill-library/demo-web-screenshot-check/SKILL.md: framework
+    singularity/skill-library/demo-web-screenshot-intake/SKILL.md: framework
     singularity/templates/benchmark/conformance.md: framework
     singularity/templates/benchmark/design.md: framework
     singularity/templates/benchmark/implementation.md: framework
@@ -3323,6 +3636,10 @@ ownership:
     singularity/templates/common/implementation.md: framework
     singularity/templates/common/intake.md: framework
     singularity/templates/common/verification.md: framework
+    singularity/templates/demo-check-repair-close/check.md: framework
+    singularity/templates/demo-check-repair-close/close.md: framework
+    singularity/templates/demo-check-repair-close/intake.md: framework
+    singularity/templates/demo-check-repair-close/repair.md: framework
     singularity/templates/demo-web-e2e-testing/check.md: framework
     singularity/templates/demo-web-e2e-testing/intake.md: framework
     singularity/templates/demo-web-e2e-testing/repair.md: framework
