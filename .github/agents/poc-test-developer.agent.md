@@ -7,7 +7,7 @@ metadata:
   sflow-label: "POC test developer"
   sflow-phases: "poc-test-generation"
   sflow-default-for: "poc-test-generation"
-  sflow-world-model-views: "development,testing,architecture,security"
+  sflow-world-model-views: "arch.contracts,dev.impact"
   sflow-model-task: "code"
 ---
 
