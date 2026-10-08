@@ -7,7 +7,7 @@ metadata:
   sflow-label: "Developer"
   sflow-phases: "implement,implementation"
   sflow-default-for: "implement,implementation"
-  sflow-world-model-views: "development,testing,architecture"
+  sflow-world-model-views: "arch.contracts,dev.impact"
   sflow-model-task: "code"
 ---
 

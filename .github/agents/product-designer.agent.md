@@ -7,7 +7,7 @@ metadata:
   sflow-label: "Product designer"
   sflow-phases: "design-intake,design-inventory"
   sflow-default-for: "design-intake,design-inventory"
-  sflow-world-model-views: "business,architecture,testing"
+  sflow-world-model-views: "biz.rules,arch.contracts"
   sflow-model-task: "reason"
 ---
 
