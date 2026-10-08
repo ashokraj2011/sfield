@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: c4801c9b08279bcce71ccd7e0fd6508008a38889
+  revision: c6a9356dcf52d41b22a744911049c6b7d53edfc9
 workflow:
   version: 2
   inputsMode: enforce
@@ -168,14 +168,17 @@ workflow:
     promptSource: singularity/prompts/copilot-planning.md
     maxContextBytes: 1048576
   worldModel:
+    format: registered-v4
     views:
-      - business
-      - architecture
-      - development
-      - testing
-      - release
-      - operations
-      - security
+      - arch.contracts@4
+      - biz.rules@4
+      - dev.hotspots@4
+      - dev.impact@4
+    v4:
+      composer: deterministic
+      consumer: developer
+      cachePolicy: reuse-valid
+      legacyAssignments: strict
     projections:
       arch.calm:
         enabled: false
@@ -191,7 +194,7 @@ workflow:
           includeExternalDependencies: direct-architecture-only
     outputDir: singularity/world-model
     historyDir: singularity/world-model-history
-    promptSource: singularity/prompts/worldmodel-builder.md
+    promptSource: builtin
     stateFetchTimeoutMs: 10000
     generation:
       parallel: true
@@ -1664,7 +1667,7 @@ workflow:
         minimumBytes: 200
       worldModel:
         views:
-          - business
+          - biz.rules
         depth: quick
       clarification:
         mode: required
@@ -1691,7 +1694,7 @@ workflow:
         minimumBytes: 300
       worldModel:
         views:
-          - business
+          - biz.rules
         depth: standard
       clarification:
         mode: required
@@ -1719,8 +1722,7 @@ workflow:
         minimumBytes: 300
       worldModel:
         views:
-          - architecture
-          - security
+          - arch.contracts
         depth: standard
       clarification:
         mode: required
@@ -1748,10 +1750,8 @@ workflow:
         minimumBytes: 400
       worldModel:
         views:
-          - architecture
-          - development
-          - testing
-          - security
+          - arch.contracts
+          - dev.impact
         depth: deep
       clarification:
         mode: required
@@ -1781,8 +1781,7 @@ workflow:
         minimumBytes: 250
       worldModel:
         views:
-          - development
-          - testing
+          - dev.impact
         depth: standard
       clarification:
         mode: required
@@ -1810,9 +1809,8 @@ workflow:
         minimumBytes: 250
       worldModel:
         views:
-          - architecture
-          - development
-          - security
+          - arch.contracts
+          - dev.impact
         depth: standard
       clarification:
         mode: required
@@ -1840,9 +1838,7 @@ workflow:
         minimumBytes: 300
       worldModel:
         views:
-          - development
-          - testing
-          - security
+          - dev.impact
         depth: standard
       clarification:
         mode: required
@@ -1871,8 +1867,8 @@ workflow:
         minimumBytes: 350
       worldModel:
         views:
-          - business
-          - architecture
+          - biz.rules
+          - arch.contracts
         depth: standard
       clarification:
         mode: required
@@ -1899,8 +1895,8 @@ workflow:
         minimumBytes: 500
       worldModel:
         views:
-          - business
-          - architecture
+          - biz.rules
+          - arch.contracts
         depth: standard
       clarification:
         mode: required
@@ -1928,9 +1924,8 @@ workflow:
         minimumBytes: 500
       worldModel:
         views:
-          - architecture
-          - development
-          - security
+          - arch.contracts
+          - dev.impact
         depth: deep
       clarification:
         mode: required
@@ -1958,10 +1953,8 @@ workflow:
         minimumBytes: 700
       worldModel:
         views:
-          - architecture
-          - development
-          - testing
-          - security
+          - arch.contracts
+          - dev.impact
         depth: deep
       clarification:
         mode: required
@@ -1990,8 +1983,7 @@ workflow:
         minimumBytes: 250
       worldModel:
         views:
-          - development
-          - testing
+          - dev.impact
         depth: standard
       clarification:
         mode: when-needed
@@ -2018,9 +2010,7 @@ workflow:
         minimumBytes: 300
       worldModel:
         views:
-          - testing
-          - development
-          - security
+          - dev.impact
         depth: standard
         evidence: true
       clarification:
@@ -2049,9 +2039,7 @@ workflow:
         minimumBytes: 300
       worldModel:
         views:
-          - testing
-          - development
-          - security
+          - dev.impact
         depth: standard
         evidence: true
       clarification:
@@ -2080,9 +2068,7 @@ workflow:
         minimumBytes: 600
       worldModel:
         views:
-          - testing
-          - development
-          - security
+          - dev.impact
         depth: deep
         evidence: true
       clarification:
@@ -2121,10 +2107,8 @@ workflow:
           - unplanned work
       worldModel:
         views:
-          - architecture
-          - development
-          - testing
-          - security
+          - arch.contracts
+          - dev.impact
         depth: deep
         evidence: true
       writeScope: artifact-only
@@ -2632,9 +2616,7 @@ workflow:
             - Safety and access
       worldModel:
         views:
-          - business
-          - testing
-          - security
+          - biz.rules
         depth: standard
       clarification:
         mode: required
@@ -2670,10 +2652,9 @@ workflow:
             - Risks and unknowns
       worldModel:
         views:
-          - architecture
-          - development
-          - testing
-          - security
+          - arch.contracts
+          - dev.hotspots
+          - dev.impact
         depth: deep
       clarification:
         mode: when-needed
@@ -2710,9 +2691,7 @@ workflow:
             - Coverage gaps
       worldModel:
         views:
-          - testing
-          - development
-          - security
+          - dev.impact
         depth: deep
         evidence: true
       clarification:
@@ -2767,10 +2746,8 @@ workflow:
             - Deviations and residual risk
       worldModel:
         views:
-          - development
-          - testing
-          - architecture
-          - security
+          - arch.contracts
+          - dev.impact
         depth: deep
       clarification:
         mode: when-needed
@@ -2816,9 +2793,7 @@ workflow:
             - Final verdict
       worldModel:
         views:
-          - testing
-          - development
-          - security
+          - dev.impact
         depth: deep
         evidence: true
       clarification:
@@ -2904,10 +2879,8 @@ workflow:
             - Human decision
       worldModel:
         views:
-          - release
-          - testing
-          - development
-          - security
+          - arch.contracts
+          - dev.impact
         depth: standard
         evidence: true
       clarification:
@@ -3054,7 +3027,7 @@ workflow:
       artifactSet: spec-driven-specification
       worldModel:
         views:
-          - business
+          - biz.rules
         depth: standard
       clarification:
         mode: required
@@ -3088,7 +3061,7 @@ workflow:
       artifactSet: spec-driven-planning
       worldModel:
         views:
-          - architecture
+          - arch.contracts
         depth: standard
       clarification:
         mode: off
@@ -3110,7 +3083,8 @@ workflow:
       artifactSet: spec-driven-verification
       worldModel:
         views:
-          - release
+          - arch.contracts
+          - dev.impact
         depth: quick
         evidence: true
       writeScope: artifact-only
@@ -3135,7 +3109,7 @@ workflow:
         task: analyze
       worldModel:
         views:
-          - development
+          - dev.impact
         depth: quick
       writeScope: artifact-only
       approval:
@@ -3157,7 +3131,7 @@ workflow:
         task: code
       worldModel:
         views:
-          - development
+          - dev.impact
         depth: quick
       writeScope: source-and-artifact
       approval: none
@@ -3175,7 +3149,7 @@ workflow:
         task: analyze
       worldModel:
         views:
-          - testing
+          - dev.impact
         depth: quick
         evidence: true
       writeScope: source-and-artifact
@@ -3212,7 +3186,7 @@ workflow:
       - .github/skills
 assets:
   .github/agents/architect.agent.md:
-    sha256: 6b04a0161f445d0d585933d3891e07522cd652683e580752b5497f14ac86deb0
+    sha256: 81348d097d9dc7e526319ea242d15178c5a35e7d027b26303be39fd4e8451aa8
   .github/agents/demo-code-checker.agent.md:
     sha256: 05ac1874b8e0b6a48efde26fd1a77e0c9ce2ecab27de28761a51460fa82deb03
   .github/agents/demo-code-repairer.agent.md:
@@ -3228,17 +3202,17 @@ assets:
   .github/agents/demo-web-tester.agent.md:
     sha256: effdbb363713e11ebcf06df83c7258dada6ef5b28e7ba012dd3e2f9e74611af3
   .github/agents/developer.agent.md:
-    sha256: e58aa358944af2247810f2f272d6571c253d43709da34b0ec7f012083a233606
+    sha256: 5e98b958632baa68321694536f5a6ddc80cef2b11e1bb422796cfbea6d7786c7
   .github/agents/document-analyst.agent.md:
     sha256: 03c307bb9396ec71ea8af1a347c45cae82c2e5cb04197588c24ce48ea6559d37
   .github/agents/mobile-architect.agent.md:
-    sha256: fee53598c1cf2aa27a365979df06c7bd3f42e3d1b7994b9ecfc2214f31772478
+    sha256: 393e8b3fe7bb07dcfd34f4e7f10be0f124414700414be01b038016087d785958
   .github/agents/poc-analyst.agent.md:
-    sha256: 4df9fb95469acfa0a036d44d47ac93a2f2a21a9a70703c98abd43d8460e4442d
+    sha256: f80f745a90ea2bf7ef2a5aa9ded7438ba7ba10cd74e5364fb818ec29d80bccf4
   .github/agents/poc-automation.agent.md:
-    sha256: fe311f2172c31133608d1a9d2f2a6afc9229fcec124e05bbd62080ee5b9ec99d
+    sha256: 5608247f349c259850f55ac38072875508e9550ad2ebe706fedfd94e8bfe2e80
   .github/agents/poc-explorer.agent.md:
-    sha256: 839a0e22f66192fe3ff5cb503a211e6baec05760c0463da97a6651071508fcdb
+    sha256: 6c6e9515d390d6f4aa715a4921a6ae2748752fa038d2cdf9391b5e712602d45a
   .github/agents/poc-lite-implementer.agent.md:
     sha256: 9d907a1f75e54b75a0a581843aa1195c6635e72a351e54e3de0763daeeec0c29
   .github/agents/poc-lite-planner.agent.md:
@@ -3246,15 +3220,15 @@ assets:
   .github/agents/poc-lite-verifier.agent.md:
     sha256: 14fe9eb15692eac47922cbc61de3686aec2eedf447544ae6ab6901c70995d33e
   .github/agents/poc-test-developer.agent.md:
-    sha256: 6576545a8047586326e2b48a77d8b92c5325807de7f717a636962eeef0622644
+    sha256: 31c1c375019c83474dec8e0108310d58a52f5cab92c287d59b36f7d6bcc84cd7
   .github/agents/poc-validator.agent.md:
-    sha256: 0d02fd985d4948ce8a4d3a1145f7334decf60e8d09f4869a9d05fe02715dbd1a
+    sha256: 33d0cc77990f6320aa03305c0bd8051be7f2b696170132d4161c0aef4ba98894
   .github/agents/product-designer.agent.md:
-    sha256: 93eec54ac8b0d671804123ee20bdcd67155a02cb274b5168380f7a77db2f1a11
+    sha256: 37df7604d2727eeea1cc23d5dee7200fd9a4a4bb16c10f4f9d0e4746a0cd13c5
   .github/agents/product-owner.agent.md:
-    sha256: 62c866c5545c95b789bdaa7d279b19074f5d19d690c9a09501dc6464c7506882
+    sha256: 2fd9bdef16bbf508d58125ba519e1ca46f35cb593480cb544c3e91e6dc63ad8a
   .github/agents/qa.agent.md:
-    sha256: de84f6854724abbda3ba42c8040fdb710147f1574862ea04c8311628ece4e53c
+    sha256: 6d73fddfc57e603970eba377123dfa43e2fbd4b444c006df9f13115496976959
   .github/agents/scenario-developer.agent.md:
     sha256: 9fc0f10ebd86aa0f3efb30414b5523fa8afc5732ffaa3402a1387bac671b4c26
   .github/agents/scenario-tester.agent.md:
@@ -3390,7 +3364,7 @@ assets:
   singularity/templates/initiatives/epic/parent-spec.md:
     sha256: 4c80b3cb91962fd1b1fe64f01bd7dc4b0ed14ec7fb889750cabf1522eaabfa72
   singularity/templates/initiatives/epic/repository-map.yml:
-    sha256: d87a27fb71918827adbb9cbbcbc58efcf9e00689e24154215c021e217cb75b6b
+    sha256: f1d971a9d7791427572c8e6bca7fe86b30b3c7762b197e8f7189cd564fa4a64f
   singularity/templates/initiatives/epic/requirements-traceability.yml:
     sha256: 672a8ccb13f2945e9043e325f7fe0538bddfe8a43d3bf07864bee7937b680b73
   singularity/templates/initiatives/epic/requirements.md:

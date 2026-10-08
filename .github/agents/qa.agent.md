@@ -7,7 +7,7 @@ metadata:
   sflow-label: "QA"
   sflow-phases: "reproduction,verify,verification,testing,visual-verification,conformance,release"
   sflow-default-for: "reproduction,verify,verification,testing,visual-verification,conformance,release"
-  sflow-world-model-views: "testing,development,security"
+  sflow-world-model-views: "dev.impact"
   sflow-model-task: "analyze"
 ---
 
