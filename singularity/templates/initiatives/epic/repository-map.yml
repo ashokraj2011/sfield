@@ -8,8 +8,8 @@
 #     `worldModelViews` must exist in it
 #
 # A missing or unavailable World Model records degraded evidence and does not block
-# publication. Against an available manifest, an unresolvable reference blocks under
-# `grounding: enforce` and otherwise warns. These checks are why this file is worth
+# publication. Against an available manifest, an unresolvable reference is a warning:
+# the World Model is guidance and never blocks. These checks are why this file is worth
 # completing properly: an impact map that names a repository nobody configured, or
 # cites a view absent from the available manifest, is a guess wearing the costume of
 # an analysis.
@@ -22,7 +22,7 @@
 #
 #   repositories:
 #     api:                                  # must match a portfolio repository ID
-#       worldModelViews: [architecture, development]
+#       worldModelViews: [arch.contracts, dev.impact]
 #       changeType: modify                  # create | modify | integrate | read-only
 #       blastRadius: contained              # contained | cross-cutting | breaking
 #       confidence: high                    # high | medium | low
@@ -40,7 +40,7 @@
 #       risks:
 #         - "Rule evaluator is shared by three callers; regression surface is wide."
 #       evidence:                           # why we believe this repository is affected
-#         - "world-model:architecture#rule-evaluator"
+#         - "Reviewed arch.contracts and dev.impact; cite the retained Fact/Evidence IDs here."
 #
 # Repositories examined and found NOT to be affected belong in `unaffected`, with
 # the reason. A silent omission is indistinguishable from an oversight.
@@ -54,7 +54,7 @@ unaffected: []
 # unaffected:
 #   - repository: web-read
 #     reason: "Read path consumes items-api v1 and v2 identically; no change required."
-#     evidence: ["world-model:architecture#items-api-consumers"]
+#     evidence: ["Reviewed arch.contracts; cite the retained consumer Fact/Evidence IDs here."]
 
 # Systems outside the portfolio that this Epic affects or depends on. Recorded
 # for completeness — these are not validated because Singularity Flow does not
