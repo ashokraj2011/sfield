@@ -14,8 +14,15 @@
 # so retiring a model degrades availability without rewriting what the story was governed by.
 # `[ADP:REQ-030]` `[ADP:CON-007]`
 #
-# Shipped deliberately thin. Two tiers declare provider-auto selection and four alias them. Split
+# Shipped deliberately thin. Three tiers declare provider-auto selection and three alias them. Split
 # an alias or pin a concrete model only when the scorecard supplies evidence for that decision.
+
+# Which tiers' `effort` and Auto routing profile (`autoTier`) are sent to Copilot: `none`, `all`, or
+# a list of tasks. Every tier's params are recorded on each invocation receipt either way. The
+# shipped choice sends only the summarize tier's, so briefs, explanations, narration and PR polish
+# run cheaper, while code, analysis and Auto keep Copilot's defaults. `all` also sends reason's
+# `effort: high`, which raises the cost of code generation and Auto.
+sendParameters: [summarize]
 
 modelTiers:
   # Dispatch and faithful narration. Cheap, fast, and asked only to not editorialise — the tier that
@@ -32,10 +39,17 @@ modelTiers:
     params:
       effort: high
 
+  # Repository briefs, code explanations, narration and pull-request polish: short summaries of
+  # material the prompt already carries. Auto picks for efficiency, at low reasoning effort.
+  summarize:
+    model: auto
+    params:
+      autoTier: efficiency
+      effort: low
+
   # Aliases until measurement says otherwise. Each is a claim that this work resembles the tier it
   # points at closely enough that a separate choice would be unjustified — not a claim that it is
   # unimportant.
   clarify: relay
-  summarize: relay
   code: reason
   analyze: reason

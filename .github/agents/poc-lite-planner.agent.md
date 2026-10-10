@@ -7,7 +7,6 @@ metadata:
   sflow-label: "POC Lite planner"
   sflow-phases: "poc-lite-plan"
   sflow-default-for: "poc-lite-plan"
-  sflow-world-model-views: ""
   sflow-model-task: "reason"
 ---
 

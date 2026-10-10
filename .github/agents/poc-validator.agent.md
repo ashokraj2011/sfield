@@ -7,7 +7,6 @@ metadata:
   sflow-label: "POC validator"
   sflow-phases: "poc-validation,poc-publication-review"
   sflow-default-for: "poc-validation,poc-publication-review"
-  sflow-world-model-views: "dev.impact"
   sflow-model-task: "analyze"
 ---
 

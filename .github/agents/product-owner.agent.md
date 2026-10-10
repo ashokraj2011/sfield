@@ -7,7 +7,6 @@ metadata:
   sflow-label: "Product owner"
   sflow-phases: "intake,requirements,specification"
   sflow-default-for: "intake,requirements,specification"
-  sflow-world-model-views: "biz.rules"
   sflow-model-task: "clarify"
 ---
 

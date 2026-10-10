@@ -7,7 +7,6 @@ metadata:
   sflow-label: "POC automation"
   sflow-phases: "poc-intake,poc-impact-analysis,poc-ui-exploration,poc-test-generation,poc-validation,poc-publication-review"
   sflow-default-for: ""
-  sflow-world-model-views: "biz.rules,arch.contracts,dev.impact"
   sflow-model-task: "analyze"
 ---
 
