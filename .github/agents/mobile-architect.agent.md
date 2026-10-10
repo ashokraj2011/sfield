@@ -7,7 +7,6 @@ metadata:
   sflow-label: "Mobile architect"
   sflow-phases: "component-mapping,mobile-spec"
   sflow-default-for: "component-mapping,mobile-spec"
-  sflow-world-model-views: "arch.contracts,dev.impact"
   sflow-model-task: "reason"
 ---
 

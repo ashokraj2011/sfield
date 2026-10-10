@@ -7,7 +7,6 @@ metadata:
   sflow-label: "POC analyst"
   sflow-phases: "poc-intake,poc-impact-analysis"
   sflow-default-for: "poc-intake,poc-impact-analysis"
-  sflow-world-model-views: "biz.rules,arch.contracts,dev.hotspots,dev.impact"
   sflow-model-task: "analyze"
 ---
 

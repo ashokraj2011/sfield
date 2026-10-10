@@ -7,7 +7,6 @@ metadata:
   sflow-label: "POC Lite verifier"
   sflow-phases: "poc-lite-verify,poc-lite-finalize"
   sflow-default-for: "poc-lite-verify,poc-lite-finalize"
-  sflow-world-model-views: ""
   sflow-model-task: "analyze"
 ---
 

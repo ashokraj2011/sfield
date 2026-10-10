@@ -7,7 +7,6 @@ metadata:
   sflow-label: "POC UI explorer"
   sflow-phases: "poc-ui-exploration"
   sflow-default-for: "poc-ui-exploration"
-  sflow-world-model-views: "dev.impact"
   sflow-model-task: "analyze"
 ---
 

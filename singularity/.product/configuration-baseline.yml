@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: a605910afb2f170bc1a4bca74ff6c0f5afcb9cc5
+  revision: b4e25198c96bc1b3982dfc8feba79ffb391f7979
 workflow:
   version: 2
   inputsMode: enforce
@@ -168,56 +168,8 @@ workflow:
     promptSource: singularity/prompts/copilot-planning.md
     maxContextBytes: 1048576
   worldModel:
-    format: registered-v4
-    views:
-      - arch.contracts@4
-      - biz.rules@4
-      - dev.hotspots@4
-      - dev.impact@4
-    v4:
-      composer: deterministic
-      consumer: developer
-      cachePolicy: reuse-valid
-    projections:
-      arch.calm:
-        enabled: false
-        required: false
-        contract: arch.calm@1
-        calm:
-          schemaRelease: "1.2"
-          strict: true
-        profile:
-          includeGovernanceActors: true
-          includeControls: true
-          includeFlows: true
-          includeExternalDependencies: direct-architecture-only
-    outputDir: singularity/world-model
-    historyDir: singularity/world-model-history
-    stateFetchTimeoutMs: 10000
-    generation:
-      parallel: true
-      maxWorkers: 4
-    materialization:
-      mode: explicit
-      publish: governed
-      lookahead: none
-      depth: phase
-      confirmation: prompt
-    grounding: warn
-    staleness: warn
-    injection:
-      placeholder: "{{WORLD_MODEL}}"
-      mode: append
-      maxBytes: 32768
-      rules: []
-  architectureIntent:
-    enabled: false
-    allowedPhases:
-      - design
-      - planning
-    blockRequiredUnfulfilledAt:
-      - verification
-      - release
+    knowledge:
+      prompt: slice
   ast:
     mode: auto
     fallback: host-and-text
@@ -1337,13 +1289,9 @@ workflow:
         intake:
           artifact:
             kind: requirements
-          worldModel:
-            views: []
         design:
           inputs:
             - intake
-          worldModel:
-            views: []
           approval:
             authorities:
               - architecture-reviewers
@@ -1354,22 +1302,16 @@ workflow:
         implementation:
           inputs:
             - design
-          worldModel:
-            views: []
         testing:
           inputs:
             - intake
             - implementation
-          worldModel:
-            views: []
         conformance:
           inputs:
             - intake
             - design
             - implementation
             - testing
-          worldModel:
-            views: []
           approval:
             authorities:
               - quality-reviewers
@@ -1659,10 +1601,6 @@ workflow:
         path: artifacts/intake/intake.md
         kind: intake
         minimumBytes: 200
-      worldModel:
-        views:
-          - biz.rules
-        depth: quick
       clarification:
         mode: required
         maxQuestions: 5
@@ -1686,10 +1624,6 @@ workflow:
         path: artifacts/requirements/requirements.md
         kind: requirements
         minimumBytes: 300
-      worldModel:
-        views:
-          - biz.rules
-        depth: standard
       clarification:
         mode: required
         maxQuestions: 5
@@ -1714,10 +1648,6 @@ workflow:
         path: artifacts/design/design.md
         kind: design
         minimumBytes: 300
-      worldModel:
-        views:
-          - arch.contracts
-        depth: standard
       clarification:
         mode: required
         maxQuestions: 5
@@ -1742,11 +1672,6 @@ workflow:
         path: artifacts/implementation-spec/implementation-spec.md
         kind: implementation-spec
         minimumBytes: 400
-      worldModel:
-        views:
-          - arch.contracts
-          - dev.impact
-        depth: deep
       clarification:
         mode: required
         maxQuestions: 5
@@ -1773,10 +1698,6 @@ workflow:
         path: artifacts/reproduction/reproduction.md
         kind: reproduction
         minimumBytes: 250
-      worldModel:
-        views:
-          - dev.impact
-        depth: standard
       clarification:
         mode: required
         maxQuestions: 5
@@ -1801,11 +1722,6 @@ workflow:
         path: artifacts/fix-design/fix-design.md
         kind: fix-design
         minimumBytes: 250
-      worldModel:
-        views:
-          - arch.contracts
-          - dev.impact
-        depth: standard
       clarification:
         mode: required
         maxQuestions: 5
@@ -1830,10 +1746,6 @@ workflow:
         path: artifacts/fix-spec/fix-spec.md
         kind: implementation-spec
         minimumBytes: 300
-      worldModel:
-        views:
-          - dev.impact
-        depth: standard
       clarification:
         mode: required
         maxQuestions: 5
@@ -1859,11 +1771,6 @@ workflow:
         path: artifacts/design-intake/design-package-intake.md
         kind: design-intake
         minimumBytes: 350
-      worldModel:
-        views:
-          - biz.rules
-          - arch.contracts
-        depth: standard
       clarification:
         mode: required
         maxQuestions: 5
@@ -1887,11 +1794,6 @@ workflow:
         path: artifacts/design-inventory/design-inventory.md
         kind: design-inventory
         minimumBytes: 500
-      worldModel:
-        views:
-          - biz.rules
-          - arch.contracts
-        depth: standard
       clarification:
         mode: required
         maxQuestions: 5
@@ -1916,11 +1818,6 @@ workflow:
         path: artifacts/component-mapping/component-mapping.md
         kind: component-mapping
         minimumBytes: 500
-      worldModel:
-        views:
-          - arch.contracts
-          - dev.impact
-        depth: deep
       clarification:
         mode: required
         maxQuestions: 5
@@ -1945,11 +1842,6 @@ workflow:
         path: artifacts/mobile-spec/mobile-spec.md
         kind: implementation-spec
         minimumBytes: 700
-      worldModel:
-        views:
-          - arch.contracts
-          - dev.impact
-        depth: deep
       clarification:
         mode: required
         maxQuestions: 5
@@ -1975,10 +1867,6 @@ workflow:
         path: artifacts/implementation/implementation-summary.md
         kind: implementation-summary
         minimumBytes: 250
-      worldModel:
-        views:
-          - dev.impact
-        depth: standard
       clarification:
         mode: when-needed
         maxQuestions: 3
@@ -2002,11 +1890,6 @@ workflow:
         path: artifacts/verification/test-evidence.md
         kind: test-evidence
         minimumBytes: 300
-      worldModel:
-        views:
-          - dev.impact
-        depth: standard
-        evidence: true
       clarification:
         mode: when-needed
         maxQuestions: 3
@@ -2031,11 +1914,6 @@ workflow:
         path: artifacts/testing/test-evidence.md
         kind: test-evidence
         minimumBytes: 300
-      worldModel:
-        views:
-          - dev.impact
-        depth: standard
-        evidence: true
       clarification:
         mode: when-needed
         maxQuestions: 3
@@ -2060,11 +1938,6 @@ workflow:
         path: artifacts/visual-verification/visual-comparison.md
         kind: visual-test-evidence
         minimumBytes: 600
-      worldModel:
-        views:
-          - dev.impact
-        depth: deep
-        evidence: true
       clarification:
         mode: when-needed
         maxQuestions: 3
@@ -2099,12 +1972,6 @@ workflow:
           - approved deviations
           - missing evidence
           - unplanned work
-      worldModel:
-        views:
-          - arch.contracts
-          - dev.impact
-        depth: deep
-        evidence: true
       writeScope: artifact-only
       comparison:
         identifiers:
@@ -2152,9 +2019,6 @@ workflow:
           - test tool
           - authorized target
           - repair boundary
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: clarify
       writeScope: artifact-only
@@ -2189,9 +2053,6 @@ workflow:
           - test access
           - inconclusive evidence
           - defect classification
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: analyze
       writeScope: artifact-only
@@ -2226,9 +2087,6 @@ workflow:
           - root cause
           - authorized scope
           - repair risks
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: code
       writeScope: source-and-artifact
@@ -2267,9 +2125,6 @@ workflow:
           - test access
           - inconclusive evidence
           - remaining defects
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: analyze
       writeScope: artifact-only
@@ -2306,9 +2161,6 @@ workflow:
           - interaction expectations
           - test environment
           - repair boundary
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: clarify
       writeScope: artifact-only
@@ -2344,9 +2196,6 @@ workflow:
           - test access
           - ambiguous screenshots
           - defect classification
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: analyze
       writeScope: artifact-only
@@ -2381,9 +2230,6 @@ workflow:
           - root cause
           - allowed paths
           - repair risks
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: code
       writeScope: source-and-artifact
@@ -2423,9 +2269,6 @@ workflow:
           - test access
           - inconclusive evidence
           - remaining defects
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: analyze
       writeScope: artifact-only
@@ -2462,9 +2305,6 @@ workflow:
           - test environment
           - repair scope
           - human checkpoints
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: clarify
       writeScope: artifact-only
@@ -2500,9 +2340,6 @@ workflow:
           - test access
           - inconclusive evidence
           - defect classification
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: analyze
       writeScope: artifact-only
@@ -2538,9 +2375,6 @@ workflow:
           - root cause
           - allowed paths
           - repair risks
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: code
       writeScope: source-and-artifact
@@ -2579,9 +2413,6 @@ workflow:
           - residual risk
           - final acceptance
           - operational handoff
-      worldModel:
-        views: []
-        depth: quick
       generation:
         task: summarize
       writeScope: artifact-only
@@ -2608,10 +2439,6 @@ workflow:
             - Target environment
             - Test intent and acceptance criteria
             - Safety and access
-      worldModel:
-        views:
-          - biz.rules
-        depth: standard
       clarification:
         mode: required
         maxQuestions: 5
@@ -2644,12 +2471,6 @@ workflow:
             - Regression footprint
             - Proposed scenarios
             - Risks and unknowns
-      worldModel:
-        views:
-          - arch.contracts
-          - dev.hotspots
-          - dev.impact
-        depth: deep
       clarification:
         mode: when-needed
         maxQuestions: 3
@@ -2683,11 +2504,6 @@ workflow:
             - Accessibility and locator evidence
             - Visual and runtime evidence
             - Coverage gaps
-      worldModel:
-        views:
-          - dev.impact
-        depth: deep
-        evidence: true
       clarification:
         mode: when-needed
         maxQuestions: 3
@@ -2738,11 +2554,6 @@ workflow:
             - Scenario traceability
             - Locator and test-data strategy
             - Deviations and residual risk
-      worldModel:
-        views:
-          - arch.contracts
-          - dev.impact
-        depth: deep
       clarification:
         mode: when-needed
         maxQuestions: 3
@@ -2785,11 +2596,6 @@ workflow:
             - Evidence inventory
             - Repair attempts
             - Final verdict
-      worldModel:
-        views:
-          - dev.impact
-        depth: deep
-        evidence: true
       clarification:
         mode: when-needed
         maxQuestions: 3
@@ -2871,12 +2677,6 @@ workflow:
             - Validation evidence
             - Residual risk and rollback
             - Human decision
-      worldModel:
-        views:
-          - arch.contracts
-          - dev.impact
-        depth: standard
-        evidence: true
       clarification:
         mode: when-needed
         maxQuestions: 3
@@ -2920,8 +2720,6 @@ workflow:
         requirement: required
         producer: deterministic
         task: reason
-      worldModel:
-        views: []
       writeScope: artifact-only
       approval: none
     poc-lite-act:
@@ -2941,8 +2739,6 @@ workflow:
         requirement: required
         producer: deterministic
         task: code
-      worldModel:
-        views: []
       writeScope: source-and-artifact
       approval: none
       qualityCommands:
@@ -2969,8 +2765,6 @@ workflow:
         requirement: required
         producer: deterministic
         task: analyze
-      worldModel:
-        views: []
       writeScope: artifact-only
       approval: none
       qualityCommands:
@@ -2997,8 +2791,6 @@ workflow:
         requirement: required
         producer: deterministic
         task: summarize
-      worldModel:
-        views: []
       writeScope: artifact-only
       approval:
         authorities:
@@ -3019,10 +2811,6 @@ workflow:
         kind: requirements
         minimumBytes: 400
       artifactSet: spec-driven-specification
-      worldModel:
-        views:
-          - biz.rules
-        depth: standard
       clarification:
         mode: required
         maxQuestions: 5
@@ -3053,10 +2841,6 @@ workflow:
         kind: design
         minimumBytes: 300
       artifactSet: spec-driven-planning
-      worldModel:
-        views:
-          - arch.contracts
-        depth: standard
       clarification:
         mode: off
       writeScope: artifact-only
@@ -3075,12 +2859,6 @@ workflow:
         kind: conformance-report
         minimumBytes: 300
       artifactSet: spec-driven-verification
-      worldModel:
-        views:
-          - arch.contracts
-          - dev.impact
-        depth: quick
-        evidence: true
       writeScope: artifact-only
       approval:
         authorities:
@@ -3101,10 +2879,6 @@ workflow:
         requirement: required
         producer: deterministic
         task: analyze
-      worldModel:
-        views:
-          - dev.impact
-        depth: quick
       writeScope: artifact-only
       approval:
         authorities:
@@ -3123,10 +2897,6 @@ workflow:
         requirement: required
         producer: deterministic
         task: code
-      worldModel:
-        views:
-          - dev.impact
-        depth: quick
       writeScope: source-and-artifact
       approval: none
       qualityCommands: []
@@ -3141,11 +2911,6 @@ workflow:
         requirement: required
         producer: deterministic
         task: analyze
-      worldModel:
-        views:
-          - dev.impact
-        depth: quick
-        evidence: true
       writeScope: source-and-artifact
       approval:
         mode: policy
@@ -3180,7 +2945,7 @@ workflow:
       - .github/skills
 assets:
   .github/agents/architect.agent.md:
-    sha256: 81348d097d9dc7e526319ea242d15178c5a35e7d027b26303be39fd4e8451aa8
+    sha256: c691034602364b7c8c752c29c345a4ef95dd330c44e17bd171b22f057d656136
   .github/agents/demo-code-checker.agent.md:
     sha256: 05ac1874b8e0b6a48efde26fd1a77e0c9ce2ecab27de28761a51460fa82deb03
   .github/agents/demo-code-repairer.agent.md:
@@ -3196,33 +2961,33 @@ assets:
   .github/agents/demo-web-tester.agent.md:
     sha256: effdbb363713e11ebcf06df83c7258dada6ef5b28e7ba012dd3e2f9e74611af3
   .github/agents/developer.agent.md:
-    sha256: 5e98b958632baa68321694536f5a6ddc80cef2b11e1bb422796cfbea6d7786c7
+    sha256: d26252853e95ebfa11bc85e3e453a20a86e6a50b05f6e0b42da90b82291295ed
   .github/agents/document-analyst.agent.md:
     sha256: 03c307bb9396ec71ea8af1a347c45cae82c2e5cb04197588c24ce48ea6559d37
   .github/agents/mobile-architect.agent.md:
-    sha256: 393e8b3fe7bb07dcfd34f4e7f10be0f124414700414be01b038016087d785958
+    sha256: 67ecdb82a9ae3a4a27cae6decf7cf77f7ad0d6ce110898113ace1aab1bde3cf6
   .github/agents/poc-analyst.agent.md:
-    sha256: f80f745a90ea2bf7ef2a5aa9ded7438ba7ba10cd74e5364fb818ec29d80bccf4
+    sha256: f553b0f39011aaaa6a4cbf6aae05c658b224c883a0ba0f1e692427b20feb26f6
   .github/agents/poc-automation.agent.md:
-    sha256: 5608247f349c259850f55ac38072875508e9550ad2ebe706fedfd94e8bfe2e80
+    sha256: bee5c59b192c790e1e094b7dfa63146f508f0ad6a88b9398d61517ca8f680603
   .github/agents/poc-explorer.agent.md:
-    sha256: 6c6e9515d390d6f4aa715a4921a6ae2748752fa038d2cdf9391b5e712602d45a
+    sha256: 8d4e8fc0a755cca632b991a6a4dac398c0a88684aa27487a45e36ce842e87533
   .github/agents/poc-lite-implementer.agent.md:
-    sha256: 9d907a1f75e54b75a0a581843aa1195c6635e72a351e54e3de0763daeeec0c29
+    sha256: 0ccc4afecb1e291698540571ae4dbf7ee11bc99808f4c94305652b8e7e251249
   .github/agents/poc-lite-planner.agent.md:
-    sha256: 74b564d5ca0063954fedf554d9c2350a9eebf78deef212ed2c6907283f35fdae
+    sha256: b72708b0bc7045807a83b8daac78a731d24afb5a90ce48a7af0365facd198f29
   .github/agents/poc-lite-verifier.agent.md:
-    sha256: 14fe9eb15692eac47922cbc61de3686aec2eedf447544ae6ab6901c70995d33e
+    sha256: 3e7f3247b001d112695f843533da5156553e8088299e3afab555a631680af998
   .github/agents/poc-test-developer.agent.md:
-    sha256: 31c1c375019c83474dec8e0108310d58a52f5cab92c287d59b36f7d6bcc84cd7
+    sha256: ae4608b208606c0fd43f57b9faeda05d28cfaba57a4a30e5c8cfda96822fa0f3
   .github/agents/poc-validator.agent.md:
-    sha256: 33d0cc77990f6320aa03305c0bd8051be7f2b696170132d4161c0aef4ba98894
+    sha256: 7db6a9dcec0c57a5da1eb93d93059eac5e56423d9f4ef7619a3ac6272deb188d
   .github/agents/product-designer.agent.md:
-    sha256: 37df7604d2727eeea1cc23d5dee7200fd9a4a4bb16c10f4f9d0e4746a0cd13c5
+    sha256: 20d14612a8cd51044c1b9fc7fd4e65b04248c3f1857b76edf8912020b059ac68
   .github/agents/product-owner.agent.md:
-    sha256: 2fd9bdef16bbf508d58125ba519e1ca46f35cb593480cb544c3e91e6dc63ad8a
+    sha256: dc9f689832f95770175c56176cdd6bc40887717649ec2dc5f5ed3cf60862e57b
   .github/agents/qa.agent.md:
-    sha256: 6d73fddfc57e603970eba377123dfa43e2fbd4b444c006df9f13115496976959
+    sha256: b35814bde7c8edb284b272d33f50b7a0ed219cb6228f3102965f23d6e6e675e7
   .github/agents/scenario-developer.agent.md:
     sha256: 9fc0f10ebd86aa0f3efb30414b5523fa8afc5732ffaa3402a1387bac671b4c26
   .github/agents/scenario-tester.agent.md:
@@ -3232,7 +2997,7 @@ assets:
   singularity/impact.yml:
     sha256: e91000c4f19ba8f8c08812ebea1d3e825919f5b31dadd1f3e22f1749e3b05313
   singularity/modelTiers.yml:
-    sha256: 9c829dea6676d1ad6066197a582125ec049a7e42c62300736ec83cb2ba563449
+    sha256: da16ef4023221a14aba0b5a87fd80b395d3ea7d48b0ecf65481c291180aec23a
   singularity/prompts/copilot-planning.md:
     sha256: 4128acc6930949e4ba1e50e8b8c7c4f7beb23f4361c2e8428475b081712b77db
   singularity/skill-library/attachments.yml:

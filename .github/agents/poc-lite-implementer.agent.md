@@ -7,7 +7,6 @@ metadata:
   sflow-label: "POC Lite implementer"
   sflow-phases: "poc-lite-act"
   sflow-default-for: "poc-lite-act"
-  sflow-world-model-views: ""
   sflow-model-task: "code"
 ---
 
