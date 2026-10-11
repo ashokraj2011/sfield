@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: e7a081cbfbe3aa75e7398584bd482477f90bcfa7
+  revision: 134089cd9eaf9c7afd6b15a739ac890c7f249ffa
 workflow:
   version: 2
   inputsMode: enforce
@@ -3179,13 +3179,13 @@ assets:
   .github/agents/demo-code-repairer.agent.md:
     sha256: c9fa90ab14274f2f1bd0d92662a773087ccdaa66d24b8b117b26d1e36fbb9834
   .github/agents/demo-instruction-analyst.agent.md:
-    sha256: 5c527291e89f935e0586657bcffc3a8317dfdddfa140f2701d2fe4a7eea3a478
+    sha256: b54384818163336db79044d2fb1ac84d609f3ffbd742e1cf4fd213af3584d8bb
   .github/agents/demo-instruction-closer.agent.md:
-    sha256: 46dfd20f054f900fb603bba672bc47b303e640951f3f308c90c6958340b5bb4b
+    sha256: 20639a730771566688d5a9e83a35d2b6a0437dc926504ab4b07dcf4b0eaefa70
   .github/agents/demo-instruction-developer.agent.md:
-    sha256: e63c417149a151a0aa6155126d40d397918e1810d4d5384b95a4ced0e307bd53
+    sha256: fbd448e6e0f480f933a1d5091af6ec8f380da84077442fabd6150132514954e7
   .github/agents/demo-instruction-tester.agent.md:
-    sha256: 1b7c1a81bceb26860dcb74210ea3ac993c5e0d1ffffaa57461c19345e296b496
+    sha256: 2ebc9462131857eba426721f2bcf33d411b9a343960a5a29a7e17daa9694a26c
   .github/agents/demo-intake-analyst.agent.md:
     sha256: 4de23dbcb5a2877937198343521aab3f9f2accd4638560c8d386e11faab21dc1
   .github/agents/demo-story-closer.agent.md:
