@@ -3,20 +3,24 @@
   "layout": "canonical-paths",
   "source": {
     "branch": "sflow/config",
-    "commit": "44bfa73e42ab2dbf48da971176f4ad74bd55274c"
+    "commit": "cdf8505d92073a92ef0ea7d743516c2bef197826"
   },
   "history": {
-    "branch": "sflow/config-history/44bfa73e42ab2dbf48da971176f4ad74bd55274c",
-    "commit": "44bfa73e42ab2dbf48da971176f4ad74bd55274c"
+    "branch": "sflow/config-history/cdf8505d92073a92ef0ea7d743516c2bef197826",
+    "commit": "cdf8505d92073a92ef0ea7d743516c2bef197826"
   },
   "product": {
     "version": "0.9.0",
-    "revision": "ad4f3794a519a01b6751bf7d6bb2da5fea8e3df9"
+    "revision": "c815d908ffed78fa18fd3ea37020eaceaeefaac4"
   },
   "files": {
     ".github/agents/architect.agent.md": "41052a47c867dfe1eaae3f0ab8686912efc3ae00e42cb0c9198131a19dc5bc88",
     ".github/agents/demo-code-checker.agent.md": "8663390f8d2307b0761c77dff2b8c3ba5f210eb0b4ce2a667393e35f74a8c429",
     ".github/agents/demo-code-repairer.agent.md": "c9fa90ab14274f2f1bd0d92662a773087ccdaa66d24b8b117b26d1e36fbb9834",
+    ".github/agents/demo-instruction-analyst.agent.md": "5c527291e89f935e0586657bcffc3a8317dfdddfa140f2701d2fe4a7eea3a478",
+    ".github/agents/demo-instruction-closer.agent.md": "46dfd20f054f900fb603bba672bc47b303e640951f3f308c90c6958340b5bb4b",
+    ".github/agents/demo-instruction-developer.agent.md": "e63c417149a151a0aa6155126d40d397918e1810d4d5384b95a4ced0e307bd53",
+    ".github/agents/demo-instruction-tester.agent.md": "1b7c1a81bceb26860dcb74210ea3ac993c5e0d1ffffaa57461c19345e296b496",
     ".github/agents/demo-intake-analyst.agent.md": "4de23dbcb5a2877937198343521aab3f9f2accd4638560c8d386e11faab21dc1",
     ".github/agents/demo-story-closer.agent.md": "41a9a1aebd1200f6777f78dd3b34b2b97aa2fc9a49d7b69923c351fcdcfa42bd",
     ".github/agents/demo-web-analyst.agent.md": "05e16faddfd28fec43c1500a7577a0e82dfceac91b28f71e6aa704555d595b2e",
@@ -41,6 +45,9 @@
     "singularity/agent-mappings.yml": "1b39a4f4caa3242749889a291e2259a361c815712bd762abde3db3cbe9f8a688",
     "singularity/capabilities.yml": "944c77d88016296c4b3188a6a5aa00775f4d665901cb7a013a30f42befc980ff",
     "singularity/impact.yml": "e91000c4f19ba8f8c08812ebea1d3e825919f5b31dadd1f3e22f1749e3b05313",
+    "singularity/instruction-library/demo-fresh-test-evidence/INSTRUCTIONS.md": "955f8eb96b82b2498d312e8efc0d464095d0d3760cebb99ff17e12a871e91948",
+    "singularity/instruction-library/demo-reviewed-routing/INSTRUCTIONS.md": "28bf939ed7d27cb2bec663ad3cff3b6eb67692a9862d0244d6d0ba611966e99f",
+    "singularity/instruction-library/demo-source-interpretation/INSTRUCTIONS.md": "cd9e207c963372ba5a94d0cdbcb8021d85daaa84d28c3b7fa47980d0c5e9d7a7",
     "singularity/modelTiers.yml": "da16ef4023221a14aba0b5a87fd80b395d3ea7d48b0ecf65481c291180aec23a",
     "singularity/portfolio.yml": "c33ddc165938c544040d0b15229d143e34d36524bc1e2f2feff94ca00f0af351",
     "singularity/prompts/copilot-planning.md": "4128acc6930949e4ba1e50e8b8c7c4f7beb23f4361c2e8428475b081712b77db",
@@ -48,6 +55,10 @@
     "singularity/skill-library/demo-acceptance-intake/SKILL.md": "0ca1d2e0fec9b529070e7ec7128e632e2efc9c6e8089b05443ea928190304896",
     "singularity/skill-library/demo-code-acceptance-check/SKILL.md": "57cd19310b68568853ac9339b4d4d73cece27ff2df57b2fc1110a4e26e7c8870",
     "singularity/skill-library/demo-evidence-bound-close/SKILL.md": "e18a418b84f1371fa7b86dbf30e9a9015d1ab348bddbb034ff12004f771f7926",
+    "singularity/skill-library/demo-instruction-check/SKILL.md": "2c5e5c781fd40e0acfe53c840be85aaad3b287ea03be3ab061e232213b9982bc",
+    "singularity/skill-library/demo-instruction-close/SKILL.md": "6dafc1c285b8966a16b973083b5d2d4ce256a23497be7e6734cca5d1bdb70609",
+    "singularity/skill-library/demo-instruction-intake/SKILL.md": "94cf220f19beaebdf607fd15a0141a725157094fc8041e1c7f545f9ad14667cb",
+    "singularity/skill-library/demo-instruction-repair/SKILL.md": "bfc145eb0865f1705a759527142de6fe6906123670c28f8b71874bc0f47452ce",
     "singularity/skill-library/demo-scoped-code-repair/SKILL.md": "8b5dad40926ef0f95a9d1c9295b2cdcbe9a43f1182636b1d82ff3fa69c2c9871",
     "singularity/skill-library/demo-web-defect-repair/SKILL.md": "c968f300ac02c798ec54a9b7c83744534b529372fdb60539f164effd251416fb",
     "singularity/skill-library/demo-web-screenshot-check/SKILL.md": "77a7ca8a6afb9a73cbbfda626ce72cec6d07d6b82287b3deaf61159785b0ee5f",
@@ -164,7 +175,7 @@
     "singularity/templates/spec-driven/spec.md": "55b0d6c4c9aa5ba19739493825f6c993f03d63bed9e1a5e2bb7d5c099b8b91bb",
     "singularity/templates/starter-packs/skp-team-notes/draft-input.json": "fbc136911e7dfecf14be06091b6d759770fa72c133c39de74710511bfee57410",
     "singularity/templates/starter-packs/skp-team-notes/README.md": "ab3e66d1654df81922a6022c491ac85868cb3b644e0eace77c4f9089c4f599ea",
-    "singularity/workflow.yml": "ce9e47f884bbf42d6959880e3bc971be7e50ecc974986d6fb5ffcdb430b92e11"
+    "singularity/workflow.yml": "096724fc889bb338db5d598a69797195ef1cae1b7e7fe859995a748e6d22455c"
   },
   "assets": {
     ".github/agents/architect.agent.md": {
@@ -180,6 +191,26 @@
     ".github/agents/demo-code-repairer.agent.md": {
       "sha256": "c9fa90ab14274f2f1bd0d92662a773087ccdaa66d24b8b117b26d1e36fbb9834",
       "object": "f24b6d868e41530a5f86e85ccfa62927b1389359",
+      "mode": "100644"
+    },
+    ".github/agents/demo-instruction-analyst.agent.md": {
+      "sha256": "5c527291e89f935e0586657bcffc3a8317dfdddfa140f2701d2fe4a7eea3a478",
+      "object": "37b66de9687975dec6d8e5114648b3f5eae18516",
+      "mode": "100644"
+    },
+    ".github/agents/demo-instruction-closer.agent.md": {
+      "sha256": "46dfd20f054f900fb603bba672bc47b303e640951f3f308c90c6958340b5bb4b",
+      "object": "e53bed5b2e68ad17229351b99ae421a034d761e0",
+      "mode": "100644"
+    },
+    ".github/agents/demo-instruction-developer.agent.md": {
+      "sha256": "e63c417149a151a0aa6155126d40d397918e1810d4d5384b95a4ced0e307bd53",
+      "object": "34b4966571d17926dc7c30b763dbe0976f948291",
+      "mode": "100644"
+    },
+    ".github/agents/demo-instruction-tester.agent.md": {
+      "sha256": "1b7c1a81bceb26860dcb74210ea3ac993c5e0d1ffffaa57461c19345e296b496",
+      "object": "f6a70955937a75926cd2d90a0a60e7899bd1e937",
       "mode": "100644"
     },
     ".github/agents/demo-intake-analyst.agent.md": {
@@ -302,6 +333,21 @@
       "object": "ca5caa426515a71bf583c5fe0fa0743e53d651d5",
       "mode": "100644"
     },
+    "singularity/instruction-library/demo-fresh-test-evidence/INSTRUCTIONS.md": {
+      "sha256": "955f8eb96b82b2498d312e8efc0d464095d0d3760cebb99ff17e12a871e91948",
+      "object": "e4c9fa4d9d34b6d20129756c65334c8de459d183",
+      "mode": "100644"
+    },
+    "singularity/instruction-library/demo-reviewed-routing/INSTRUCTIONS.md": {
+      "sha256": "28bf939ed7d27cb2bec663ad3cff3b6eb67692a9862d0244d6d0ba611966e99f",
+      "object": "9c19b38ced6849d530320b5f302b7b89dabcd834",
+      "mode": "100644"
+    },
+    "singularity/instruction-library/demo-source-interpretation/INSTRUCTIONS.md": {
+      "sha256": "cd9e207c963372ba5a94d0cdbcb8021d85daaa84d28c3b7fa47980d0c5e9d7a7",
+      "object": "a856b4804c0f055376b7598b9d2979507920e9ee",
+      "mode": "100644"
+    },
     "singularity/modelTiers.yml": {
       "sha256": "da16ef4023221a14aba0b5a87fd80b395d3ea7d48b0ecf65481c291180aec23a",
       "object": "0c6aebce180bb71580331028dd5e7e58c2932096",
@@ -335,6 +381,26 @@
     "singularity/skill-library/demo-evidence-bound-close/SKILL.md": {
       "sha256": "e18a418b84f1371fa7b86dbf30e9a9015d1ab348bddbb034ff12004f771f7926",
       "object": "6e388dda560ac38b797df807d30662d583527c6e",
+      "mode": "100644"
+    },
+    "singularity/skill-library/demo-instruction-check/SKILL.md": {
+      "sha256": "2c5e5c781fd40e0acfe53c840be85aaad3b287ea03be3ab061e232213b9982bc",
+      "object": "8b0e9bb68c43aaadaf9414990af26ee52cb3aeee",
+      "mode": "100644"
+    },
+    "singularity/skill-library/demo-instruction-close/SKILL.md": {
+      "sha256": "6dafc1c285b8966a16b973083b5d2d4ce256a23497be7e6734cca5d1bdb70609",
+      "object": "1813633f1ed0b07469ad611bac9233d62e328ee8",
+      "mode": "100644"
+    },
+    "singularity/skill-library/demo-instruction-intake/SKILL.md": {
+      "sha256": "94cf220f19beaebdf607fd15a0141a725157094fc8041e1c7f545f9ad14667cb",
+      "object": "f7eb6274be60930fe7533ba4f2a2ead7348adf10",
+      "mode": "100644"
+    },
+    "singularity/skill-library/demo-instruction-repair/SKILL.md": {
+      "sha256": "bfc145eb0865f1705a759527142de6fe6906123670c28f8b71874bc0f47452ce",
+      "object": "8d12c76e5ede7e06843f4a9470893e29e777c5d4",
       "mode": "100644"
     },
     "singularity/skill-library/demo-scoped-code-repair/SKILL.md": {
@@ -918,8 +984,8 @@
       "mode": "100644"
     },
     "singularity/workflow.yml": {
-      "sha256": "ce9e47f884bbf42d6959880e3bc971be7e50ecc974986d6fb5ffcdb430b92e11",
-      "object": "16912bf080b48590a423c2a209435bf2b6d018e4",
+      "sha256": "096724fc889bb338db5d598a69797195ef1cae1b7e7fe859995a748e6d22455c",
+      "object": "49fe87fa773d1da3f683a3e22990caa22d86276c",
       "mode": "100644"
     }
   }
