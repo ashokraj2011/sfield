@@ -3,15 +3,15 @@
   "layout": "canonical-paths",
   "source": {
     "branch": "sflow/config",
-    "commit": "372a45ed891cebd5d2adac1157795423ec04512d"
+    "commit": "17f641833a67d9dce5e18b657b8d444540bf85eb"
   },
   "history": {
-    "branch": "sflow/config-history/372a45ed891cebd5d2adac1157795423ec04512d",
-    "commit": "372a45ed891cebd5d2adac1157795423ec04512d"
+    "branch": "sflow/config-history/17f641833a67d9dce5e18b657b8d444540bf85eb",
+    "commit": "17f641833a67d9dce5e18b657b8d444540bf85eb"
   },
   "product": {
     "version": "0.9.0",
-    "revision": "134089cd9eaf9c7afd6b15a739ac890c7f249ffa"
+    "revision": "dadb1a3eeeb89972d114baf99a007b11eec65572"
   },
   "files": {
     ".github/agents/architect.agent.md": "41052a47c867dfe1eaae3f0ab8686912efc3ae00e42cb0c9198131a19dc5bc88",
@@ -170,7 +170,7 @@
     "singularity/templates/spec-code-test-loop/specification.md": "cc407b7192e181456f1ba6e8af2ddfb81ae4329efa2dc829d2aa060cd4e66c1d",
     "singularity/templates/spec-code-test-loop/testing.md": "eef65b164a45b3df7843d76ef071e9d9932304ec9861c8ed19c646db105f9284",
     "singularity/templates/spec-driven/convergence.md": "eb257477afca0229ed858875499736c57498015aaee0a527b714356819a9dde2",
-    "singularity/templates/spec-driven/plan.md": "66fecb17e2ee3397909ca79f2834e445b27050f2d67d066b434deb589f5ffa04",
+    "singularity/templates/spec-driven/plan.md": "e7a12442437f5454a3d5bf2151de476c87b30b71f54d1226def49bda492d4f7c",
     "singularity/templates/spec-driven/release.md": "3d6717eace80085585d04c9c3f5c67f10d7a2e9c4e535a862c8b5aa900d556fe",
     "singularity/templates/spec-driven/spec.md": "55b0d6c4c9aa5ba19739493825f6c993f03d63bed9e1a5e2bb7d5c099b8b91bb",
     "singularity/templates/starter-packs/skp-team-notes/draft-input.json": "fbc136911e7dfecf14be06091b6d759770fa72c133c39de74710511bfee57410",
@@ -959,8 +959,8 @@
       "mode": "100644"
     },
     "singularity/templates/spec-driven/plan.md": {
-      "sha256": "66fecb17e2ee3397909ca79f2834e445b27050f2d67d066b434deb589f5ffa04",
-      "object": "15780b2faf5a3c1c20bd4a68f9253e4b5df66589",
+      "sha256": "e7a12442437f5454a3d5bf2151de476c87b30b71f54d1226def49bda492d4f7c",
+      "object": "782fe81b9d0b8b9e5fe4bf619397c99eb42d2ea1",
       "mode": "100644"
     },
     "singularity/templates/spec-driven/release.md": {

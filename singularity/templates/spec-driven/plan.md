@@ -38,7 +38,9 @@ fully qualified ID (for example, `{{work.id}}:REQ-001`, never only `REQ-001`). `
 names, and prose are not paths. Multiple exact paths may be listed as separate backticked values.
 For new/modified delivery, `Expected paths` contains product source only and `Planned tests` contains
 test files only; never repeat a test file in both columns. A test-only obligation uses fulfillment
-`test-only`, `Expected paths` = `-`, and its exact tests under `Planned tests`.
+`test-only`, an unquoted dash (-) in Expected paths, and its exact tests under `Planned tests`.
+Never backtick the empty dash: that names a file. Retained screenshots/documents use fulfillment
+`evidence` and exact paths under `{{work.id}}`'s Story evidence directory, not product source.
 For a genuinely non-testable clause, write `not-applicable:` followed by your concrete reviewed
 explanation in `Planned tests`. Do not use it to defer a test or to replace an unknown path.
 
@@ -55,7 +57,9 @@ Use a Criterion | Slot | Method | Witness | Role | Required assurance table. For
 its Test strategy row has Fulfillment evidence and the exact Story evidence path under Expected
 paths. The contract has a primary visual (screen/scenario) or inspection (exact path) witness,
 with source-bound assurance. Prose describing a "primary visual verification contract" is not
-a contract row. Never classify the screenshot as product source or an executable test. -->
+a contract row. Criterion must be an exact approved AC ID, Slot a lower-hyphen identifier,
+Method test/inspection/visual, and Role primary/supporting; scenario/reviewer prose belongs
+outside these cells. Never classify the screenshot as product source or an executable test. -->
 
 ## Supporting files
 
