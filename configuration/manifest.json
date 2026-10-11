@@ -3,24 +3,24 @@
   "layout": "canonical-paths",
   "source": {
     "branch": "sflow/config",
-    "commit": "6bc2b24a2ab1565b9ebc7339bfa26a3d40bc7e5c"
+    "commit": "372a45ed891cebd5d2adac1157795423ec04512d"
   },
   "history": {
-    "branch": "sflow/config-history/6bc2b24a2ab1565b9ebc7339bfa26a3d40bc7e5c",
-    "commit": "6bc2b24a2ab1565b9ebc7339bfa26a3d40bc7e5c"
+    "branch": "sflow/config-history/372a45ed891cebd5d2adac1157795423ec04512d",
+    "commit": "372a45ed891cebd5d2adac1157795423ec04512d"
   },
   "product": {
     "version": "0.9.0",
-    "revision": "e7a081cbfbe3aa75e7398584bd482477f90bcfa7"
+    "revision": "134089cd9eaf9c7afd6b15a739ac890c7f249ffa"
   },
   "files": {
     ".github/agents/architect.agent.md": "41052a47c867dfe1eaae3f0ab8686912efc3ae00e42cb0c9198131a19dc5bc88",
     ".github/agents/demo-code-checker.agent.md": "8663390f8d2307b0761c77dff2b8c3ba5f210eb0b4ce2a667393e35f74a8c429",
     ".github/agents/demo-code-repairer.agent.md": "c9fa90ab14274f2f1bd0d92662a773087ccdaa66d24b8b117b26d1e36fbb9834",
-    ".github/agents/demo-instruction-analyst.agent.md": "5c527291e89f935e0586657bcffc3a8317dfdddfa140f2701d2fe4a7eea3a478",
-    ".github/agents/demo-instruction-closer.agent.md": "46dfd20f054f900fb603bba672bc47b303e640951f3f308c90c6958340b5bb4b",
-    ".github/agents/demo-instruction-developer.agent.md": "e63c417149a151a0aa6155126d40d397918e1810d4d5384b95a4ced0e307bd53",
-    ".github/agents/demo-instruction-tester.agent.md": "1b7c1a81bceb26860dcb74210ea3ac993c5e0d1ffffaa57461c19345e296b496",
+    ".github/agents/demo-instruction-analyst.agent.md": "b54384818163336db79044d2fb1ac84d609f3ffbd742e1cf4fd213af3584d8bb",
+    ".github/agents/demo-instruction-closer.agent.md": "20639a730771566688d5a9e83a35d2b6a0437dc926504ab4b07dcf4b0eaefa70",
+    ".github/agents/demo-instruction-developer.agent.md": "fbd448e6e0f480f933a1d5091af6ec8f380da84077442fabd6150132514954e7",
+    ".github/agents/demo-instruction-tester.agent.md": "2ebc9462131857eba426721f2bcf33d411b9a343960a5a29a7e17daa9694a26c",
     ".github/agents/demo-intake-analyst.agent.md": "4de23dbcb5a2877937198343521aab3f9f2accd4638560c8d386e11faab21dc1",
     ".github/agents/demo-story-closer.agent.md": "41a9a1aebd1200f6777f78dd3b34b2b97aa2fc9a49d7b69923c351fcdcfa42bd",
     ".github/agents/demo-web-analyst.agent.md": "05e16faddfd28fec43c1500a7577a0e82dfceac91b28f71e6aa704555d595b2e",
@@ -194,23 +194,23 @@
       "mode": "100644"
     },
     ".github/agents/demo-instruction-analyst.agent.md": {
-      "sha256": "5c527291e89f935e0586657bcffc3a8317dfdddfa140f2701d2fe4a7eea3a478",
-      "object": "37b66de9687975dec6d8e5114648b3f5eae18516",
+      "sha256": "b54384818163336db79044d2fb1ac84d609f3ffbd742e1cf4fd213af3584d8bb",
+      "object": "ffc55f24cd7b19229f985abde5e4d6d0423f7348",
       "mode": "100644"
     },
     ".github/agents/demo-instruction-closer.agent.md": {
-      "sha256": "46dfd20f054f900fb603bba672bc47b303e640951f3f308c90c6958340b5bb4b",
-      "object": "e53bed5b2e68ad17229351b99ae421a034d761e0",
+      "sha256": "20639a730771566688d5a9e83a35d2b6a0437dc926504ab4b07dcf4b0eaefa70",
+      "object": "d3739a19434108f0aa6b262762b5473b7eef3785",
       "mode": "100644"
     },
     ".github/agents/demo-instruction-developer.agent.md": {
-      "sha256": "e63c417149a151a0aa6155126d40d397918e1810d4d5384b95a4ced0e307bd53",
-      "object": "34b4966571d17926dc7c30b763dbe0976f948291",
+      "sha256": "fbd448e6e0f480f933a1d5091af6ec8f380da84077442fabd6150132514954e7",
+      "object": "67ed8baad75b0bada1eeece55109681a2ac534f7",
       "mode": "100644"
     },
     ".github/agents/demo-instruction-tester.agent.md": {
-      "sha256": "1b7c1a81bceb26860dcb74210ea3ac993c5e0d1ffffaa57461c19345e296b496",
-      "object": "f6a70955937a75926cd2d90a0a60e7899bd1e937",
+      "sha256": "2ebc9462131857eba426721f2bcf33d411b9a343960a5a29a7e17daa9694a26c",
+      "object": "97b7320b590a502ef3e71da634d7498dbae9bf98",
       "mode": "100644"
     },
     ".github/agents/demo-intake-analyst.agent.md": {
