@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: 5f368a057d56a54408d045ced6d51c6bf8bd6346
+  revision: 232614d45908f502402985c0ab0e1aff702539ba
 workflow:
   version: 2
   inputsMode: enforce
@@ -433,6 +433,11 @@ workflow:
         design:
           inputs:
             - requirements
+          approval:
+            rejectTo:
+              - intake
+              - requirements
+              - design
         implementation-spec:
           inputs:
             - requirements
@@ -441,10 +446,25 @@ workflow:
           inputs:
             - design
             - implementation-spec
+          approval:
+            rejectTo:
+              - intake
+              - requirements
+              - design
+              - implementation-spec
+              - implementation
         verification:
           inputs:
             - implementation-spec
             - implementation
+          approval:
+            rejectTo:
+              - intake
+              - requirements
+              - design
+              - implementation-spec
+              - implementation
+              - verification
         conformance:
           inputs:
             - implementation-spec
@@ -452,6 +472,9 @@ workflow:
             - verification
           approval:
             rejectTo:
+              - intake
+              - requirements
+              - design
               - implementation-spec
               - implementation
               - verification
@@ -491,10 +514,25 @@ workflow:
         implementation:
           inputs:
             - fix-spec
+          approval:
+            rejectTo:
+              - intake
+              - reproduction
+              - fix-design
+              - fix-spec
+              - implementation
         verification:
           inputs:
             - fix-spec
             - implementation
+          approval:
+            rejectTo:
+              - intake
+              - reproduction
+              - fix-design
+              - fix-spec
+              - implementation
+              - verification
         conformance:
           inputs:
             - fix-spec
@@ -502,6 +540,9 @@ workflow:
             - verification
           approval:
             rejectTo:
+              - intake
+              - reproduction
+              - fix-design
               - fix-spec
               - implementation
               - verification
@@ -524,15 +565,25 @@ workflow:
             - intake
           generation:
             task: analyze
+          approval:
+            rejectTo:
+              - intake
+              - implementation
         verification:
           inputs:
             - implementation
+          approval:
+            rejectTo:
+              - intake
+              - implementation
+              - verification
         conformance:
           inputs:
             - implementation
             - verification
           approval:
             rejectTo:
+              - intake
               - implementation
               - verification
               - conformance
@@ -609,6 +660,13 @@ workflow:
           inputs:
             - component-mapping
             - mobile-spec
+          approval:
+            rejectTo:
+              - design-intake
+              - design-inventory
+              - component-mapping
+              - mobile-spec
+              - implementation
         visual-verification:
           inputs:
             - design-inventory
@@ -626,6 +684,7 @@ workflow:
               - quality-reviewers
             minimum: 1
             rejectTo:
+              - design-intake
               - design-inventory
               - component-mapping
               - mobile-spec
@@ -732,6 +791,7 @@ workflow:
               - quality-reviewers
             minimum: 1
             rejectTo:
+              - intake
               - implementation
               - testing
         conformance:
@@ -1286,6 +1346,11 @@ workflow:
               maximumSummaryBytes: 16384
               expansion: hash-bound-reference
               fallback: block
+          approval:
+            rejectTo:
+              - intake
+              - design
+              - implementation
         testing:
           inputs:
             - phase: intake
@@ -1303,6 +1368,12 @@ workflow:
               maximumSummaryBytes: 16384
               expansion: hash-bound-reference
               fallback: block
+          approval:
+            rejectTo:
+              - intake
+              - design
+              - implementation
+              - testing
         conformance:
           inputs:
             - phase: intake
@@ -1339,6 +1410,7 @@ workflow:
               - architecture-reviewers
             minimum: 1
             rejectTo:
+              - intake
               - design
               - implementation
               - testing
@@ -1386,10 +1458,21 @@ workflow:
         implementation:
           inputs:
             - design
+          approval:
+            rejectTo:
+              - intake
+              - design
+              - implementation
         testing:
           inputs:
             - intake
             - implementation
+          approval:
+            rejectTo:
+              - intake
+              - design
+              - implementation
+              - testing
         conformance:
           inputs:
             - intake
@@ -1402,6 +1485,7 @@ workflow:
               - architecture-reviewers
             minimum: 1
             rejectTo:
+              - intake
               - design
               - implementation
               - testing
@@ -1495,6 +1579,11 @@ workflow:
           inputs:
             - specification
             - planning
+          approval:
+            rejectTo:
+              - specification
+              - planning
+              - implementation
         convergence:
           inputs:
             - specification
@@ -1505,6 +1594,13 @@ workflow:
             - specification
             - planning
             - implementation
+          approval:
+            rejectTo:
+              - specification
+              - planning
+              - implementation
+              - convergence
+              - verification
         release:
           inputs:
             - verification
@@ -1600,6 +1696,11 @@ workflow:
               maximumSummaryBytes: 24576
               expansion: hash-bound-reference
               fallback: block
+          approval:
+            rejectTo:
+              - specification
+              - planning
+              - implementation
         convergence:
           inputs:
             - phase: specification
@@ -1666,6 +1767,13 @@ workflow:
               maximumSummaryBytes: 24576
               expansion: hash-bound-reference
               fallback: block
+          approval:
+            rejectTo:
+              - specification
+              - planning
+              - implementation
+              - convergence
+              - verification
         release:
           inputs:
             - phase: convergence
@@ -1772,6 +1880,7 @@ workflow:
           - architecture-reviewers
         minimum: 1
         rejectTo:
+          - intake
           - requirements
           - design
           - implementation-spec
@@ -1821,6 +1930,7 @@ workflow:
           - architecture-reviewers
         minimum: 1
         rejectTo:
+          - intake
           - reproduction
           - fix-design
     fix-spec:
@@ -1845,6 +1955,7 @@ workflow:
           - architecture-reviewers
         minimum: 1
         rejectTo:
+          - intake
           - reproduction
           - fix-design
           - fix-spec
@@ -1917,6 +2028,7 @@ workflow:
           - architecture-reviewers
         minimum: 1
         rejectTo:
+          - design-intake
           - design-inventory
           - component-mapping
     mobile-spec:
@@ -1941,6 +2053,7 @@ workflow:
           - architecture-reviewers
         minimum: 1
         rejectTo:
+          - design-intake
           - design-inventory
           - component-mapping
           - mobile-spec
@@ -2037,6 +2150,8 @@ workflow:
           - quality-reviewers
         minimum: 1
         rejectTo:
+          - design-intake
+          - design-inventory
           - component-mapping
           - mobile-spec
           - implementation
@@ -2180,6 +2295,7 @@ workflow:
         minimum: 1
         rejectTo:
           - document-intake
+          - scenario-check
           - scenario-repair
       qualityCommands: []
     scenario-retest:
@@ -2218,6 +2334,8 @@ workflow:
         minimum: 1
         rejectTo:
           - document-intake
+          - scenario-check
+          - scenario-repair
           - scenario-retest
       qualityCommands: []
     demo-web-intake:
@@ -2323,6 +2441,7 @@ workflow:
         minimum: 1
         rejectTo:
           - demo-web-intake
+          - demo-web-check
           - demo-web-repair
       qualityCommands: []
     demo-web-retest:
@@ -2362,6 +2481,8 @@ workflow:
         minimum: 1
         rejectTo:
           - demo-web-intake
+          - demo-web-check
+          - demo-web-repair
           - demo-web-retest
       qualityCommands: []
     demo-intake:
@@ -2468,6 +2589,7 @@ workflow:
         minimum: 1
         rejectTo:
           - demo-intake
+          - demo-check
           - demo-repair
       qualityCommands: []
     demo-close:
@@ -2507,6 +2629,7 @@ workflow:
         rejectTo:
           - demo-intake
           - demo-check
+          - demo-repair
           - demo-close
       qualityCommands: []
     demo-instruction-intake:
@@ -2613,6 +2736,7 @@ workflow:
         minimum: 1
         rejectTo:
           - demo-instruction-intake
+          - demo-instruction-test
           - demo-instruction-repair
       qualityCommands: []
     demo-instruction-close:
@@ -2651,6 +2775,7 @@ workflow:
         rejectTo:
           - demo-instruction-intake
           - demo-instruction-test
+          - demo-instruction-repair
           - demo-instruction-close
       qualityCommands: []
     poc-intake:
@@ -2766,6 +2891,7 @@ workflow:
           - quality-reviewers
         minimum: 1
         rejectTo:
+          - poc-intake
           - poc-impact-analysis
           - poc-ui-exploration
     poc-test-generation:
@@ -2800,6 +2926,8 @@ workflow:
           - engineering-reviewers
         minimum: 1
         rejectTo:
+          - poc-intake
+          - poc-impact-analysis
           - poc-ui-exploration
           - poc-test-generation
       qualityCommands:
@@ -2863,6 +2991,7 @@ workflow:
         minimum: 1
         rejectTo:
           - poc-intake
+          - poc-impact-analysis
           - poc-ui-exploration
           - poc-test-generation
           - poc-validation
@@ -3094,7 +3223,10 @@ workflow:
           - quality-reviewers
         minimum: 1
         rejectTo:
+          - specification
+          - planning
           - implementation
+          - convergence
           - verification
           - release
     convergence:
@@ -3114,7 +3246,10 @@ workflow:
           - architecture-reviewers
         minimum: 1
         rejectTo:
+          - specification
+          - planning
           - implementation
+          - convergence
     implement:
       label: Implement
       defaultTemplate: quick-fix/implement.md
@@ -3149,6 +3284,7 @@ workflow:
           - quality-reviewers
         minimum: 1
         rejectTo:
+          - intake
           - implement
           - verify
       qualityCommands:
@@ -3174,7 +3310,7 @@ workflow:
       - .github/skills
 assets:
   .github/agents/architect.agent.md:
-    sha256: 41052a47c867dfe1eaae3f0ab8686912efc3ae00e42cb0c9198131a19dc5bc88
+    sha256: 8770e647612b0c805ad583e7615f2ebe7fbb79b93bab2c1f3ad9237da5ff3d69
   .github/agents/demo-code-checker.agent.md:
     sha256: 8663390f8d2307b0761c77dff2b8c3ba5f210eb0b4ce2a667393e35f74a8c429
   .github/agents/demo-code-repairer.agent.md:
@@ -3202,7 +3338,7 @@ assets:
   .github/agents/document-analyst.agent.md:
     sha256: 4d8dba85aa99d9929fa480aa2f208a25aefdf451fcd096a2a0bd529383fb2715
   .github/agents/mobile-architect.agent.md:
-    sha256: 297c4d1a96fb97f38ed362cbc998ec22d562be0bb55e12599d53c7ec32486992
+    sha256: f0078e599da77b0b4130c5cbf2fdf2b31ab877e17bc36f7a15bcb7b452adcb30
   .github/agents/poc-analyst.agent.md:
     sha256: a4c0fb8c793ac6fb09334b181e901b7fd7e145fbe2066a9c183e1974d653c34d
   .github/agents/poc-automation.agent.md:
@@ -3224,7 +3360,7 @@ assets:
   .github/agents/product-owner.agent.md:
     sha256: 84b653bdf4c778841221c46552a198deee1a23feb4e5bfc152a117796a673a10
   .github/agents/qa.agent.md:
-    sha256: 1d9963e539be077db1efe3cbd55572c1365c755db98008857ed0aa958f67fd4a
+    sha256: 83b59e145e185b27c28a8a96d3f4a6d0499c7d06db4cb2fe78f0999d4404096b
   .github/agents/scenario-developer.agent.md:
     sha256: daa622886352e3d5abd80d90823f2360028a3ee5acd8f85374653a45ea274cf7
   .github/agents/scenario-tester.agent.md:
