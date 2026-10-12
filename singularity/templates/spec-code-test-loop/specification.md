@@ -26,6 +26,17 @@ unless the obligation is withdrawn and that withdrawal is explicitly reviewed.
 - TODO: State an observable behavior. [{{work.id}}:REQ-001]
 - TODO: State an independently checkable acceptance outcome. [{{work.id}}:AC-001]
 
+## Verification intent
+
+<!-- Declare test/visual/inspection methods for every clause. Comma-separated methods are all
+required. Each AC names itself under Criterion; a visual/inspection requirement links to the AC
+proving it. A test-only requirement may use -. Resolve the proof method from the Story source here. -->
+
+| Clause | Methods | Criterion |
+|---|---|---|
+| `{{work.id}}:REQ-001` | TODO | - |
+| `{{work.id}}:AC-001` | TODO | `{{work.id}}:AC-001` |
+
 ## Boundary and non-functional requirements
 
 TODO: Record limits, error handling, permissions, accessibility, privacy, and measurable
@@ -36,7 +47,8 @@ performance requirements or explain why a category is not applicable.
 Add exactly one row for every approved requirement and acceptance clause above. Use exact
 repository-relative source and executable-test paths in backticks, not directories or globs.
 If a clause truly cannot be tested, use `not-applicable:` followed by a concrete reviewer-approved
-reason. Browser observations may supplement the planned executable tests, never replace them.
+reason. For approved non-executable proof, use `verification: <AC-ID>` and its primary
+visual/inspection Verification contract. Browser observations never replace approved test methods.
 
 | Clause | Expected paths | Planned tests | Fulfillment | Observable result |
 |---|---|---|---|---|
