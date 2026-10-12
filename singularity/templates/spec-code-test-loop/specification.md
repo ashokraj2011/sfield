@@ -26,6 +26,18 @@ unless the obligation is withdrawn and that withdrawal is explicitly reviewed.
 - TODO: State an observable behavior. [{{work.id}}:REQ-001]
 - TODO: State an independently checkable acceptance outcome. [{{work.id}}:AC-001]
 
+## Scenario coverage
+
+<!-- Author S-number situations under User scenarios, each with complete Given/When/Then cases.
+Map every behavior/acceptance clause below. Outcome: success, failure, boundary, empty. Include
+distinct failure cases for approved rejection/error behavior; prose alone is not an acceptance
+case. Use only pinned source/clarification facts, never invented behavior or test results. -->
+
+| Clause | Scenario | Outcome |
+|---|---|---|
+| `{{work.id}}:REQ-001` | S1 | TODO |
+| `{{work.id}}:AC-001` | S1 | TODO |
+
 ## Verification intent
 
 <!-- Declare test/visual/inspection methods for every clause. Comma-separated methods are all

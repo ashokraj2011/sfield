@@ -64,6 +64,19 @@ specifications are usually silent and implementations usually improvise.
 - **Failure:** <the dependency is unavailable>
 - **Partial:** <some of it worked>
 
+## Scenario coverage
+
+<!-- One row per behavior/acceptance clause; repeat rows for multiple outcomes. Every referenced
+S-number must have complete Given/When/Then acceptance cases above. Outcome is success, failure,
+boundary, or empty. Rejection/error requirements need distinct failure cases, not only happy-path
+prose. Use the pinned request and clarification answers; do not invent error text or new scope. -->
+
+| Clause | Scenario | Outcome |
+|---|---|---|
+| `{{work.id}}:REQ-001` | S1 | TODO |
+| `{{work.id}}:REQ-002` | S2 | TODO |
+| `{{work.id}}:AC-001` | S1 | TODO |
+
 ## Permissions
 
 Who may do each thing, and what a reader without that authority sees instead.
