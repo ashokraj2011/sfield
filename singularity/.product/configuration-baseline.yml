@@ -1,7 +1,7 @@
 format: singularity-flow-configuration-baseline/v1
 product:
   version: 0.9.0
-  revision: d5f769d9fc9caf4b7143a3bcc2b8870139464875
+  revision: 5f368a057d56a54408d045ced6d51c6bf8bd6346
 workflow:
   version: 2
   inputsMode: enforce
@@ -3053,6 +3053,7 @@ workflow:
       specificationQuality:
         mode: enforce
         checklist: requirements-quality-v1
+        scenarioCoverage: required
         approvalChecklist: off
       writeScope: artifact-only
       approval:
@@ -3475,7 +3476,7 @@ assets:
   singularity/templates/spec-code-test-loop/conformance.md:
     sha256: b22de4f73720b8bf645faef0e2484031838d511fe4ea06810c6bf9b16c8bae1a
   singularity/templates/spec-code-test-loop/specification.md:
-    sha256: 28e2b5462c1fc7bc77cfea42c875b69e3f9eb1f9c3374cf37a2a5aa2aeba2547
+    sha256: df84e819635791295f1fd6e30e42f8233959966bbac5c3b4f1a52eeba8ceb41c
   singularity/templates/spec-code-test-loop/testing.md:
     sha256: eef65b164a45b3df7843d76ef071e9d9932304ec9861c8ed19c646db105f9284
   singularity/templates/spec-driven/convergence.md:
@@ -3485,7 +3486,7 @@ assets:
   singularity/templates/spec-driven/release.md:
     sha256: 3d6717eace80085585d04c9c3f5c67f10d7a2e9c4e535a862c8b5aa900d556fe
   singularity/templates/spec-driven/spec.md:
-    sha256: b370347adeca20bb560827843acb2330e90e9fa875e760611ef752ee38765cab
+    sha256: 8845017e5a12bf3b59ea955324f999f9b51f4a6a6606c3808f7e516adf1d2cce
   singularity/templates/starter-packs/skp-team-notes/draft-input.json:
     sha256: fbc136911e7dfecf14be06091b6d759770fa72c133c39de74710511bfee57410
   singularity/templates/starter-packs/skp-team-notes/README.md:

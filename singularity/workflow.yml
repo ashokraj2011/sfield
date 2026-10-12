@@ -2441,6 +2441,7 @@ phases:
       mode: enforce
       checklist: requirements-quality-v1
       approvalChecklist: off
+      scenarioCoverage: required
     writeScope: artifact-only
     approval:
       authorities:
