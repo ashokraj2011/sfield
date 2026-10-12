@@ -8,6 +8,8 @@ remaining limitations, and rollout considerations for downstream agents. Keep it
 the detailed changed-components and test sections are preserved separately.
 -->
 
+TODO: Write the Agent brief here as visible text; text inside the comment above is not read.
+
 ## Implemented outcome
 
 TODO: Summarize the implemented behavior.
