@@ -83,6 +83,20 @@ Acceptance criteria use the same stable, namespaced form:
 
 - <observable acceptance outcome>. *(S1)* [{{work.id}}:AC-001]
 
+## Verification intent
+
+<!-- One row per declared clause, including non-functional requirements. Methods: test, visual,
+inspection, or a comma-separated combination (all required). AC Criterion is its own ID. A
+visual/inspection requirement names the AC proving it; a test-only requirement may use -. Choose
+from the pinned source, not from available tools. A screenshot is visual proof, not a test exemption.
+Planning must inherit these methods and cannot change them without an approved scope amendment. -->
+
+| Clause | Methods | Criterion |
+|---|---|---|
+| `{{work.id}}:REQ-001` | TODO | - |
+| `{{work.id}}:REQ-002` | TODO | - |
+| `{{work.id}}:AC-001` | TODO | `{{work.id}}:AC-001` |
+
 ## Non-functional requirements
 
 Latency, throughput, availability, accessibility, privacy, retention. State the number and how it

@@ -43,6 +43,9 @@ Never backtick the empty dash: that names a file. Retained screenshots/documents
 `evidence` and exact paths under `{{work.id}}`'s Story evidence directory, not product source.
 For a genuinely non-testable clause, write `not-applicable:` followed by your concrete reviewed
 explanation in `Planned tests`. Do not use it to defer a test or to replace an unknown path.
+For approved visual/inspection proof without an executable test, write `verification: <AC-ID>`
+instead, naming its exact approved Criterion, and define the primary witness below. This is proof,
+not an exemption; human visual acceptance remains separate. Inherit all Specification methods.
 
 | Clause | Expected paths | Planned tests | Fulfillment | Observable result |
 |---|---|---|---|---|
